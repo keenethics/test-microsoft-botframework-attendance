@@ -8,7 +8,7 @@ var MongoClient = require('mongodb').MongoClient
   
  
  //Connection URL 
-var url = 'mongodb://<dbuser>:<dbpassword>@ds141410.mlab.com:41410/heroku_5sb2kdth';
+var url = 'mongodb://keenpeople:Suwuz123@ds141410.mlab.com:41410/heroku_5sb2kdth';
 MongoClient.connect(url, function(err, db) {
   assert.equal(null, err);
   console.log("Connected correctly to server");
