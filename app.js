@@ -3,17 +3,17 @@ require('dotenv-extended').load();
 var restify = require('restify');
 var builder = require('botbuilder');
 
-var MongoClient = require('mongodb').MongoClient
-  , assert = require('assert');
+//var MongoClient = require('mongodb').MongoClient
+//  , assert = require('assert');
   
  
 // Connection URL 
-var url = '//heroku_5sb2kdth:1r0tns4e3n7tddios7sikfjbeh@ds141410.mlab.com:41410/heroku_5sb2kdth';
+//var url = 'mongodb://localhost:27017/skypebot';
 // Use connect method to connect to the Server 
-MongoClient.connect(url, function(err, db) {
-  assert.equal(null, err);
-  console.log("Connected correctly to server");
- db.close();
+//MongoClient.connect(url, function(err, db) {
+  //assert.equal(null, err);
+  //console.log("Connected correctly to server");
+ //db.close();
 
 });
 
@@ -87,13 +87,13 @@ bot.dialog('/ensureProfile', [
             session.dialogData.profile.email = results.response;
             session.send('Hello %(name)s! Your email is %(email)s!', session.dialogData.profile);
             session.send('Nice to meet you :)');
-            var shit = session.dialogData.profile;
-            MongoClient.connect(url, function(err, db) {
-              assert.equal(null, err);
-              insertDocument(db, function() {
-                db.close();
-              },shit);
-            });
+  //          var shit = session.dialogData.profile;
+    //        MongoClient.connect(url, function(err, db) {
+      //        assert.equal(null, err);
+        //      insertDocument(db, function() {
+          //      db.close();
+            //  },shit);
+          //  });
         }
         session.endDialogWithResult({ response: session.dialogData.profile });
     }
@@ -114,20 +114,20 @@ bot.dialog('/dayoff' , [
   }
 ]);
 
-var insertDocument = function(db, callback, profile) {
-   console.log("ffff",profile);
-   db.collection('users').insertOne( {
-      "name" : profile.name,
-      "email" : profile.email
-   }, function(err, result) {
-    assert.equal(err, null);
-    callback();
-  });
-};
+//var insertDocument = function(db, callback, profile) {
+  // console.log("ffff",profile);
+   //db.collection('users').insertOne( {
+  //    "name" : profile.name,
+  //    "email" : profile.email
+  // }, function(err, result) {
+  //  assert.equal(err, null);
+  //  callback();
+  //});
+//};
 
 function createHeroCard(session,reason) {
     return new builder.HeroCard(session)
-        .title('Day off for  %s', session.userData.name)
+        .title('Day off for  %s', session.userData.profile.name)
         .text('Reason: " %s "', reason)
         .images([
             builder.CardImage.create(session, 'http://2.bp.blogspot.com/-AJcBRl3gmJk/VPdRVHoEa5I/AAAAAAAAaTU/23keCkkciQQ/s1600/keep-calm-and-have-a-day-off-3.png')
