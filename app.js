@@ -3,19 +3,19 @@ require('dotenv-extended').load();
 var restify = require('restify');
 var builder = require('botbuilder');
 
-//var MongoClient = require('mongodb').MongoClient
-//  , assert = require('assert');
+var MongoClient = require('mongodb').MongoClient
+  , assert = require('assert');
   
  
-// Connection URL 
-//var url = 'mongodb://localhost:27017/skypebot';
-// Use connect method to connect to the Server 
-//MongoClient.connect(url, function(err, db) {
-  //assert.equal(null, err);
-  //console.log("Connected correctly to server");
- //db.close();
+ Connection URL 
+var url = 'mongodb://suwuy123@gmail.com:Suwuz123@ds141410.mlab.com:41410/heroku_5sb2kdth';
+ Use connect method to connect to the Server 
+MongoClient.connect(url, function(err, db) {
+  assert.equal(null, err);
+  console.log("Connected correctly to server");
+ db.close();
 
-//});
+});
 
 //=========================================================
 // Bot Setup
@@ -87,13 +87,13 @@ bot.dialog('/ensureProfile', [
             session.dialogData.profile.email = results.response;
             session.send('Hello %(name)s! Your email is %(email)s!', session.dialogData.profile);
             session.send('Nice to meet you :)');
-  //          var shit = session.dialogData.profile;
-    //        MongoClient.connect(url, function(err, db) {
-      //        assert.equal(null, err);
-        //      insertDocument(db, function() {
-          //      db.close();
-            //  },shit);
-          //  });
+            var shit = session.dialogData.profile;
+            MongoClient.connect(url, function(err, db) {
+              assert.equal(null, err);
+              insertDocument(db, function() {
+                db.close();
+              },shit);
+            });
         }
         session.endDialogWithResult({ response: session.dialogData.profile });
     }
@@ -114,16 +114,16 @@ bot.dialog('/dayoff' , [
   }
 ]);
 
-//var insertDocument = function(db, callback, profile) {
-  // console.log("ffff",profile);
-   //db.collection('users').insertOne( {
-  //    "name" : profile.name,
-  //    "email" : profile.email
-  // }, function(err, result) {
-  //  assert.equal(err, null);
-  //  callback();
-  //});
-//};
+var insertDocument = function(db, callback, profile) {
+   console.log("ffff",profile);
+   db.collection('users').insertOne( {
+      "name" : profile.name,
+      "email" : profile.email
+   }, function(err, result) {
+    assert.equal(err, null);
+    callback();
+  });
+};
 
 function createHeroCard(session,reason) {
     return new builder.HeroCard(session)
