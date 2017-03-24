@@ -15,7 +15,7 @@ var builder = require('botbuilder');
   //console.log("Connected correctly to server");
  //db.close();
 
-});
+//});
 
 //=========================================================
 // Bot Setup
