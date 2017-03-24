@@ -9,7 +9,6 @@ var MongoClient = require('mongodb').MongoClient
  
  //Connection URL 
 var url = 'mongodb://suwuy123@gmail.com:Suwuz123@ds141410.mlab.com:41410/heroku_5sb2kdth';
- Use connect method to connect to the Server 
 MongoClient.connect(url, function(err, db) {
   assert.equal(null, err);
   console.log("Connected correctly to server");
