@@ -8,8 +8,8 @@ var MongoClient = require('mongodb').MongoClient
   
  
 // Connection URL 
-//var url = 'mongodb://localhost:27017/skypebot';
-var url = 'mongodb://keenpeople:Suwuz123@ds141410.mlab.com:41410/heroku_5sb2kdth';
+var url = 'mongodb://localhost:27017/skypebot';
+//var url = 'mongodb://<dbuser>:<dbpassword>@ds141410.mlab.com:41410/heroku_5sb2kdth'
  //Use connect method to connect to the Server 
 MongoClient.connect(url, function(err, db) {
   assert.equal(null, err);
@@ -34,41 +34,44 @@ var connector = new builder.ChatConnector({
   appPassword: "9Yhoxk9oJyqo18Xog1hT4sH"
 });
 var bot = new builder.UniversalBot(connector);
-var intents = new builder.IntentDialog();
+//var intents = new builder.IntentDialog();
 server.post('/api/messages', connector.listen());
 
 //=========================================================
 // Bots Dialogs
 //=========================================================
 
-bot.dialog('/', intents);
+bot.dialog('/', new builder.IntentDialog()
+    .onDefault('/getstarted')
+ );
 
+bot.dialog('/menu', new builder.IntentDialog()
 
-intents.matches(/^day off/i, [
-  function (session){
-    session.beginDialog('/dayoff');
-  }
-]);
+    .matches(/^help/i,builder.DialogAction.send("You can : 1. day off  2.createAlarm  3.editprofile") )
+    .matches(/^day off/i, '/dayoff')
+    .matches(/^createAlarm/i, '/createAlarm')
+    .matches(/^ensureProfile/i, '/ensureProfile')
+    .onDefault(builder.DialogAction.send("You can : 1. day off  2.createAlarm  3.editprofile"))
+ 
+);
+bot.dialog('/getstarted',[
 
-intents.matches(/^createAlarm/i, [
-  function (session){
-   session.beginDialog('/createAlarm');  
-  }  
-]);
+function (session, args, next , results) {
+    if (!session.userData.profile) {
+    session.beginDialog('/ensureProfile', session.userData.profile);
+    
+    } else {
+        next();
 
-intents.onDefault([
-    function (session, args, next) {
-        if (!session.userData.name) {
-        session.beginDialog('/ensureProfile', session.userData.profile);
-        
-        } else {
-            next();
-        }
-    },
-    function (session, results) {
-      session.userData.profile = results.response;
     }
+},
+function (session, results) {
+  session.userData.profile = results.response;
+  session.endDialogWithResult();
+  session.beginDialog('/menu', session.userData.profile);
+}
 ]);
+
 
 bot.dialog('/ensureProfile', [
     function (session, args, next) {
@@ -95,40 +98,13 @@ bot.dialog('/ensureProfile', [
             session.send('Hello %(name)s! Your email is %(email)s!', session.dialogData.profile);
             session.send('Nice to meet you :)');
            //builder.Prompts.confirm(session, "Your data is right ?"); 
-        }      
+        } else {
+            next();
+        }     
     //  session.userData.confirm = results.response;
-      next();
+     session.endDialogWithResult({ response: session.dialogData.profile });
     },
-  
-    function (session, results,next){
-      builder.Prompts.text(session, "Your data is right ?");
-      session.send('Just say : yes or no ');
-      session.userData.confirm = results.response;
-     console.log("SHHHIT",session.userData.confirm);
-    },
-   
-   function (session,results,next) {
-     //sobaka = results.response;
-     //console.log("SHHHIT",session.userData.confirm);
-     if (results.response){
-     session.userData.confirm = results.response;
-    console.log("SHHHIT",session.userData.confirm);
-     if (session.userData.confirm == "yes"){
-          var shit = session.dialogData.profile;
-          MongoClient.connect(url, function(err, db) {
-            assert.equal(null, err);
-            insertDocument(db, function() {
-              db.close();
-            },shit);
-          });
-  session.endDialogWithResult({ response: session.dialogData.profile });
-}
-if(session.userData.confirm == "no"){
-     session.send('So , forgot about all u write above :)');
-      session.beginDialog('/ensureProfile'); 
-   }
-}
-}
+
 ]);
 
 bot.dialog('/dayoff' , [
