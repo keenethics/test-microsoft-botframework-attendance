@@ -8,8 +8,8 @@ var MongoClient = require('mongodb').MongoClient
   
  
 // Connection URL 
-var url = 'mongodb://localhost:27017/skypebot';
-//var url = 'mongodb://<dbuser>:<dbpassword>@ds141410.mlab.com:41410/heroku_5sb2kdth'
+//var url = 'mongodb://localhost:27017/skypebot';
+var url = 'mongodb://keenpeople:Suwuz123@ds141410.mlab.com:41410/heroku_5sb2kdth'
  //Use connect method to connect to the Server 
 MongoClient.connect(url, function(err, db) {
   assert.equal(null, err);
