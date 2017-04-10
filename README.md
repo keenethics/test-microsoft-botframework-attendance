@@ -11,7 +11,9 @@ Clone repository and use node and npm versions in package.json file, install the
 
 
 Emulator must be running in the separate terminal.
-Download, build and run Bot-framework emulator. The easiest way is to simply load Source code (tar.gz)
+[Download, build and run Bot-framework emulator] 
+(https://github.com/Microsoft/BotFramework-Emulator/releases1)
+The easiest way is to simply load Source code (tar.gz)
 and build it with the following steps:
 
 1. `npm install`
