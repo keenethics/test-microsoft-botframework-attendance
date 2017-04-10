@@ -1,3 +1,5 @@
+import event from './models/event';
+
 require('dotenv-extended').load();
 
 var restify = require('restify');
