@@ -10,8 +10,8 @@ var MongoClient = require('mongodb').MongoClient
   
  
 // Connection URL 
-//var url = 'mongodb://localhost:27017/skypebot';
-var url = 'mongodb://keenpeople:Suwuz123@ds141410.mlab.com:41410/heroku_5sb2kdth'
+var url = 'mongodb://localhost:27017/skypebot';
+//var url = 'mongodb://keenpeople:Suwuz123@ds141410.mlab.com:41410/heroku_5sb2kdth'
  //Use connect method to connect to the Server 
 MongoClient.connect(url, function(err, db) {
   assert.equal(null, err);
@@ -38,15 +38,14 @@ var connector = new builder.ChatConnector({
 var bot = new builder.UniversalBot(connector);
 //var intents = new builder.IntentDialog();
 server.post('/api/messages', connector.listen());
-
+var confirm = false
 //=========================================================
 // Bots Dialogs
 //=========================================================
-
 bot.dialog('/', new builder.IntentDialog()
     .onDefault('/getstarted')
- );
 
+  );
 bot.dialog('/menu', new builder.IntentDialog()
 
     .matches(/^help/i,builder.DialogAction.send("You can : 1. day off  2.createAlarm  3.editprofile") )
@@ -59,7 +58,8 @@ bot.dialog('/menu', new builder.IntentDialog()
 bot.dialog('/getstarted',[
 
 function (session, args, next , results) {
-    if (!session.userData.profile) {
+  console.log("shit",confirm);
+    if (confirm == false) {
     session.beginDialog('/ensureProfile', session.userData.profile);
     
     } else {
@@ -71,6 +71,7 @@ function (session, results) {
   session.userData.profile = results.response;
   session.endDialogWithResult();
   session.beginDialog('/menu', session.userData.profile);
+  session.send("You can : 1. day off  2. createAlarm  3. editprofile  4. help");
 }
 ]);
 
@@ -99,11 +100,21 @@ bot.dialog('/ensureProfile', [
             session.dialogData.profile.email = results.response;
             session.send('Hello %(name)s! Your email is %(email)s!', session.dialogData.profile);
             session.send('Nice to meet you :)');
+            //session.send("You can : 1. day off  2. createAlarm  3. editprofile  4. help");
+            confirm = true;   var shit = session.dialogData.profile;
+              MongoClient.connect(url, function(err, db) {
+                assert.equal(null, err);
+                insertDocument(db, function() {
+                  db.close();
+                },shit);
+              });
+        
            //builder.Prompts.confirm(session, "Your data is right ?"); 
         } else {
             next();
         }     
     //  session.userData.confirm = results.response;
+    confirm = true; 
      session.endDialogWithResult({ response: session.dialogData.profile });
     },
 
@@ -126,6 +137,7 @@ bot.dialog('/dayoff' , [
       var msg = new builder.Message(session).addAttachment(card);
       session.send(msg);
       session.endDialogWithResult();
+      session.beginDialog('/menu');
   }
 ]);
 
@@ -148,7 +160,7 @@ var insertDocument = function(db, callback, profile) {
 
 function createHeroCard(session,reason) {
     return new builder.HeroCard(session)
-        .title('Day off for  %s', session.userData.profile.name)
+        .title('Day off for  %s', session.userData.name)
         .text('Reason: " %s "', reason)
         .text('AT: " %s "', session.userData.time)
         .images([
