@@ -22,4 +22,4 @@ The next thing that should be done is putting app ID and password into emulator 
   appId: "607b6eb5-3eb4-4f2d-a0e9-38b471a4979a"
   appPassword: "9Yhoxk9oJyqo18Xog1hT4sH"
 
-![alt tag](https://github.com/keenethics/attendance/1.png)
+![alt tag](1.png)
