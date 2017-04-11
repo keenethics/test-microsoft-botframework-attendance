@@ -7,6 +7,7 @@ require('dotenv-extended').load();
 
 var restify = require('restify');
 var builder = require('botbuilder');
+var ObjectId = require('mongodb').ObjectId;
 
 var MongoClient = require('mongodb').MongoClient
   , assert = require('assert');
@@ -54,12 +55,13 @@ bot.dialog('/', new builder.IntentDialog()
   );
 bot.dialog('/menu', new builder.IntentDialog()
 
-    .matches(/^help/i,builder.DialogAction.send("You can : 1. day off  2.createAlarm  3.editprofile") )
+    .matches(/^help/i,builder.DialogAction.send("You can : 1. day off  2.createAlarm  3.editprofilem, 4. full info") )
     .matches(/^day off/i, '/dayoff')
     .matches(/^createAlarm/i, '/createAlarm')
     .matches(/^ensureProfile/i, '/ensureProfile')
-    .onDefault(builder.DialogAction.send("You can : 1. day off  2.createAlarm  3.editprofile"))
-
+    .matches(/^full info/i, 'fullInfo')
+    .onDefault(builder.DialogAction.send("You can : 1. day off  2.createAlarm  3.editprofile, 4. full info"))
+ 
 );
 bot.dialog('/getstarted',[
 
@@ -170,6 +172,39 @@ bot.dialog('/dayoff' , [
   }
 ]);
 
+
+
+bot.dialog('fullInfo', [
+  function(session) {
+    var userId = "58ec701fa81f966bf53debf3";
+    MongoClient.connect(url, function(err, db) {
+      assert.equal(null, err);
+      getFullInfoForUser(db, function(data) {
+        var answer = 'Sorry, not enough information. :('
+        if (data) {
+          answer = '';
+          Object.keys(data).map(i => {
+            if (i == "_id") return;
+            var str = '\n' + i + ': ' + data[i] + '\n';
+            answer += str;
+          });
+          var vacationDays = 0;
+          for (var i = 0; i < 12; i++) {
+            vacationDays += (20 / 12) * (data.workedActually[i] / data.workingDays[i]);
+          }
+          vacationDays -= data.usedVacations;
+          answer += '\n' + 'Your have ' + parseInt(vacationDays) + ' vacation days left';
+        }
+        session.send(answer);
+        db.close();
+      }, userId);
+    });
+    session.endDialog();
+  }
+]);
+
+
+
 var insertDocument = function(db, callback, profile) {
    var currentdate = new Date(); 
    db.collection('users').insertOne( {
@@ -181,6 +216,22 @@ var insertDocument = function(db, callback, profile) {
     callback();
   });
 };
+
+
+
+var getFullInfoForUser = function(db, callback, userId) {
+  console.log('getFullInfoForUser');
+  /*
+  db.testData.insert({name: 'foobar', email: 'foobar@gmail.com', usedVacations: 1,
+  workedActually:[20, 17, 18, 20, 12, 0, 0, 0, 0, 0, 0, 0],
+  workingDays:[20, 19, 20, 21, 19, 20, 21, 20, 21, 21, 20, 21]})
+  */
+  db.collection('testData').findOne({_id: ObjectId(userId)}, function(err, doc){
+    callback(doc);
+  });
+};
+
+
 
 function createHeroCard(session,reason) {
     const { startsAt, endsAt } = session.userData.dayoff;
