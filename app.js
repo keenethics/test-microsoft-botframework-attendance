@@ -1,4 +1,7 @@
-import event from './models/event';
+import Event from './models/event';
+import moment from 'moment';
+import mongoose from 'mongoose';
+
 
 require('dotenv-extended').load();
 
@@ -11,7 +14,10 @@ var MongoClient = require('mongodb').MongoClient
   
  
 // Connection URL 
-var url = 'mongodb://localhost:27017/test';
+mongoose.connect('mongodb://localhost:27017/skypebot');
+
+var url = 'mongodb://localhost:27017/skypebot';
+
 //var url = 'mongodb://keenpeople:Suwuz123@ds141410.mlab.com:41410/heroku_5sb2kdth'
  //Use connect method to connect to the Server 
 MongoClient.connect(url, function(err, db) {
@@ -60,7 +66,6 @@ bot.dialog('/menu', new builder.IntentDialog()
 bot.dialog('/getstarted',[
 
 function (session, args, next , results) {
-  console.log("shit",confirm);
     if (confirm == false) {
     session.beginDialog('/ensureProfile', session.userData.profile);
     
@@ -70,18 +75,16 @@ function (session, args, next , results) {
     }
 },
 function (session, results) {
-  session.userData.profile = results.response;
-  session.endDialogWithResult();
   session.beginDialog('/menu', session.userData.profile);
-  session.send("You can : 1. day off  2. createAlarm  3. editprofile  4. help");
+  session.send("You can : 1. чday off  2. createAlarm  3. editprofile  4. help");
 }
 ]);
 
-
 bot.dialog('/ensureProfile', [
     function (session, args, next) {
-        session.dialogData.profile = args || {};
-        if (!session.dialogData.profile.name) {
+        if (!session.userData) session.userData = {}
+        session.userData.profile = args || {};
+        if (!session.userData.profile.name) {
             builder.Prompts.text(session, "HI! :) What's your full name?");
         } else {
             next();
@@ -89,9 +92,9 @@ bot.dialog('/ensureProfile', [
     },
     function (session, results, next) {
         if (results.response) {
-            session.dialogData.profile.name = results.response;
+            session.userData.profile.name = results.response;
         }
-        if (!session.dialogData.profile.email) {
+        if (!session.userData.profile.email) {
             builder.Prompts.text(session, "Enter your email please");
         } else {
             next();
@@ -99,50 +102,75 @@ bot.dialog('/ensureProfile', [
     },
     function (session, results ,next) {
         if (results.response) {
-            session.dialogData.profile.email = results.response;
-            session.send('Hello %(name)s! Your email is %(email)s!', session.dialogData.profile);
+            session.userData.profile.email = results.response;
+            session.send('Hello %(name)s! Your email is %(email)s!', session.userData.profile);
             session.send('Nice to meet you :)');
-            //session.send("You can : 1. day off  2. createAlarm  3. editprofile  4. help");
-            confirm = true;   var shit = session.dialogData.profile;
+            confirm = true;   var shit = session.userData.profile;
               MongoClient.connect(url, function(err, db) {
                 assert.equal(null, err);
                 insertDocument(db, function() {
                   db.close();
                 },shit);
-              });
-        
-           //builder.Prompts.confirm(session, "Your data is right ?"); 
+              }); 
         } else {
             next();
         }     
-    //  session.userData.confirm = results.response;
     confirm = true; 
-     session.endDialogWithResult({ response: session.dialogData.profile });
+     session.endDialogWithResult({ response: session.userData.profile });
     },
 
 ]);
 
 bot.dialog('/dayoff' , [
-  function (session){
+
+  function (session,  results) {
+      builder.Prompts.text(session,'how many days ?');
+  },
+
+  function (session, results){
+      session.userData.dayOff = { dayOffCount: parseInt(results.response,10) };
       builder.Prompts.text(session,'whats up ?');
 
     },
   function (session,results){
-      var reason = results.response;
-      builder.Prompts.time(session, "What time would you like to set an day off  for?");   
+      session.userData.dayOff.reason = results.response; 
+      builder.Prompts.text(session, "What time would you like to set an day off  for? (dd.mm)");   
   },
   function (session, results ,reason){
-      //var reason = results.response;
-      // create the card based on selection
-      session.userData.time = builder.EntityRecognizer.resolveTime([results.response]);
+      const { dayOffCount } = session.userData.dayOff; 
+      const dayMonth = results.response.split(".");
+      const day = dayMonth[0];
+      const month = dayMonth[1];
+      const date = moment({month, date: day})._d;
+      const startsAt = moment(date)._d;
+      const endsAt = moment(startsAt).clone().add(dayOffCount, 'days');
+      const type = "dayoff"; 
+      const dayoff = {
+        startsAt,
+        endsAt,
+        type,
+        comment: session.userData.dayOff.reason,
+        user: session.userData.profile.name,
+        responses: [], 
+      }
+      session.userData.dayoff = dayoff;
+
+      const DayOff = new Event(dayoff);
+      DayOff.save((err, data) => {
+        if (err) { console.log(err) }
+      })
+
+      // session.userData.time = builder.EntityRecognizer.resolveTime([results.response]);
+      session.userData.time = builder.EntityRecognizer.resolveTime([startsAt]);
+      
       var card = createHeroCard(session, reason);
       var msg = new builder.Message(session).addAttachment(card);
       session.send(msg);
+
       session.endDialogWithResult();
       session.beginDialog('/menu');
   }
 ]);
-
 
 
 
@@ -165,8 +193,8 @@ bot.dialog('fullInfo', [
             vacationDays += (20 / 12) * (data.workedActually[i] / data.workingDays[i]);
           }
           vacationDays -= data.usedVacations;
+          answer += '\n' + 'Your have ' + parseInt(vacationDays) + ' vacation days left';
         }
-        answer += '\n' + 'Your have ' + parseInt(vacationDays) + ' vacation days left';
         session.send(answer);
         db.close();
       }, userId);
@@ -178,7 +206,6 @@ bot.dialog('fullInfo', [
 
 
 var insertDocument = function(db, callback, profile) {
-   console.log("ffff",profile);
    var currentdate = new Date(); 
    db.collection('users').insertOne( {
       "name" : profile.name,
@@ -186,7 +213,6 @@ var insertDocument = function(db, callback, profile) {
       "createdat" : currentdate
     }, function(err, result) {
     assert.equal(err, null);
-   console.log("FFFF",profile);
     callback();
   });
 };
@@ -208,10 +234,14 @@ var getFullInfoForUser = function(db, callback, userId) {
 
 
 function createHeroCard(session,reason) {
+    const { startsAt, endsAt } = session.userData.dayoff;
+    const diff = moment(endsAt).diff(moment(startsAt), 'days');
+    const dayoffs = diff > 1 ? `${moment(startsAt).format('MMMM Do YYYY')} - ${moment(endsAt).format('MMMM Do YYYY')}`
+    : moment(startsAt).format('MMMM Do YYYY');
     return new builder.HeroCard(session)
-        .title('Day off for  %s', session.userData.name)
+        .title('Day off for  %s', session.userData.profile.name)
         .text('Reason: " %s "', reason)
-        .text('AT: " %s "', session.userData.time)
+        .text('AT: " %s "', dayoffs)
         .images([
             builder.CardImage.create(session, 'http://2.bp.blogspot.com/-AJcBRl3gmJk/VPdRVHoEa5I/AAAAAAAAaTU/23keCkkciQQ/s1600/keep-calm-and-have-a-day-off-3.png')
         ])

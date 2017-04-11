@@ -6,7 +6,7 @@ const EventSchema = {
 	type: String,
 	comment: String,
 	user: String,
-	responses: String,
+	responses: Array,
 }
 
 const Event = mongoose.model('Event', EventSchema);
