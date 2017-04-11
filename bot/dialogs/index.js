@@ -1,4 +1,4 @@
 import dayoff from './dayoff.js';
 import menu from './menu.js';
-
-export { menu, dayoff }
+import profile from './profile.js';
+export { menu, dayoff, profile }
