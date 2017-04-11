@@ -1,53 +1,22 @@
 import Event from './models/event';
 import moment from 'moment';
 import mongoose from 'mongoose';
-
-
 require('dotenv-extended').load();
+import restify from 'restify';
+import builder from 'botbuilder';
 
-var restify = require('restify');
-var builder = require('botbuilder');
+import { bot } from './bot/bot.js';
+import server from './bot/server.js';
 
 var MongoClient = require('mongodb').MongoClient
   , assert = require('assert');
   
+const url = 'mongodb://localhost:27017/skypebot';
  
-// Connection URL 
-mongoose.connect('mongodb://localhost:27017/skypebot');
+var confirm = false;
 
-var url = 'mongodb://localhost:27017/skypebot';
 
-//var url = 'mongodb://keenpeople:Suwuz123@ds141410.mlab.com:41410/heroku_5sb2kdth'
- //Use connect method to connect to the Server 
-MongoClient.connect(url, function(err, db) {
-  assert.equal(null, err);
-  console.log("Connected correctly to server");
- db.close();
 
-});
-
-//=========================================================
-// Bot Setup
-//=========================================================
-
-// Setup Restify Server
-var server = restify.createServer();
-server.listen(process.env.port || process.env.PORT || 3978, function () {
-   console.log('%s listening to %s', server.name, server.url); 
-});
-  
-// Create chat bot
-var connector = new builder.ChatConnector({
-  appId: "607b6eb5-3eb4-4f2d-a0e9-38b471a4979a",
-  appPassword: "9Yhoxk9oJyqo18Xog1hT4sH"
-});
-var bot = new builder.UniversalBot(connector);
-//var intents = new builder.IntentDialog();
-server.post('/api/messages', connector.listen());
-var confirm = false
-//=========================================================
-// Bots Dialogs
-//=========================================================
 bot.dialog('/', new builder.IntentDialog()
     .onDefault('/getstarted')
 
