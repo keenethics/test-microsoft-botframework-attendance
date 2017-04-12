@@ -10,7 +10,7 @@ Clone repository and use node and npm versions in package.json file, install the
 
 
 1. `npm install`
-2. `npm run start`
+2. `npm run start-locally`
 
 
 Emulator must be running in the separate terminal.
