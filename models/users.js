@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
 
 const UsersSchema = {
 	name: String,
@@ -6,7 +6,7 @@ const UsersSchema = {
 	usedVacations: Number,
 	workedActually: [Number],
 	workingDays: [Number],
-}
+};
 
 const Users = mongoose.model('Users', UsersSchema);
 
