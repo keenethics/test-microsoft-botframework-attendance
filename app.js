@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import Event from './models/event';
 import moment from 'moment';
 import mongoose from 'mongoose';

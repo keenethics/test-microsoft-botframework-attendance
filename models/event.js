@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
 
 const EventSchema = {
 	startsAt: Date,
@@ -7,7 +7,7 @@ const EventSchema = {
 	comment: String,
 	user: String,
 	responses: Array,
-}
+};
 
 const Event = mongoose.model('Event', EventSchema);
 
