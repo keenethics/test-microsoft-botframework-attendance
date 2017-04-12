@@ -1,8 +1,8 @@
 # Attendance
 
 
-# Attendance is a chat bot application which allows employees to take a day off in an easy and comfortable way.
-# The goal of this project is automating that process.
+Attendance is a chat bot application which allows employees to take a day off in an easy and comfortable way.
+The goal of this project is automating that process.
 
 ## Run the app:
 
@@ -31,7 +31,7 @@ The next thing that should be done is putting app ID and password into emulator 
 
 
 
-# basic workflow:
+## basic workflow:
 
 We use BDD methodology while developing the app.
 (https://www.toptal.com/freelance/your-boss-won-t-appreciate-tdd-try-bdd)
@@ -49,7 +49,7 @@ to test it.
 4. Approved PR is merged to master.
 
 
-# writing tests
+## writing tests
 We use mocha as a test runner and chai assertion library.
 Take a look at the following resources: 
 1. https://blog.risingstack.com/node-hero-node-js-unit-testing-tutorial/
