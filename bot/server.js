@@ -3,12 +3,16 @@ import builder from 'botbuilder';
 import { connector } from './bot.js';
 import mongoose from 'mongoose';
 
+var createUsers = require("../models/db/defaultUsersDB.js");
+
 var MongoClient = require('mongodb').MongoClient
   , assert = require('assert');
    
 mongoose.connect('mongodb://localhost:27017/skypebot');
 
 const url = 'mongodb://localhost:27017/skypebot';
+
+createUsers(mongoose);
 
 MongoClient.connect(url, function(err, db) {
   assert.equal(null, err);
