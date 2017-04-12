@@ -1,6 +1,9 @@
 # Attendance
 
 
+# Attendance is a chat bot application which allows employees to take a day off in an easy and comfortable way.
+# The goal of this project is automating that process.
+
 ## Run the app:
 
 Clone repository and use node and npm versions in package.json file, install them if not already installed.
@@ -25,3 +28,30 @@ The next thing that should be done is putting app ID and password into emulator 
   appPassword: "9Yhoxk9oJyqo18Xog1hT4sH"
 
 ![alt tag](1.png)
+
+
+
+#basic workflow:
+
+We use BDD methodology while developing the app.
+(https://www.toptal.com/freelance/your-boss-won-t-appreciate-tdd-try-bdd)
+
+Make sure you follow eslint rules
+(http://eslint.org/docs/rules/)
+
+Commits with eslint errors are disabled.
+
+When you are assigned on the new task:
+1. Create separate branch. The name of the branch should appropriate a task meaining.
+2. When you all done with a task create PR. Left the comment with a task description or link to task. And ask other developers
+to test it.
+3. Every task should have tests covering.
+4. Approved PR is merged to master.
+
+
+#writing tests
+We use mocha as a test runner and chai assertion library.
+Take a look at the following resources: 
+1. https://blog.risingstack.com/node-hero-node-js-unit-testing-tutorial/
+2. https://mochajs.org/
+3. http://chaijs.com/
