@@ -1,8 +1,8 @@
 import builder from 'botbuilder';
 
 export const connector = new builder.ChatConnector({
-	appId: '607b6eb5-3eb4-4f2d-a0e9-38b471a4979a',
-	appPassword: '9Yhoxk9oJyqo18Xog1hT4sH'
+	appId: '79dc72c7-dc9b-43f6-9833-d12c0771f89b',
+	appPassword: 'SmiHtU8Mpjx6QzQcQ9YjbXg'
 });
 
 export const bot = new builder.UniversalBot(connector);
