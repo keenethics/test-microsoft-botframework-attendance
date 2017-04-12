@@ -1,2 +1,3 @@
 import Event from './event.js';
-export { Event };
+import Users from './users.js';
+export { Event, Users };

@@ -2,7 +2,7 @@ import { bot } from '../bot.js'
 import builder from 'botbuilder';
 import moment from 'moment';
 
-const confirm = false;
+let confirm = false;
 
 bot.dialog('/', new builder.IntentDialog()
     .onDefault('/getstarted')
@@ -10,11 +10,12 @@ bot.dialog('/', new builder.IntentDialog()
   );
 bot.dialog('/menu', new builder.IntentDialog()
 
-    .matches(/^help/i,builder.DialogAction.send("You can : 1. day off  2.createAlarm  3.editprofile") )
+    .matches(/^help/i,builder.DialogAction.send("You can : 1. day off  2.createAlarm  3.editprofile 4.full info") )
     .matches(/^day off/i, '/dayoff')
     .matches(/^createAlarm/i, '/createAlarm')
     .matches(/^ensureProfile/i, '/ensureProfile')
-    .onDefault(builder.DialogAction.send("You can : 1. day off  2.createAlarm  3.editprofile"))
+    .matches(/^full info/i, '/fullInfo')
+    .onDefault(builder.DialogAction.send("You can : 1. day off  2.createAlarm  3.editprofile 4.full info"))
 
 );
 bot.dialog('/getstarted',[

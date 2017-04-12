@@ -2,6 +2,8 @@ import { bot } from '../bot.js'
 import builder from 'botbuilder';
 import moment from 'moment';
 
+let confirm = false;
+
 bot.dialog('/ensureProfile', [
     function (session, args, next) {
         if (!session.userData) session.userData = {}
@@ -28,12 +30,12 @@ bot.dialog('/ensureProfile', [
             session.send('Hello %(name)s! Your email is %(email)s!', session.userData.profile);
             session.send('Nice to meet you :)');
             confirm = true;   var shit = session.userData.profile;
-              MongoClient.connect(url, function(err, db) {
-                assert.equal(null, err);
-                insertDocument(db, function() {
-                  db.close();
-                },shit);
-              }); 
+	     // MongoClient.connect(url, function(err, db) {
+	     //   assert.equal(null, err);
+	     //   insertDocument(db, function() {
+	     //     db.close();
+	     //   },shit);
+	     // });
         } else {
             next();
         }     
