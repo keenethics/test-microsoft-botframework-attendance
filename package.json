@@ -4,14 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "./node_modules/mocha/bin/mocha --compilers js:babel-core/register",
     "babel-node": "babel-node",
     "start": "npm install && nodemon --exec npm run babel-node -- app.js",
     "start-locally": "NODE_ENV='development' nodemon --exec npm run babel-node -- app.js",
-    "eslint" : "./node_modules/.bin/eslint ./",
-    "precommit-msg" : "echo 'Pre-commit checks...' && exit 0"
+    "eslint": "./node_modules/.bin/eslint ./",
+    "precommit-msg": "echo 'Pre-commit checks...' && exit 0"
   },
-  "pre-commit" : ["precommit-msg", "eslint"],
+  "pre-commit": [
+    "precommit-msg",
+    "eslint"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -166,9 +169,14 @@
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
+    "babel-core": "^6.24.1",
     "babel-preset-env": "^1.3.3",
+    "babel-preset-es2015": "^6.24.1",
+    "chai": "^3.5.0",
     "eslint": "^3.19.0",
+    "mocha": "^3.2.0",
     "nodemon": "^1.11.0",
-    "pre-commit": "^1.2.2"
+    "pre-commit": "^1.2.2",
+    "underscore": "^1.8.3"
   }
 }
