@@ -6,8 +6,9 @@
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha --compilers js:babel-core/register",
     "babel-node": "babel-node",
-    "start": "npm install && npm run babel-node -- app.js",
-    "start-locally": "NODE_ENV='development' nodemon --exec npm run babel-node -- app.js",
+    "build": "babel src --out-dir lib",
+    "run-production": "npm install && node lib/app.js",
+    "start-locally": "NODE_ENV='development' nodemon --exec npm run babel-node -- src/app.js",
     "eslint": "./node_modules/.bin/eslint ./",
     "precommit-msg": "echo 'Pre-commit checks...' && exit 0"
   },
