@@ -1,4 +1,4 @@
-import { Event } from './models';
+import { Event } from './src/models';
 
 var testData = {};
 
