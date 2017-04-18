@@ -55,3 +55,7 @@ Take a look at the following resources:
 1. https://blog.risingstack.com/node-hero-node-js-unit-testing-tutorial/
 2. https://mochajs.org/
 3. http://chaijs.com/
+
+## Deploy Attandance app to Heroku:
+1. `npm run build`
+2. `git push heroku master`
