@@ -8,7 +8,7 @@ testData.user = new Event({
 	type: 'dayoff',
 	comment: 'this is a comment',
 	user: 'username',
-	dummyData: 'dummy'
+	dummyData: 'dummy',
 });
 
 testData.convert = function (str) {
@@ -16,3 +16,4 @@ testData.convert = function (str) {
 };
 
 module.exports= testData;
+

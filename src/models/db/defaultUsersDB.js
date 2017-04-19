@@ -1,41 +1,129 @@
-import { Users } from '../../models';
+import { Users, Holidays } from '../../models';
 
-module.exports = (db) => {
-	db.connection.collections['users'].drop(function(err) {
+import mongoose from 'mongoose';
+
+module.exports = () => {
+	dropAllCollections(false);
+	mongoose.connection.model('Holidays').find({}, (err, d) => {
+		d.length;
+		if (!d.length) {
+			fillHolidaysIfEmpty();
+		}
+	});
+
+	mongoose.connection.model('Users').find({}, (err, d) => {
+		d.length;
+		if (!d.length) {
+			fillUsersIfEmpty();
+		}
+	});
+};
+
+
+let fillHolidaysIfEmpty = () => {
+	let holiday = {year: 2017, months: []};
+	let months = [
+		{name: 'January',
+			holidays: [new Date(2017, 0, 2), new Date(2017, 0, 9)]},
+		{name:'February'},
+		{name:'March',
+			holidays: [new Date(2017, 2, 8)]},
+		{name:'April',
+			holidays: [new Date(2017, 3, 17)]},
+		{name:'May',
+			holidays: [new Date(2017, 4, 1), new Date(2017, 4, 2), new Date(2017, 4, 9)]},
+		{name:'June',
+			holidays: [new Date(2017, 5, 5), new Date(2017, 5, 28)]},
+		{name:'July'},
+		{name:'August',
+			holidays: [new Date(2017, 7, 24)]},
+		{name:'September'},
+		{name:'October',
+			holidays: [new Date(2017, 9, 16)]},
+		{name:'November'},
+		{name:'December'}];
+
+	let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+	months.map((m, index) => {
+		let numberOfDaysInMonth = new Date(holiday.year, index+1, 0).getDate();
+		let workingDays = 0;
+		while(numberOfDaysInMonth) {
+			let day = new Date(holiday.year, index, numberOfDaysInMonth);
+			if (days[day.getDay()] != 'Sunday' && days[day.getDay()] != 'Saturday') {
+				let isHoliday = false;
+				if (m.holidays) {
+					m.holidays.map((hDay) => {
+						if (hDay.getTime() == day.getTime()) isHoliday = true;
+					});
+				}
+				if (!isHoliday) ++workingDays;
+			}
+			--numberOfDaysInMonth;
+		}
+		holiday.months.push({month: m.name, totalWorkingDays: workingDays});
+	});
+	new Holidays(holiday).save((err) => {
+		if(err) {
+			console.log('--->',err);
+		} else {
+			console.log('db.holidays was filled');
+		}
+	});
+};
+
+
+let fillUsersIfEmpty = () => {
+	let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
+		'September', 'October', 'November', 'December'];
+	let workedDaysInMonth = [10, 20, 22, 11];
+	let user = {};
+	let name = 'tester';
+	let role = 'user';
+	let email = 'tester@gmail.com';
+	let usedVacations = 0;
+	let sickLeaveLeft = 5;
+	let sickLeaveHalfLeft = 10;
+	let workingInfo = [];
+	let workingYear = {year: 2017, months: []};
+	let events = [];
+	workedDaysInMonth.map((workedDays, index) => {
+		workingYear.months.push({month: months[index], actuallyWorkedDays: workedDays});
+	});
+	workingInfo.push(workingYear);
+	user = {name, role, email,usedVacations, sickLeaveLeft, sickLeaveHalfLeft, workingInfo, events};
+	new Users(user).save((err) => {
+		if(err) {
+			console.log('--->',err);
+		} else {
+			console.log('db.users was filled with user \"' + name + '\"');
+		}
+	});
+};
+
+
+let dropAllCollections = (toDrop) => {
+	if (!toDrop) return;
+	mongoose.connection.model('Holidays').remove((err) => {
 		if (err) {
 			console.log(err);
-			return;
+		} else {
+			console.log('db.holidays was dropped');
 		}
-		console.log('----dropped users');
 	});
-	let users = [];
-	let workingDays = [20, 19, 21, 20, 21, 20, 20, 20, 21, 20, 21, 21];
 
-	let name = 'tester';
-	let email = 'tester@gmail.com';
-	let usedVacations = 2;
-	let workedActually = [19, 18, 20, 20, 10, 0, 0, 0, 0, 0, 0, 0];
-	users.push(new Users({name, email, usedVacations, workedActually, workingDays}));
+	mongoose.connection.model('Users').remove((err) => {
+		if (err) {
+			console.log(err);
+		} else {
+			console.log('db.users was dropped');
+		}
+	});
 
-	name = 'foo';
-	email = 'foo@mail.com';
-	usedVacations = 0;
-	workedActually = [0, 11, 15, 10, 5, 10, 11, 0, 0, 0, 0, 0];
-	users.push(new Users({name, email, usedVacations, workedActually, workingDays}));
-
-	name = 'bar';
-	email = 'bar@yandex.com';
-	usedVacations = 3;
-	workedActually = [0, 0, 0, 0, 5, 10, 11, 13, 15, 16, 17, 0];
-	users.push(new Users({name, email, usedVacations, workedActually, workingDays}));
-
-	name = 'foobar';
-	email = 'foobar@yahoo.com';
-	usedVacations = 0;
-	workedActually = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 17, 21];
-	users.push(new Users({name, email, usedVacations, workedActually, workingDays}));
-
-	users.map(u => {
-		u.save((err) => {if (err) { console.log(err); }});
+	mongoose.connection.model('Event').remove((err) => {
+		if (err) {
+			console.log(err);
+		} else {
+			console.log('db.events was dropped');
+		}
 	});
 };
