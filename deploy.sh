@@ -1,6 +1,5 @@
-DATE=date +"%m-%d-%y"
-BRANCH=feature-$(DATE)
-
+BRANCH=feature-`date +%y/%m/%d-%H:%M:%S`
+echo $BRANCH
 git checkout -b $BRANCH
 npm run build
 git add .
