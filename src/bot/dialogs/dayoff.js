@@ -5,7 +5,7 @@ import { Event } from '../../models';
 bot.dialog('/dayoff' , [
 
 	function (session) {
-		builder.Prompts.text(session,'how many days ?');
+		builder.Prompts.text(session,'how many days do you want ?');
 	},
 
 	function (session, results){
