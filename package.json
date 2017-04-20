@@ -6,6 +6,7 @@
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha --compilers js:babel-core/register",
     "babel-node": "babel-node",
+    "deploy": "bash deploy.sh",
     "build": "babel src --out-dir lib",
     "run-production": "npm install && node lib/app.js",
     "start-locally": "NODE_ENV='development' nodemon --exec npm run babel-node -- src/app.js",
