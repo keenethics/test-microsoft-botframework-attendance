@@ -2,6 +2,7 @@ import { bot } from '../bot.js';
 import builder from 'botbuilder';
 
 //let confirm = false;
+var getRoleByUsername = require('../../models/db/methods/userInfo').getRoleByUsername;
 
 bot.dialog('/ensureProfile', [
 	function (session, args, next) {
@@ -39,8 +40,11 @@ bot.dialog('/ensureProfile', [
 		} else {
 			next();
 		}     
-		//confirm = true; 
-		session.endDialogWithResult({ response: session.userData.profile });
+		//confirm = true;
+		getRoleByUsername(session.userData.profile.name, function(role) {
+			session.userData.profile.role = role;
+			session.endDialogWithResult({ response: session.userData.profile });
+		});
 	},
 
 ]);
