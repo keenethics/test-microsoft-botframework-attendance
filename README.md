@@ -56,6 +56,13 @@ Take a look at the following resources:
 2. https://mochajs.org/
 3. http://chaijs.com/
 
+## running tests
+To run all tests:
+1. `npm test`
+
+If you want add your own test, make a file "./test/fileName.js",
+where you can write functional, which you want to test.
+
 ## Deploy Attandance app to Heroku:
 1. `npm run build`
 2. `git push heroku master`

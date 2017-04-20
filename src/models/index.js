@@ -1,3 +1,4 @@
 import Event from './event.js';
 import Users from './users.js';
-export { Event, Users };
+import Holidays from './holidays.js';
+export { Event, Users, Holidays };
