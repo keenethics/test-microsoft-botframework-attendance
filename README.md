@@ -63,6 +63,5 @@ To run all tests:
 If you want add your own test, make a file "./test/fileName.js",
 where you can write functional, which you want to test.
 
-## Deploy Attandance app to Heroku:
-1. `npm run build`
-2. `git push heroku master`
+## Deploy Attandance:
+1. `npm run deploy`
