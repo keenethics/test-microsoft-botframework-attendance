@@ -177,6 +177,7 @@
     "chai": "^3.5.0",
     "eslint": "^3.19.0",
     "mocha": "^3.2.0",
+    "nodemailer": "^4.0.1",
     "nodemon": "^1.11.0",
     "pre-commit": "^1.2.2",
     "underscore": "^1.8.3"

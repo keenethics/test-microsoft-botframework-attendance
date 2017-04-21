@@ -2,6 +2,10 @@ import { bot } from '../bot.js';
 import builder from 'botbuilder';
 import moment from 'moment';
 import { Event } from '../../models';
+
+var sendEmailAboutNewEvent = require('../../email_notifications/EventsNotification').sendEmailAboutNewEvent;
+var data = {};
+
 bot.dialog('/dayoff' , [
 
 	function (session) {
@@ -37,8 +41,12 @@ bot.dialog('/dayoff' , [
 		session.userData.dayoff = dayoff;
 
 		const DayOff = new Event(dayoff);
-		DayOff.save((err) => {
-			if (err) { console.log(err); }
+		DayOff.save((err, result) => {
+			if (err) {
+				data = {};
+				return console.log(err);
+			}
+			data = result;
 		});
 
       // session.userData.time = builder.EntityRecognizer.resolveTime([results.response]);
@@ -68,6 +76,15 @@ function createHeroCard(session,reason) {
 	builder.CardImage.create(session, imageUrl)
 ])
         .buttons([
-	builder.CardAction.openUrl(session,'https://www.google.com.ua/', 'Send(to mc)')
+	builder.CardAction.dialogAction(session, 'sendEmail','' ,'Send(to mc)')
 ]);
 }
+
+bot.dialog('/sendEmail', [
+	function(session) {
+		sendEmailAboutNewEvent(data, function(answer) {
+			session.endDialog(answer);
+		});
+	}
+]);
+bot.beginDialogAction('sendEmail', '/sendEmail');
