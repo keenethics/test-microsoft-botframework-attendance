@@ -5,14 +5,12 @@ import mongoose from 'mongoose';
 module.exports = () => {
 	dropAllCollections(false);
 	mongoose.connection.model('Holidays').find({}, (err, d) => {
-		d.length;
 		if (!d.length) {
 			fillHolidaysIfEmpty();
 		}
 	});
 
 	mongoose.connection.model('Users').find({}, (err, d) => {
-		d.length;
 		if (!d.length) {
 			fillUsersIfEmpty();
 		}
@@ -60,7 +58,7 @@ let fillHolidaysIfEmpty = () => {
 			}
 			--numberOfDaysInMonth;
 		}
-		holiday.months.push({ month: m.name, totalWorkingDays: workingDays, holidaysDate: m.holidays });
+		holiday.months.push({month: m.name, totalWorkingDays: workingDays, holidaysDate: m.holidays});
 	});
 	new Holidays(holiday).save((err) => {
 		if(err) {
@@ -98,6 +96,30 @@ let fillUsersIfEmpty = () => {
 			console.log('db.users was filled with user \"' + name + '\"');
 		}
 	});
+
+	workedDaysInMonth = [0, 0, 5, 6];
+	user = {};
+	name = 'admin';
+	role = 'admin';
+	email = 'admin@gmail.com';
+	usedVacations = 0;
+	sickLeaveLeft = 1;
+	sickLeaveHalfLeft = 4;
+	workingInfo = [];
+	workingYear = {year: 2017, months: []};
+	workedDaysInMonth.map((workedDays, index) => {
+		workingYear.months.push({month: months[index], actuallyWorkedDays: workedDays});
+	});
+	workingInfo.push(workingYear);
+	user = {name, role, email,usedVacations, sickLeaveLeft, sickLeaveHalfLeft, workingInfo, events};
+	new Users(user).save((err) => {
+		if(err) {
+			console.log('--->',err);
+		} else {
+			console.log('db.users was filled with user \"' + name + '\"');
+		}
+	});
+
 };
 
 
