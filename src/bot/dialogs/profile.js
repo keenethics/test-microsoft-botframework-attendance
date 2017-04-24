@@ -2,7 +2,7 @@ import { bot } from '../bot.js';
 import builder from 'botbuilder';
 
 //let confirm = false;
-var getRoleByUsername = require('../../models/db/methods/userInfo').getRoleByUsername;
+var getRoleByUsername = require('../../models/db/methods/usersMethods').getRoleByUsername;
 
 bot.dialog('/ensureProfile', [
 	function (session, args, next) {

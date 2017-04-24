@@ -1,7 +1,7 @@
 import { bot } from '../bot.js';
 import builder from 'botbuilder';
 
-var getInfoByUsername = require('../../models/db/methods/userInfo').getInfoByUsername;
+var getInfoByUsername = require('../../models/db/methods/usersMethods').getInfoByUsername;
 bot.dialog('/userInfo', [
 	function(session) {
 		if (session.userData.profile.role != 'admin') {
