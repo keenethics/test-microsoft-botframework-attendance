@@ -60,7 +60,7 @@ let fillHolidaysIfEmpty = () => {
 			}
 			--numberOfDaysInMonth;
 		}
-		holiday.months.push({month: m.name, totalWorkingDays: workingDays});
+		holiday.months.push({ month: m.name, totalWorkingDays: workingDays, holidaysDate: m.holidays });
 	});
 	new Holidays(holiday).save((err) => {
 		if(err) {
