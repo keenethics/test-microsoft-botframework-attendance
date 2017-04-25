@@ -73,33 +73,7 @@ bot.dialog('/dayoff' , [
 			responses: [], 
 		};
 		session.userData.dayoff = dayoff;
-		Fiber(function() {
-			if (!workedMonths.length) getHolidays(new Date());
-
-			getUser(session.userData.profile.name);
-			const workedMonthsObject = {};
-			workedMonths.forEach(wM => workedMonthsObject[wM.month] = wM.totalWorkingDays);
-			const actuallyWorked = user.workingInfo.filter(wI => (wI.year === parseInt(year, 10)))[0];
-			const actuallyWorkedObject =  {};
-			actuallyWorked.months.forEach(aW => actuallyWorkedObject[aW.month] = aW.actuallyWorkedDays);
-
-			let vacations = 0;
-			for (let keys in actuallyWorkedObject) {
-				vacations += (actuallyWorkedObject[keys] / workedMonthsObject[keys]) * 1.66;
-			}
-			const { usedVacations } = user;
-			const enabledVacationsForEvent = Math.floor(vacations) - usedVacations;
-			let vacationsUsed = dayOffCount;
-			let daysOffUsed = 0;
-			if (enabledVacationsForEvent < dayOffCount) {
-				vacationsUsed = enabledVacationsForEvent;
-				daysOffUsed = dayOffCount - enabledVacationsForEvent;
-			}
-			dayoff.vacationsUsed = vacationsUsed;
-			dayoff.daysOffUsed = daysOffUsed;
-			saveEvent(dayoff);
-		}).run();
-
+		saveDayoffEvent(dayoff, session.userData.profile.name);
 		session.userData.time = builder.EntityRecognizer.resolveTime([startsAt]);
 		var card = createHeroCard(session, reason);
 		var msg = new builder.Message(session).addAttachment(card);
@@ -127,3 +101,36 @@ function createHeroCard(session,reason) {
 	builder.CardAction.openUrl(session,'https://www.google.com.ua/', 'Send(to mc)')
 ]);
 }
+
+
+function saveDayoffEvent (event, userName) {
+	const dayoff = event;
+	const year = moment(dayoff.startsAt).year();
+	const dayOffCount = moment(dayoff.endsAt).diff(moment(dayoff.startsAt), 'days');
+
+	Fiber(function() {
+		if(event.isVacation) {
+			if (!workedMonths.length) getHolidays(new Date());
+			getUser(userName);
+			const workedMonthsObject = {};
+			workedMonths.forEach(wM => workedMonthsObject[wM.month] = wM.totalWorkingDays);
+			const actuallyWorked = user.workingInfo.filter(wI => (wI.year === parseInt(year, 10)))[0];
+			const actuallyWorkedObject =  {};
+			actuallyWorked.months.forEach(aW => actuallyWorkedObject[aW.month] = aW.actuallyWorkedDays);
+			let vacations = 0;
+			for (let keys in actuallyWorkedObject) {
+				vacations += (actuallyWorkedObject[keys] / workedMonthsObject[keys]) * 1.66;
+			}
+			const { usedVacations } = user;
+			dayoff.vacationsUsed = Math.floor(vacations) - usedVacations - dayOffCount;
+			dayoff.daysOffUsed = 0;
+		} else {
+			dayoff.vacationsUsed = 0;
+			dayoff.daysOffUsed = dayOffCount;
+		}
+		saveEvent(dayoff);
+	}).run();
+
+}
+
+export default saveDayoffEvent;
