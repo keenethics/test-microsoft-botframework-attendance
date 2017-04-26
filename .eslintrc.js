@@ -8,13 +8,13 @@ module.exports = {
         "sourceType": "module"
     },
     "rules": {
-        "no-console":0,
+        "no-console": ["error", {allow: ["error", "info"] }],
         "no-unused-vars": ["error", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
         "max-len": [1, 120, 2, {"ignoreComments": true}],
         "no-multiple-empty-lines": [2, {"max": 5, "maxEOF": 1,}],
         "indent": [
             "error",
-            "tab"
+            2
         ],
         "linebreak-style": [
             "error",
