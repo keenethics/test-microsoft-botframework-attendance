@@ -1,6 +1,7 @@
 import dayoff from './dayoff.js';
 import menu from './menu.js';
 import profile from './profile.js';
+import vacation from './vacation';
 import fullInfo from './fullInfo.js';
 import userInfo from '../admin_dialogs/getInfoByUserName.js';
 export {
@@ -8,5 +9,6 @@ export {
 	dayoff,
 	profile,
 	fullInfo,
-	userInfo
+	userInfo,
+	vacation,
 };
