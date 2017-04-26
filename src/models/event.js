@@ -7,11 +7,11 @@ const EventSchema = {
 	type: String,
 	comment: String,
 	user: String,
-	//responses: Array,
 	vacationsUsed: {type: Number, defaul: 0},
 	daysOffUsed: {type: Number, defaul: 0},
 	sickLeavesUsed: {type: Number, defaul: 0},
 	isReject: {type: Boolean, default: false},
+	rejectReason: String,
 };
 
 

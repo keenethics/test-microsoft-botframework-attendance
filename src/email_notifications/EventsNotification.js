@@ -14,7 +14,7 @@ const nodemailer = require('nodemailer');
 app.use(myParser.urlencoded({extended:true}));
 
 app.post('/rejectEvent', function(request) {
-	rejectEventById(request.body.eventID);
+	rejectEventById(request.body.eventID, request.body.reason);
 	sendNotificationAboutEventReject(request.body);
 });
 
@@ -34,7 +34,7 @@ function sendEmailAboutNewEvent(data, callback) {
 	let startsAt = moment(data.startsAt).format('MMMM Do YYYY');
 	let endsAt = moment(data.endsAt).format('MMMM Do YYYY');
 	let html = '<span style="font-size: 16px; font-weight: bold">' + data.user + '</span> want take ' + data.type +
-	'<br /> Starts at: ' + startsAt + '<br /> Ends at: ' + endsAt + '<br />Comment:' + data.comment +
+	'<br /> Starts at: ' + startsAt + '<br /> Ends at: ' + endsAt + '<br />Comment: ' + data.comment +
 		'<br /><br />To reject press the button below:' + '<form action="http://localhost:8080/rejectEvent" method="post">\
 	<input type="hidden" name="eventID" value="' + data._id + '">\
 	<input type="hidden" name="startsAt" value="' + startsAt + '">\
