@@ -28,6 +28,8 @@
     "asynckit": "0.4.0",
     "aws-sign2": "0.6.0",
     "aws4": "1.6.0",
+    "babel-eslint": "^7.2.3",
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
     "backoff": "2.5.0",
     "balanced-match": "0.4.2",
     "base64url": "1.0.6",

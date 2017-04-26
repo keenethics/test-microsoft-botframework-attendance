@@ -2,41 +2,48 @@ import { bot } from '../bot.js';
 import builder from 'botbuilder';
 import moment from 'moment';
 import { Event } from '../../models';
-import Fiber from 'fibers';
 import mongoose from 'mongoose';
 
-let workedMonths = [];
-let user = {};
-
 function getHolidays() {
-	const holidays = mongoose.connection.model('Holidays');
-	const fiber = Fiber.current;
-	holidays.find({ year: 2017 }, (err, info) => {
-		workedMonths = info[0] && info[0].months;
-		fiber.run();
+	return new Promise(function(resolve, reject) {
+		const holidays = mongoose.connection.model('Holidays');
+		holidays.find({ year: 2017 }, (err, info) => {
+			if (err) { 
+				reject(err.reason);
+			} else {
+				const workedMonths = info[0] && info[0].months;
+				resolve(workedMonths);
+			}
+		});
 	});
-	Fiber.yield();
 }
 
 function saveEvent(dayoff) {
-	const DayOff = new Event(dayoff);
-	DayOff.save((err) => {
-		if (err) { console.log(err); }
-		console.log('saved......');
-	});	
+	return new Promise(function(resolve, reject) {
+		const DayOff = new Event(dayoff);
+		DayOff.save((err) => {
+			if (err) {
+				console.log(err);
+				reject(err);
+			} else {
+				resolve('saved...');
+			}
+		});			
+	});
 }
 
 function getUser(userName) {
-	const users = mongoose.connection.model('Users');
-	const fiber = Fiber.current;
-	users.findOne({ name: userName }, (err, info) => {
-		user = info;
-		fiber.run();
+	return new Promise(function(resolve, reject) {
+		const users = mongoose.connection.model('Users');
+		users.findOne({ name: userName }, (err, info) => {
+			if (err) {
+				reject(err);
+			} else {
+				resolve(info);
+			}
+		});
 	});
-	Fiber.yield();
 }
-
-
 
 bot.dialog('/dayoff' , [
 
@@ -62,7 +69,6 @@ bot.dialog('/dayoff' , [
 		const date = moment({ month, date: day, year })._d;
 		const startsAt = moment(date)._d;
 		const endsAt = moment(startsAt).clone().add(dayOffCount, 'days')._d;
-
 		const type = 'dayoff'; 
 		const dayoff = {
 			startsAt,
@@ -103,34 +109,30 @@ function createHeroCard(session,reason) {
 }
 
 
-function saveDayoffEvent (event, userName) {
+const saveDayoffEvent = async (event, userName) => {
 	const dayoff = event;
 	const year = moment(dayoff.startsAt).year();
 	const dayOffCount = moment(dayoff.endsAt).diff(moment(dayoff.startsAt), 'days');
-
-	Fiber(function() {
-		if(event.isVacation) {
-			if (!workedMonths.length) getHolidays(new Date());
-			getUser(userName);
-			const workedMonthsObject = {};
-			workedMonths.forEach(wM => workedMonthsObject[wM.month] = wM.totalWorkingDays);
-			const actuallyWorked = user.workingInfo.filter(wI => (wI.year === parseInt(year, 10)))[0];
-			const actuallyWorkedObject =  {};
-			actuallyWorked.months.forEach(aW => actuallyWorkedObject[aW.month] = aW.actuallyWorkedDays);
-			let vacations = 0;
-			for (let keys in actuallyWorkedObject) {
-				vacations += (actuallyWorkedObject[keys] / workedMonthsObject[keys]) * 1.66;
-			}
-			const { usedVacations } = user;
-			dayoff.vacationsUsed = Math.floor(vacations) - usedVacations - dayOffCount;
-			dayoff.daysOffUsed = 0;
-		} else {
-			dayoff.vacationsUsed = 0;
-			dayoff.daysOffUsed = dayOffCount;
+	if(event.isVacation) {
+		const workedMonths = await getHolidays(new Date());
+		const user = await getUser(userName);
+		const workedMonthsObject = {};
+		workedMonths.forEach(wM => workedMonthsObject[wM.month] = wM.totalWorkingDays);
+		const actuallyWorked = user.workingInfo.filter(wI => (wI.year === parseInt(year, 10)))[0];
+		const actuallyWorkedObject =  {};
+		actuallyWorked.months.forEach(aW => actuallyWorkedObject[aW.month] = aW.actuallyWorkedDays);
+		let vacations = 0;
+		for (let keys in actuallyWorkedObject) {
+			vacations += (actuallyWorkedObject[keys] / workedMonthsObject[keys]) * 1.66;
 		}
-		saveEvent(dayoff);
-	}).run();
-
-}
+		const { usedVacations } = user;
+		dayoff.vacationsUsed = Math.floor(vacations) - usedVacations - dayOffCount;
+		dayoff.daysOffUsed = 0;
+	} else {
+		dayoff.vacationsUsed = 0;
+		dayoff.daysOffUsed = dayOffCount;
+	}
+	saveEvent(dayoff);
+};
 
 export default saveDayoffEvent;
