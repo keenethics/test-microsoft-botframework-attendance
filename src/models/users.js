@@ -23,6 +23,7 @@ const UsersSchema = {
   sickLeaveHalfLeft: Number,
   workingInfo: [WorkingInfoSchema],
   events: [Event],
+  sessionAddress: Object,
 };
 
 const Users = mongoose.model('Users', UsersSchema);

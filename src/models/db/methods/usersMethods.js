@@ -60,7 +60,28 @@ function getRoleByUsername(username, callback) {
 }
 
 
+function setSessionAddressForUser(username, address) {
+  usersDB.update({name: username}, {$set: {sessionAddress: address}}, (err) => {
+    if(err) {
+      return console.error(err);
+    }
+  });
+}
+
+function getSessionAddressForUser(username, callback) {
+  usersDB.findOne({name: username}, (err, user) => {
+    if (err) {
+      return console.error(err);
+    }
+    if (user) {
+      callback(user.sessionAddress);
+    }
+  });
+}
+
 module.exports = {
   getInfoByUsername: getInfoByUsername,
-  getRoleByUsername: getRoleByUsername
+  getRoleByUsername: getRoleByUsername,
+  setSessionAddressForUser: setSessionAddressForUser,
+  getSessionAddressForUser: getSessionAddressForUser
 };

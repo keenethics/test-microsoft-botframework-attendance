@@ -2,7 +2,8 @@ import { bot } from '../bot.js';
 import builder from 'botbuilder';
 
 //let confirm = false;
-var getRoleByUsername = require('../../models/db/methods/userInfo').getRoleByUsername;
+var getRoleByUsername = require('../../models/db/methods/usersMethods').getRoleByUsername;
+var setSessionAddressForUser = require('../../models/db/methods/usersMethods').setSessionAddressForUser;
 
 bot.dialog('/ensureProfile', [
   function (session, args, next) {
@@ -29,6 +30,7 @@ bot.dialog('/ensureProfile', [
       session.userData.profile.email = results.response;
       session.send('Hello %(name)s! Your email is %(email)s!', session.userData.profile);
       session.send('Nice to meet you :)');
+      setSessionAddressForUser(session.userData.profile.name, session.message.address);
 			//confirm = true;
 			//var shit = session.userData.profile;
 			// MongoClient.connect(url, function(err, db) {

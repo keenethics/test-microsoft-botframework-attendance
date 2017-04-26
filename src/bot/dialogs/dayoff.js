@@ -5,6 +5,9 @@ import { Event } from '../../models';
 import Fiber from 'fibers';
 import mongoose from 'mongoose';
 
+var sendEmailAboutNewEvent = require('../../email_notifications/EventsNotification').sendEmailAboutNewEvent;
+var setSessionAddressForUser = require('../../models/db/methods/usersMethods').setSessionAddressForUser;
+let data = {};
 let workedMonths = [];
 let user = {};
 
@@ -20,8 +23,9 @@ function getHolidays() {
 
 function saveEvent(dayoff) {
   const DayOff = new Event(dayoff);
-  DayOff.save((err) => {
+  DayOff.save((err, result) => {
     if (err) { console.error(err); }
+    data = result;
     console.info('saved......');
   });	
 }
@@ -74,6 +78,7 @@ bot.dialog('/dayoff' , [
     };
     session.userData.dayoff = dayoff;
     saveDayoffEvent(dayoff, session.userData.profile.name);
+    setSessionAddressForUser(session.userData.profile.name, session.message.address);
     session.userData.time = builder.EntityRecognizer.resolveTime([startsAt]);
     var card = createHeroCard(session, reason);
     var msg = new builder.Message(session).addAttachment(card);
@@ -82,6 +87,17 @@ bot.dialog('/dayoff' , [
     session.beginDialog('/menu');
   }
 ]);
+
+
+bot.dialog('/sendEmail', [
+  function(session) {
+    sendEmailAboutNewEvent(data, function(answer) {
+      session.endDialog(answer);
+    });
+  }
+]);
+bot.beginDialogAction('sendEmail', '/sendEmail');
+
 
 function createHeroCard(session,reason) {
   const imageUrl = 'http://2.bp.blogspot.com/-AJcBRl3gmJk/VPdRVHoEa5I/AAAAAAAAaTU/'+
@@ -98,9 +114,10 @@ function createHeroCard(session,reason) {
           builder.CardImage.create(session, imageUrl)
         ])
         .buttons([
-          builder.CardAction.openUrl(session,'https://www.google.com.ua/', 'Send(to mc)')
+          builder.CardAction.dialogAction(session, 'sendEmail','' ,'Send(to mc)')
         ]);
 }
+
 
 
 function saveDayoffEvent (event, userName) {
