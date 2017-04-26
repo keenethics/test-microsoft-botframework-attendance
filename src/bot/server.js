@@ -18,15 +18,15 @@ mongoose.connect(mongourl);
 createUsers(mongoose);
 
 MongoClient.connect(mongourl, function(err, db) {
-	assert.equal(null, err);
-	console.log('Connected correctly to server');
-	db.close();
+  assert.equal(null, err);
+  console.info('Connected correctly to server');
+  db.close();
 
 });
 
 const server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3978, function () {
-	console.log('%s listening to %s', server.name, server.mongourl); 
+  console.info('%s listening to %s', server.name, server.mongourl); 
 });
   
 server.post('/api/messages', connector.listen());

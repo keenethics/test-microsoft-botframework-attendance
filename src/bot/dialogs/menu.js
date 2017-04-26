@@ -23,17 +23,17 @@ bot.dialog('/menu', new builder.IntentDialog()
 );
 bot.dialog('/getstarted',[
 
-	function (session, args, next) {
-		if (confirm == false) {
-			session.beginDialog('/ensureProfile', session.userData.profile);
+  function (session, args, next) {
+    if (confirm == false) {
+      session.beginDialog('/ensureProfile', session.userData.profile);
     
-		} else {
-			next();
+    } else {
+      next();
 
-		}
-	},
-	function (session) {
-		session.beginDialog('/menu', session.userData.profile);
-		session.send('You can : 1. day off  2. createAlarm  3. editprofile  4. help');
-	}
+    }
+  },
+  function (session) {
+    session.beginDialog('/menu', session.userData.profile);
+    session.send('You can : 1. day off  2. createAlarm  3. editprofile  4. help');
+  }
 ]);

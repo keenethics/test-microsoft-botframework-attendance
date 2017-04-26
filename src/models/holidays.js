@@ -2,15 +2,15 @@ import mongoose from 'mongoose';
 
 
 const MonthSchema = {
-	_id: false,
-	month: String,
-	holidaysDate: Array,
-	totalWorkingDays: Number,
+  _id: false,
+  month: String,
+  holidaysDate: Array,
+  totalWorkingDays: Number,
 };
 
 const HolidaysSchema = {
-	year: Number,
-	months: [MonthSchema],
+  year: Number,
+  months: [MonthSchema],
 };
 
 
