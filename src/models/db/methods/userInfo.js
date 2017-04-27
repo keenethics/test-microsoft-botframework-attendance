@@ -60,7 +60,21 @@ function getRoleByUsername(username, callback) {
 }
 
 
+function checkUserEmail(userEmail) {
+  return new Promise(function(resolve, reject) {
+    usersDB.findOne({email: userEmail}, (err, user) => {
+      if (err) {
+        console.error(err);
+        reject(err);
+      } else {
+        resolve(user);
+      }
+    });
+  });
+}
+
 module.exports = {
   getInfoByUsername: getInfoByUsername,
-  getRoleByUsername: getRoleByUsername
+  getRoleByUsername: getRoleByUsername,
+  checkUserEmail: checkUserEmail
 };
