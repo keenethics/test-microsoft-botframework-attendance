@@ -1,5 +1,8 @@
 import mongoose from 'mongoose';
 import _ from 'underscore';
+import { Users } from '../../index';
+mongoose.Promise = require('bluebird');
+
 
 let usersDB = mongoose.connection.model('Users');
 let holidaysDB = mongoose.connection.model('Holidays');
@@ -73,8 +76,42 @@ function checkUserEmail(userEmail) {
   });
 }
 
+
+function usernameExist(userName) {
+  return new Promise(function(resolve, reject) {
+    usersDB.findOne({name: userName}, (err, user) => {
+      if (err) {
+        console.error(err);
+        reject(err);
+      }
+      if (user) {
+        resolve(true);
+      } else {
+        resolve(false);
+      }
+    });
+  });
+}
+
+
+function registrateNewUser(newUser) {
+  return new Promise(function(resolve, reject) {
+    new Users(newUser).save((err, user) => {
+      if (err) {
+        console.error(err);
+        reject(err);
+      } else {
+        resolve(user);
+      }
+    });
+  });
+}
+
+
 module.exports = {
   getInfoByUsername: getInfoByUsername,
   getRoleByUsername: getRoleByUsername,
-  checkUserEmail: checkUserEmail
+  checkUserEmail: checkUserEmail,
+  usernameExist: usernameExist,
+  registrateNewUser: registrateNewUser
 };

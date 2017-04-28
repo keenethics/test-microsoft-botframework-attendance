@@ -16,11 +16,11 @@ const WorkingInfoSchema = {
 
 const UsersSchema = {
   name: String,
-  role: String,
+  role: {type: String, default: 'user'},
   email: String,
-  usedVacations: Number,
-  sickLeaveLeft: Number,
-  sickLeaveHalfLeft: Number,
+  usedVacations: {type: Number, default: 0},
+  sickLeaveLeft: {type: Number, default: 5},
+  sickLeaveHalfLeft: {type: Number, default: 10},
   workingInfo: [WorkingInfoSchema],
   events: [Event],
 };

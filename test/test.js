@@ -49,9 +49,9 @@ describe('Check EventSchema', () => {
       expect(forTest.user.user).to.be.a('string');
     });
 
-    it('should have responses and be a array', () => {
-      forTest.user.should.have.property('responses');
-      expect(forTest.user.responses).to.be.a('Array');
+    it('should have isReject and be a boolean', () => {
+      forTest.user.should.have.property('isReject');
+      expect(forTest.user.isReject).to.be.a('boolean');
     });
   });
 });
