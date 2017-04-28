@@ -1,62 +1,139 @@
 import { bot } from '../bot.js';
 import builder from 'botbuilder';
+import { CCODE } from '../../models/db/CCode';
 
-//let confirm = false;
-var getRoleByUsername = require('../../models/db/methods/userInfo').getRoleByUsername;
+
+var checkUserEmail = require('../../models/db/methods/userInfo').checkUserEmail;
+var usernameExist = require('../../models/db/methods/userInfo').usernameExist;
+var registrateNewUser = require('../../models/db/methods/userInfo').registrateNewUser;
+var sendConfirmCode = require('../mailService/mailMessage').sendConfirmCode;
+var user = {};
 
 bot.dialog('/ensureProfile', [
-  function (session, args, next) {
+  function (session, args) {
     if (!session.userData) session.userData = {};
     session.userData.profile = args || {};
-    if (!session.userData.profile.name) {
-      builder.Prompts.text(session, 'HI! :) What\'s your full name?');
+    if (!args) {
+      builder.Prompts.text(session, `Greetings ${session.message.user.name}, what's your email?` );
     } else {
-      next();
+      builder.Prompts.text(session, 'Enter valid email');
     }
   },
-  function (session, results, next) {
+  async function (session, results) {
     if (results.response) {
-      session.userData.profile.name = results.response;
-    }
-    if (!session.userData.profile.email) {
-      builder.Prompts.text(session, 'Enter your email please');
-    } else {
-      next();
+      user = await checkUserEmail(results.response);
+      var ccode = CCODE();
+      session.userData.profile.ccode = ccode;
+      if (user) {
+        let mailOptions = {
+          from: 'keenethics',
+          to: user.email,
+          subject: 'Confirmation code',
+          text: ccode
+        };
+        var sendResult = await sendConfirmCode(mailOptions);
+        if (sendResult) {
+          builder.Prompts.text(session, `Confirmation code was send to ${user.email}. Please paste it here:`);
+        } else {
+          session.send('Sorry. Something go wrong, try once more later.');
+          session.replaceDialog('/ensureProfile');
+        }
+      } else {
+        if (validateEmail(results.response)) {
+          session.send('There is no user with such email address.');
+          session.userData.profile.email = results.response;
+          session.replaceDialog('/newUserRegistration');
+        } else {
+          session.send('Invalid email. Only \"@keenethics.com\" domain allowed.');
+          session.replaceDialog('/ensureProfile', { reprompt: true });
+        }
+      }
     }
   },
-  function (session, results ,next) {
-    if (results.response) {
-      session.userData.profile.email = results.response;
-      session.send('Hello %(name)s! Your email is %(email)s!', session.userData.profile);
-      session.send('Nice to meet you :)');
-			//confirm = true;
-			//var shit = session.userData.profile;
-			// MongoClient.connect(url, function(err, db) {
-			//   assert.equal(null, err);
-			//   insertDocument(db, function() {
-			//     db.close();
-			//   },shit);
-			// });
+  function (session, results) {
+    if (session.userData.profile.ccode != results.response) {
+      session.send('Wrong confirmation code');
+      session.replaceDialog('/ensureProfile', {reprompt: true});
     } else {
-      next();
-    }
-		//confirm = true;
-    getRoleByUsername(session.userData.profile.name, function(role) {
-      session.userData.profile.role = role;
+      session.userData.profile.email = user.email;
+      session.userData.profile.name = user.name;
+      session.userData.profile.role = user.role;
+      session.send(`Welcome on board ${session.userData.profile.name}!`);
       session.endDialogWithResult({ response: session.userData.profile });
-    });
+    }
   },
 
 ]);
 
-//var insertDocument = function(db, callback, profile) {
-//	var currentdate = new Date();
-//	db.collection('users').insertOne( {
-//		'name' : profile.name,
-//		'email' : profile.email,
-//		'createdat' : currentdate
-//	}, function(err, result) {
-//		assert.equal(err, null);
-//		callback();
-//	});
-//};
+bot.dialog('/newUserRegistration', [
+  function(session, args) {
+    if (!args || !args.invalidName) {
+      session.send('Welcome to new user registration. Enter \"/cancel\" to exit.');
+      builder.Prompts.text(session, 'Enter your name:');
+    } else {
+      builder.Prompts.text(session, 'Enter valid name:');
+    }
+  },
+  async function(session, results) {
+    if (results.response == '/cancel') {
+      session.replaceDialog('/ensureProfile');
+    } else {
+      if (validateName(results.response)) {
+        if (await usernameExist(results.response)) {
+          session.send('This name already exist!');
+          session.replaceDialog('/newUserRegistration', {invalidName: true});
+        } else {
+          session.userData.profile.name = results.response;
+          var ccode = CCODE();
+          session.userData.profile.ccode = ccode;
+          let mailOptions = {
+            from: 'keenethics',
+            to: session.userData.profile.email,
+            subject: 'Confirmation code',
+            text: ccode
+          };
+          var sendResult = await sendConfirmCode(mailOptions);
+          if (sendResult) {
+            builder.Prompts.text(session, `Confirmation code was send to ${session.userData.profile.email}. Please paste
+               it here:`);
+          } else {
+            session.send('Sorry. Something go wrong, try once more later.');
+            session.replaceDialog('/newUserRegistration');
+          }
+        }
+      } else {
+        session.send('Invalid name!');
+        session.replaceDialog('/newUserRegistration', {invalidName: true});
+      }
+    }
+  },
+  async function (session, results) {
+    if (session.userData.profile.ccode != results.response) {
+      session.send('Wrong confirmation code');
+      session.replaceDialog('/newUserRegistration');
+    } else {
+      var newUser = {
+        name: session.userData.profile.name,
+        email: session.userData.profile.email
+      };
+      user = await registrateNewUser(newUser);
+      session.userData.profile.email = user.email;
+      session.userData.profile.name = user.name;
+      session.userData.profile.role = user.role;
+      session.send('You are successfully registrated.');
+      session.send(`Welcome on board ${session.userData.profile.name}!`);
+      session.endDialogWithResult({ response: session.userData.profile });
+    }
+  },
+]);
+
+function validateEmail(email) {
+  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@keenethics.com$/;
+  return re.test(email);
+}
+
+function validateName(name) {
+  if (name.length < 4 || name.length > 20) return false;
+  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))$/;
+  return re.test(name);
+}
