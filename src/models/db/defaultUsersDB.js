@@ -77,7 +77,7 @@ let fillUsersIfEmpty = () => {
   let user = {};
   let name = 'tester';
   let role = 'user';
-  let email = 'tester@gmail.com';
+  let email = 'tester@keenethics.com';
   let usedVacations = 0;
   let sickLeaveLeft = 5;
   let sickLeaveHalfLeft = 10;
@@ -101,7 +101,7 @@ let fillUsersIfEmpty = () => {
   user = {};
   name = 'admin';
   role = 'admin';
-  email = 'admin@gmail.com';
+  email = 'admin@keenethics.com';
   usedVacations = 0;
   sickLeaveLeft = 1;
   sickLeaveHalfLeft = 4;
