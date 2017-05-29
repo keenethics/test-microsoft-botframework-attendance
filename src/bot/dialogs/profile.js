@@ -11,6 +11,7 @@ var user = {};
 
 bot.dialog('/ensureProfile', [
   function (session, args) {
+    session.userData.confirm = false;
     if (!session.userData) session.userData = {};
     session.userData.profile = args || {};
     if (!args) {
@@ -58,6 +59,7 @@ bot.dialog('/ensureProfile', [
       session.userData.profile.email = user.email;
       session.userData.profile.name = user.name;
       session.userData.profile.role = user.role;
+      session.userData.confirm = true;
       session.send(`Welcome on board ${session.userData.profile.name}!`);
       session.endDialogWithResult({ response: session.userData.profile });
     }
