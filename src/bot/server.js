@@ -1,5 +1,6 @@
 import restify from 'restify';
 import { connector } from './bot.js';
+import params from '../../settings.js';
 import mongoose from 'mongoose';
 
 var createUsers = require('../models/db/defaultUsersDB.js');
@@ -11,7 +12,7 @@ var MongoClient = require('mongodb').MongoClient
 const mongourl = 
 	process.env.NODE_ENV === 'development' ?
 	'mongodb://localhost:27017/skypebot'
-	: 'mongodb://michaelost123:123qweasdzxcv@ds139969.mlab.com:39969/skypebot123';
+	: params.mongodb;
    
 mongoose.connect(mongourl);
 

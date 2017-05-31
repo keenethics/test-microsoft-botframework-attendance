@@ -1,4 +1,5 @@
 node_modules
+settings.js
 npm-debug.log
 *.js.swp
 
