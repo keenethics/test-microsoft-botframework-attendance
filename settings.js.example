@@ -1,8 +1,0 @@
-const params = {
-  ChatConnector:{
-    appId:'79dc72c7-dc9b-43f6-9833-d12c0771f89b',
-    appPassword:'SmiHtU8Mpjx6QzQcQ9YjbXg'
-  },
-  mongodb:'//michaelost123:123qweasdzxcv@ds139969.mlab.com:39969/skypebot123'
-};
-export default params;

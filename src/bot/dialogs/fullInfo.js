@@ -1,9 +1,9 @@
 import { bot } from '../bot.js';
 
-var getInfoByUsername = require('../../models/db/methods/userInfo').getInfoByUsername;
+var getInfoByEmail = require('../../models/db/methods/userInfo').getInfoByEmail;
 bot.dialog('/fullInfo', [
   function(session) {
-    getInfoByUsername(session.userData.profile.name, function(answer) {
+    getInfoByEmail(session.userData.profile.email, function(answer) {
       session.send(answer);
       session.endDialog();
     });

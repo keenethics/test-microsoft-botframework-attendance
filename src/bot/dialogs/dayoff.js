@@ -74,7 +74,7 @@ bot.dialog('/dayoff' , [
       endsAt,
       type,
       comment: session.userData.dayOff.reason,
-      user: session.userData.profile.name,
+      user: session.userData.profile.email,
       responses: [], 
     };
     session.userData.dayoff = dayoff;
