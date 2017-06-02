@@ -9,7 +9,7 @@ bot.dialog('/userInfo', [
       session.endDialog();
       return;
     }
-    builder.Prompts.text(session, "Enter users's email(example@keenethics.com) about whom you want get information");
+    builder.Prompts.text(session, 'Enter user"s email(example@keenethics.com) about whom you want get information');
   },
   function(session, result) {
     getInfoByEmail(result.response, function(answer) {
