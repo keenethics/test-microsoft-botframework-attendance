@@ -15,8 +15,8 @@ holidaysDB.find((err, data) => {
   }
 });
 
-function getInfoByUsername(username, callback) {
-  usersDB.findOne({name: username}, (err, user) => {
+function getInfoByEmail(email, callback) {
+  usersDB.findOne({email: email}, (err, user) => {
     var answer;
     if (err) {
       answer = 'Sorry, something go wrong. :(';
@@ -109,7 +109,7 @@ function registrateNewUser(newUser) {
 
 
 module.exports = {
-  getInfoByUsername: getInfoByUsername,
+  getInfoByEmail: getInfoByEmail,
   getRoleByUsername: getRoleByUsername,
   checkUserEmail: checkUserEmail,
   usernameExist: usernameExist,
