@@ -10,12 +10,13 @@ Clone repository and use node and npm versions in package.json file, install the
 
 
 1. `npm install`
-2. `npm run start-locally`
+2.  Prepare `settings.json` file (use `settings.json.example` as a template)
+3. `npm run start-locally`
 
 
 Emulator must be running in the separate terminal.
 [Download, build and run Bot-framework emulator] 
-(https://github.com/Microsoft/BotFramework-Emulator/releases1)
+(https://github.com/Microsoft/BotFramework-Emulator/releases)
 The easiest way is to simply load Source code (tar.gz)
 and build it with the following steps:
 
@@ -24,8 +25,8 @@ and build it with the following steps:
 3. `npm run start`
 
 The next thing that should be done is putting app ID and password into emulator window
-  appId: "607b6eb5-3eb4-4f2d-a0e9-38b471a4979a"
-  appPassword: "9Yhoxk9oJyqo18Xog1hT4sH"
+  appId: "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+  appPassword: "XXXXXXXXXXXXXXXXXXXXXX"
 
 ![alt tag](1.png)
 

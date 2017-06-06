@@ -3,7 +3,8 @@ import menu from './menu.js';
 import profile from './profile.js';
 import vacation from './vacation';
 import fullInfo from './fullInfo.js';
-import userInfo from '../admin_dialogs/getInfoByUserName.js';
+import userInfo from '../admin_dialogs/getInfoByEmail.js';
+import help from './help.js';
 export {
 	menu,
 	dayoff,
@@ -11,4 +12,5 @@ export {
 	fullInfo,
 	userInfo,
 	vacation,
+	help
 };

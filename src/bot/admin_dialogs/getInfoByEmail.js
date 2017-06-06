@@ -1,7 +1,7 @@
 import { bot } from '../bot.js';
 import builder from 'botbuilder';
 
-var getInfoByUsername = require('../../models/db/methods/userInfo').getInfoByUsername;
+var getInfoByEmail = require('../../models/db/methods/userInfo').getInfoByEmail;
 bot.dialog('/userInfo', [
   function(session) {
     if (session.userData.profile.role != 'admin') {
@@ -9,10 +9,10 @@ bot.dialog('/userInfo', [
       session.endDialog();
       return;
     }
-    builder.Prompts.text(session, 'Enter username about which you want get information');
+    builder.Prompts.text(session, 'Enter user"s email(example@keenethics.com) about whom you want get information');
   },
   function(session, result) {
-    getInfoByUsername(result.response, function(answer) {
+    getInfoByEmail(result.response, function(answer) {
       session.send(answer);
       session.endDialog();
     });

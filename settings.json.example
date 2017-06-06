@@ -1,0 +1,7 @@
+{
+  "ChatConnector" : {
+    "appId":"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "appPassword":"XXXXXXXXXXXXXXXXXXXXXXX"
+  },
+  "mongodb":"'path to mongodb'"
+}
