@@ -15,7 +15,8 @@ module.exports = {
         "no-multiple-empty-lines": [2, {"max": 5, "maxEOF": 1,}],
         "indent": [
             "error",
-            2
+            2,
+            {SwitchCase: 1}
         ],
         "linebreak-style": [
             "error",
