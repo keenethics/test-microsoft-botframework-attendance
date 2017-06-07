@@ -3,6 +3,7 @@ import builder from 'botbuilder';
 import moment from 'moment';
 import { Event } from '../../models';
 import mongoose from 'mongoose';
+require('babel-polyfill');
 
 function getHolidays() {
   return new Promise(function(resolve, reject) {
