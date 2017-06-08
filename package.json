@@ -129,6 +129,7 @@
     "negotiator": "0.6.1",
     "node-uuid": "1.4.8",
     "nodemailer": "^4.0.1",
+    "nodemailer-smtp-transport": "^2.7.4",
     "number-is-nan": "1.0.1",
     "oauth-sign": "0.8.2",
     "object-assign": "1.0.0",
@@ -167,6 +168,7 @@
     "tunnel-agent": "0.4.3",
     "tweetnacl": "0.14.5",
     "typedarray": "0.0.6",
+    "underscore": "^1.8.3",
     "url-join": "1.1.0",
     "util-deprecate": "1.0.2",
     "vasync": "1.6.3",
@@ -174,8 +176,7 @@
     "wbuf": "1.7.2",
     "wrappy": "1.0.2",
     "xtend": "4.0.1",
-    "yallist": "2.1.2",
-    "underscore": "^1.8.3"
+    "yallist": "2.1.2"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
