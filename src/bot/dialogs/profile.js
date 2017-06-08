@@ -74,14 +74,14 @@ bot.dialog('/ensureProfile', [
 bot.dialog('/newUserRegistration', [
   function(session, args) {
     if (!args || !args.invalidName) {
-      session.send('Welcome to new user registration. Enter \"/cancel\" to exit.');
+      session.send('Welcome to new user registration. Enter \"-cancel\" to exit.');
       builder.Prompts.text(session, 'Enter your name:');
     } else {
       builder.Prompts.text(session, 'Enter valid name:');
     }
   },
   async function(session, results) {
-    if (results.response == '/cancel') {
+    if (results.response == '-cancel') {
       session.replaceDialog('/ensureProfile');
     } else {
       if (validateName(results.response)) {
