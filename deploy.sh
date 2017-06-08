@@ -4,4 +4,5 @@ git checkout -b $BRANCH
 npm run build
 git add .
 git commit -m "release"
-git push heroku master
+git push --force heroku master
+git reset --hard HEAD^
