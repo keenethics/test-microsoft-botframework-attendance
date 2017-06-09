@@ -1,12 +1,13 @@
+const smtpTransport = require('nodemailer-smtp-transport');
 const nodemailer = require('nodemailer');
 
-let  transporter = nodemailer.createTransport({
+let  transporter = nodemailer.createTransport(smtpTransport({
   service: 'Gmail',
   auth: {
     user: 'keenethics.bot@gmail.com',
     pass: 'keenethics'
   }
-});
+}));
 
 
 function sendConfirmCode(mailOptions) {

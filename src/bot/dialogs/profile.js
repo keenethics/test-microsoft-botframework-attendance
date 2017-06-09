@@ -22,7 +22,11 @@ bot.dialog('/ensureProfile', [
   },
   async function (session, results) {
     if (results.response) {
-      user = await checkUserEmail(results.response);
+      let userEmail = results.response;
+      if (checkEmailOnTags(userEmail)) {
+        userEmail = getEmailOutOfTag(userEmail);
+      }
+      user = await checkUserEmail(userEmail);
       var ccode = CCODE();
       session.userData.profile.ccode = ccode;
       if (user) {
@@ -40,9 +44,9 @@ bot.dialog('/ensureProfile', [
           session.replaceDialog('/ensureProfile');
         }
       } else {
-        if (validateEmail(results.response)) {
+        if (validateEmail(userEmail)) {
           session.send('There is no user with such email address.');
-          session.userData.profile.email = results.response;
+          session.userData.profile.email = userEmail;
           session.replaceDialog('/newUserRegistration');
         } else {
           session.send('Invalid email. Only \"@keenethics.com\" domain allowed.');
@@ -70,14 +74,14 @@ bot.dialog('/ensureProfile', [
 bot.dialog('/newUserRegistration', [
   function(session, args) {
     if (!args || !args.invalidName) {
-      session.send('Welcome to new user registration. Enter \"/cancel\" to exit.');
+      session.send('Welcome to new user registration. Enter \"-cancel\" to exit.');
       builder.Prompts.text(session, 'Enter your name:');
     } else {
       builder.Prompts.text(session, 'Enter valid name:');
     }
   },
   async function(session, results) {
-    if (results.response == '/cancel') {
+    if (results.response == '-cancel') {
       session.replaceDialog('/ensureProfile');
     } else {
       if (validateName(results.response)) {
@@ -129,13 +133,28 @@ bot.dialog('/newUserRegistration', [
   },
 ]);
 
+
 function validateEmail(email) {
   var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@keenethics.com$/;
   return re.test(email);
 }
 
+
 function validateName(name) {
   if (name.length < 4 || name.length > 20) return false;
   var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))$/;
   return re.test(name);
+}
+
+
+function checkEmailOnTags(email) {
+  let re = /<a(.*?)a>/i;
+  return re.test(email);
+}
+
+
+function getEmailOutOfTag(emailWithTag) {
+  let re = /<a(.*?)>/i;
+  let email = emailWithTag.split(re)[2].split('</a>')[0];
+  return email;
 }
