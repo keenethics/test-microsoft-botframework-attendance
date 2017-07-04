@@ -1,6 +1,7 @@
 import { bot } from '../bot.js';
 import builder from 'botbuilder';
 import { CCODE } from '../../models/db/CCode';
+import emailHelper from '../helpers/emailHelper';
 
 
 var checkUserEmail = require('../../models/db/methods/userInfo').checkUserEmail;
@@ -23,8 +24,8 @@ bot.dialog('/ensureProfile', [
   async function (session, results) {
     if (results.response) {
       let userEmail = results.response;
-      if (checkEmailOnTags(userEmail)) {
-        userEmail = getEmailOutOfTag(userEmail);
+      if (emailHelper.checkEmailOnTags(userEmail)) {
+        userEmail = emailHelper.getEmailOutOfTag(userEmail);
       }
       user = await checkUserEmail(userEmail);
       var ccode = CCODE();
@@ -44,7 +45,7 @@ bot.dialog('/ensureProfile', [
           session.replaceDialog('/ensureProfile');
         }
       } else {
-        if (validateEmail(userEmail)) {
+        if (emailHelper.validateEmail(userEmail)) {
           session.send('There is no user with such email address.');
           session.userData.profile.email = userEmail;
           session.replaceDialog('/newUserRegistration');
@@ -84,7 +85,7 @@ bot.dialog('/newUserRegistration', [
     if (results.response == '-cancel') {
       session.replaceDialog('/ensureProfile');
     } else {
-      if (validateName(results.response)) {
+      if (emailHelper.validateName(results.response)) {
         if (await usernameExist(results.response)) {
           session.send('This name already exist!');
           session.replaceDialog('/newUserRegistration', {invalidName: true});
@@ -132,29 +133,3 @@ bot.dialog('/newUserRegistration', [
     }
   },
 ]);
-
-
-function validateEmail(email) {
-  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@keenethics.com$/;
-  return re.test(email);
-}
-
-
-function validateName(name) {
-  if (name.length < 4 || name.length > 20) return false;
-  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))$/;
-  return re.test(name);
-}
-
-
-function checkEmailOnTags(email) {
-  let re = /<a(.*?)a>/i;
-  return re.test(email);
-}
-
-
-function getEmailOutOfTag(emailWithTag) {
-  let re = /<a(.*?)>/i;
-  let email = emailWithTag.split(re)[2].split('</a>')[0];
-  return email;
-}
