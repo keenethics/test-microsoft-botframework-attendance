@@ -17,12 +17,16 @@ Clone repository and use node and npm versions in package.json file, install the
 Emulator must be running in the separate terminal.
 [Download, build and run Bot-framework emulator] 
 (https://github.com/Microsoft/BotFramework-Emulator/releases)
-The easiest way is to simply load Source code (tar.gz)
+The easiest way is to simply load Source code 3.5.27 (tar.gz)
 and build it with the following steps:
 
 1. `npm install`
 2. `npm run build`
 3. `npm run start`
+
+If have troubles with tar.gz from GitHub download,
+botframework-emulator-3.5.27-mac.zip for MacOS and
+[this one](https://goo.gl/eWAtH5) for other platforms.
 
 The next thing that should be done is putting app ID and password into emulator window
   appId: "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
@@ -49,6 +53,8 @@ to test it.
 3. Every task should have tests covering.
 4. Approved PR is merged to master.
 
+## Troubleshooting
+If have troubles with compiling Typescript files in BotFramework-Emulator change typescript version in package.json to "2.2.2".
 
 ## Writing tests
 We use mocha as a test runner and chai assertion library.
