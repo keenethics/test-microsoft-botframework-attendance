@@ -29,11 +29,8 @@ The next thing that should be done is putting app ID and password into emulator 
   appPassword: "XXXXXXXXXXXXXXXXXXXXXX"
   
   "appId":"451d80bd-2333-42c0-83f7-f3cf1aff8cf5"
-  
   "appPassword":"qgMc3sDFZJiGsGfSYrgh2Ze"
-  
-  "mongodb":"'mongodb://localhost:27017/skypebot'"
-  
+  "mongodb":"mongodb://localhost:27017/skypebot"
   "mongoDeployUrl":"mongodb://tester:tester21@ds161960.mlab.com:61960/skype_bot"
 
 ![alt tag](1.png)
