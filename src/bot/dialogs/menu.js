@@ -14,6 +14,7 @@ bot.dialog('/menu', new builder.IntentDialog()
     .matches(/^edit profile/i, '/ensureProfile')
     .matches(/^full info/i, '/fullInfo')
     .matches(/^user info/i, '/userInfo')
+    .matches(/^active events/i, '/activeEvents')
     .matches(/^change info/i, '/changeInfo')
     .onDefault('/help')
 

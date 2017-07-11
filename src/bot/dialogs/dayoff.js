@@ -1,50 +1,10 @@
 import { bot } from '../bot.js';
 import builder from 'botbuilder';
 import moment from 'moment';
-import { Event } from '../../models';
-import mongoose from 'mongoose';
+import { getHolidays, saveEvent } from '../helpers/events.js';
+import { getUser } from '../helpers/users.js';
+
 require('babel-polyfill');
-
-function getHolidays() {
-  return new Promise(function(resolve, reject) {
-    const holidays = mongoose.connection.model('Holidays');
-    holidays.find({ year: 2017 }, (err, info) => {
-      if (err) { 
-        reject(err.reason);
-      } else {
-        const workedMonths = info[0] && info[0].months;
-        resolve(workedMonths);
-      }
-    });
-  });
-}
-
-function saveEvent(dayoff) {
-  return new Promise(function(resolve, reject) {
-    const DayOff = new Event(dayoff);
-    DayOff.save((err) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve('saved...');
-      }
-    });			
-  });
-}
-
-function getUser(userName) {
-  return new Promise(function(resolve, reject) {
-    const users = mongoose.connection.model('Users');
-    users.findOne({ name: userName }, (err, info) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(info);
-      }
-    });
-  });
-}
-
 bot.dialog('/dayoff' , [
 
   function (session) {

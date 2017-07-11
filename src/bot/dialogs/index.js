@@ -5,6 +5,8 @@ import vacation from './vacation';
 import fullInfo from './fullInfo.js';
 import userInfo from '../admin_dialogs/getInfoByEmail.js';
 import help from './help.js';
+import activeEvents from './activeEvents';
+
 export {
 	menu,
 	dayoff,
@@ -12,5 +14,6 @@ export {
 	fullInfo,
 	userInfo,
 	vacation,
-	help
+  help,
+  activeEvents 
 };
