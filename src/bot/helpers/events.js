@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 import Event from '../../models/event.js';
+import Users from '../../models/users.js';
+
 export const getHolidays = () => {
   return new Promise(function(resolve, reject) {
     const holidays = mongoose.connection.model('Holidays');
@@ -17,13 +19,25 @@ export const getHolidays = () => {
 export const saveEvent = (dayoff) => {
   return new Promise(function(resolve, reject) {
     const DayOff = new Event(dayoff);
+    const { _id } = DayOff;
     DayOff.save((err) => {
       if (err) {
-        reject(err);
+        reject(null);
       } else {
-        resolve('saved...');
+        resolve(_id);
       }
     });			
   });
 };
 
+export const saveEventIntoUser = (userId, eventId) => {
+  return new Promise(function(resolve, reject) {
+    Users.update({ _id: userId }, { $addToSet: { events: eventId }} ,(err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve('success');
+      }
+    });			
+  }); 
+};

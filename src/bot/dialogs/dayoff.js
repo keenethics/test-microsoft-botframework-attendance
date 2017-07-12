@@ -1,8 +1,8 @@
 import { bot } from '../bot.js';
 import builder from 'botbuilder';
 import moment from 'moment';
-import { getHolidays, saveEvent } from '../helpers/events.js';
-import { getUser } from '../helpers/users.js';
+import { getHolidays, saveEvent, saveEventIntoUser } from '../helpers/events.js';
+import { getUserByEmail } from '../helpers/users.js';
 
 require('babel-polyfill');
 bot.dialog('/dayoff' , [
@@ -39,7 +39,7 @@ bot.dialog('/dayoff' , [
       responses: [], 
     };
     session.userData.dayoff = dayoff;
-    saveDayoffEvent(dayoff, session.userData.profile.name);
+    saveDayoffEvent(dayoff, session.userData.profile.email);
     session.userData.time = builder.EntityRecognizer.resolveTime([startsAt]);
     var card = createHeroCard(session, reason);
     var msg = new builder.Message(session).addAttachment(card);
@@ -68,13 +68,13 @@ function createHeroCard(session,reason) {
         ]);
 }
 
-const saveDayoffEvent = async (event, userName) => {
+const saveDayoffEvent = async (event, email) => {
   const dayoff = event;
   const year = moment(dayoff.startsAt).year();
   const dayOffCount = moment(dayoff.endsAt).diff(moment(dayoff.startsAt), 'days');
+  const user = await getUserByEmail(email);
   if(event.isVacation) {
     const workedMonths = await getHolidays(new Date());
-    const user = await getUser(userName);
     const workedMonthsObject = {};
     workedMonths.forEach(wM => workedMonthsObject[wM.month] = wM.totalWorkingDays);
     const actuallyWorked = user.workingInfo.filter(wI => (wI.year === parseInt(year, 10)))[0];
@@ -91,7 +91,10 @@ const saveDayoffEvent = async (event, userName) => {
     dayoff.vacationsUsed = 0;
     dayoff.daysOffUsed = dayOffCount;
   }
-  saveEvent(dayoff);
+  const eventId = await saveEvent(dayoff);
+  if (eventId) {
+    saveEventIntoUser(user._id, eventId);
+  }
 };
 
 export default saveDayoffEvent;
