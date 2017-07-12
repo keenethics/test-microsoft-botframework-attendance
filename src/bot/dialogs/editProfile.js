@@ -28,4 +28,9 @@ bot.dialog('/editProfile', [
     session.send(`The name successfully changed, ${newName.response}!`);
     session.endDialog();
   }
-]);
+]).endConversationAction(
+  'returnToMainMenu', 'Returning to main menu',
+  {
+    matches: /^cancel$/i
+  }
+);

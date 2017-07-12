@@ -33,4 +33,9 @@ bot.dialog('/getstarted',[
     session.beginDialog('/help');
     session.beginDialog('/menu', session.userData.profile);
   }
-]);
+]).endConversationAction(
+  'returnToMainMenu', 'Returning to main menu',
+  {
+    matches: /^cancel$/i
+  }
+);
