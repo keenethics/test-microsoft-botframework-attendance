@@ -1,7 +1,7 @@
 import { bot } from '../bot.js';
 import builder from 'botbuilder';
 import moment from 'moment';
-import { getHolidays, saveEvent, saveEventIntoUser } from '../helpers/events.js';
+import { getHolidays, saveEvent, saveEventIntoUser, getEventDate } from '../helpers/events.js';
 import { getUserByEmail } from '../helpers/users.js';
 
 require('babel-polyfill');
@@ -52,10 +52,7 @@ bot.dialog('/dayoff' , [
 function createHeroCard(session,reason) {
   const imageUrl = 'http://2.bp.blogspot.com/-AJcBRl3gmJk/VPdRVHoEa5I/AAAAAAAAaTU/'+
   '23keCkkciQQ/s1600/keep-calm-and-have-a-day-off-3.png';
-  const { startsAt, endsAt } = session.userData.dayoff;
-  const diff = moment(endsAt).diff(moment(startsAt), 'days');
-  const dayoffs = diff > 1 ? `${moment(startsAt).format('MMMM Do YYYY')} - ${moment(endsAt).format('MMMM Do YYYY')}`
-    : moment(startsAt).format('MMMM Do YYYY');
+  const dayoffs = getEventDate(session.userData.dayoff); 
   return new builder.HeroCard(session)
         .title('Day off for  %s', session.userData.profile.name)
         .text('Reason: " %s "', reason)

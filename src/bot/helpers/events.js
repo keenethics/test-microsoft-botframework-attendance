@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import moment from 'moment';
 import Event from '../../models/event.js';
 import Users from '../../models/users.js';
 
@@ -41,3 +42,34 @@ export const saveEventIntoUser = (userId, eventId) => {
     });			
   }); 
 };
+
+export const getEventsByIds = (ids) => {
+  return new Promise(function(resolve, reject) {
+    Event.find({ _id: { $in: ids } }, function(err, data){
+      if(err) {
+        reject(err);
+      }
+      resolve(data);
+    });
+  });
+};
+
+export const getEventDate = (event) => {
+  const { startsAt, endsAt } = event;
+  const diff = moment(endsAt).diff(moment(startsAt), 'days');
+  const dayoffs = diff > 1 ? `${moment(startsAt).format('MMMM Do YYYY')} - ${moment(endsAt).format('MMMM Do YYYY')}`
+    : moment(startsAt).format('MMMM Do YYYY'); 
+  return dayoffs;
+}
+
+export const cancelEvent = (eventId) => {
+  return new Promise(function(resolve, reject) {
+    Event.remove({ _id: eventId}, function(err, data){
+      if (err) {
+        reject(false);
+      }
+      resolve(true);
+    });
+  });
+};
+
