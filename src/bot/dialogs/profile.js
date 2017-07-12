@@ -70,7 +70,12 @@ bot.dialog('/ensureProfile', [
     }
   },
 
-]);
+]).endConversationAction(
+  'returnToMainMenu', 'Returning to main menu',
+  {
+    matches: /^cancel$/i
+  }
+);
 
 bot.dialog('/newUserRegistration', [
   function(session, args) {
@@ -132,4 +137,9 @@ bot.dialog('/newUserRegistration', [
       session.endDialogWithResult({ response: session.userData.profile });
     }
   },
-]);
+]).endConversationAction(
+  'returnToMainMenu', 'Returning to main menu',
+  {
+    matches: /^cancel$/i
+  }
+);
