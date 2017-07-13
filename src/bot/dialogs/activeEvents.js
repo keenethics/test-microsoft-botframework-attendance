@@ -1,3 +1,4 @@
+//import moment from 'moment';
 import { bot } from '../bot.js';
 import builder from 'botbuilder';
 import { getUserByEmail } from '../helpers/users.js';
@@ -8,8 +9,7 @@ bot.dialog('/pending', [
     session.send(`your events ${session.userData.profile.email} `);
     const user = await getUserByEmail(session.userData.profile.email);
     const events = await getEventsByIds(user.events, { startsAt: { $gt: new Date() }, rejected: { $size: 0 }});
-    const sortedEvents = events
-      .sort((ev, ev2) => (ev2.startsAt > ev.startsAt));
+    const sortedEvents = events;
     session.dialogData.mappedEvents = {};
     sortedEvents.forEach((ev, index) => { session.dialogData.mappedEvents[index] = ev._id; });
     const displayEvents = sortedEvents.map((ev,index) => (
@@ -48,9 +48,37 @@ bot.dialog('/pending', [
 
 ]);
 
+bot.dialog('/rejected', [
+  async function (session) {
+    const user = await getUserByEmail(session.userData.profile.email);
+    const events = await getEventsByIds(user.events, { startsAt: { $gt: new Date() }, 'rejected.0' : { $exists: true }});
+    events.forEach((ev,index) => {
+      session.send(`${index} - ${getEventDate(ev)} ${ev.type} reason: ${ev.comment}`);   
+    });
+    session.send('rejected events');
+    builder.Prompts.text(session, '1.menu 2. active events');
+  },
+  function (session, results) {
+    switch (results.response) {
+      case 'menu': 
+        session.beginDialog('/menu');
+        break;
+      case 'active events': 
+        session.beginDialog('/activeEvents');
+        break;
+      default:
+        session.beginDialog('/rejected');
+        break;
+    }
+  }
+
+]);
+
 bot.dialog('/activeEvents', [
   function (session){
     const options = ['pending', 'rejected', 'approved', 'menu'];
+    //const today = moment()._d;
+    //const pastDate = moment(today).clone().subtract(2, 'd')._d;
     session.dialogData.options = options;
     builder.Prompts.text(session, '1.pending 2.rejected 3.approved 4.menu');
   },
@@ -64,3 +92,4 @@ bot.dialog('/activeEvents', [
     }
   }
 ]);
+

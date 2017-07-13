@@ -37,6 +37,7 @@ bot.dialog('/dayoff' , [
       comment: session.userData.dayOff.reason,
       user: session.userData.profile.email,
       responses: [], 
+      createdAt: new Date(),
     };
     session.userData.dayoff = dayoff;
     saveDayoffEvent(dayoff, session.userData.profile.email);

@@ -11,6 +11,7 @@ const EventSchema = {
   daysOffUsed: {type: Number, defaul: 0},
   sickLeavesUsed: {type: Number, defaul: 0},
   rejected: {type: Array, default: []},
+  createdAt: Date,
 };
 
 

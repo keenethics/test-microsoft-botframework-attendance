@@ -47,11 +47,12 @@ export const getEventsByIds = (ids, options = {}) => {
   return new Promise(function(resolve, reject) {
     const query = { _id: { $in: ids } };
     const queryWithOptions = Object.assign({}, query, options);   
-    Event.find(queryWithOptions, function(err, data){
+    Event.find(queryWithOptions).sort('startsAt').exec(function(err, data){
       if(err) {
         reject(err);
       }
       resolve(data);
+      
     });
   });
 };
