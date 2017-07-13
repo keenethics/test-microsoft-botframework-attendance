@@ -43,9 +43,11 @@ export const saveEventIntoUser = (userId, eventId) => {
   }); 
 };
 
-export const getEventsByIds = (ids) => {
+export const getEventsByIds = (ids, options = {}) => {
   return new Promise(function(resolve, reject) {
-    Event.find({ _id: { $in: ids } }, function(err, data){
+    const query = { _id: { $in: ids } };
+    const queryWithOptions = Object.assign({}, query, options);   
+    Event.find(queryWithOptions, function(err, data){
       if(err) {
         reject(err);
       }
@@ -54,17 +56,18 @@ export const getEventsByIds = (ids) => {
   });
 };
 
+
 export const getEventDate = (event) => {
   const { startsAt, endsAt } = event;
   const diff = moment(endsAt).diff(moment(startsAt), 'days');
   const dayoffs = diff > 1 ? `${moment(startsAt).format('MMMM Do YYYY')} - ${moment(endsAt).format('MMMM Do YYYY')}`
     : moment(startsAt).format('MMMM Do YYYY'); 
   return dayoffs;
-}
+};
 
 export const cancelEvent = (eventId) => {
   return new Promise(function(resolve, reject) {
-    Event.remove({ _id: eventId}, function(err, data){
+    Event.remove({ _id: eventId}, function(err){
       if (err) {
         reject(false);
       }

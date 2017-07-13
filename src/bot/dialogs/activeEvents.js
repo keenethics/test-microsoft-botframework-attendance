@@ -7,10 +7,11 @@ bot.dialog('/activeEvents', [
   async function (session) {
     session.send(`your events ${session.userData.profile.email} `);
     const user = await getUserByEmail(session.userData.profile.email);
-    const events = await getEventsByIds(user.events);
-    const sortedEvents = events.sort((ev, ev2) => (ev2.startsAt > ev.startsAt));
+    const events = await getEventsByIds(user.events, { startsAt: { $gt: new Date() }, rejected: { $size: 0 }});
+    const sortedEvents = events
+      .sort((ev, ev2) => (ev2.startsAt > ev.startsAt));
     session.dialogData.mappedEvents = {};
-    const mappedEvents = sortedEvents.forEach((ev, index) => { session.dialogData.mappedEvents[index] = ev._id });
+    sortedEvents.forEach((ev, index) => { session.dialogData.mappedEvents[index] = ev._id; });
     const displayEvents = sortedEvents.map((ev,index) => (
       `${index} - ${getEventDate(ev)} ${ev.type} reason: ${ev.comment}`   
     ));
@@ -33,13 +34,12 @@ bot.dialog('/activeEvents', [
     if (expMenu.test(action)) {
       session.beginDialog('/menu');   
     } else if (exp.test(action)){ 
-        const success = cancelEvent(dialogId);
-        if (success) {
-          session.send(`event ${displayEvents[number]} has been canceled`);
-          console.log('success');
-        } else {
-          session.send('ops... something wrong');
-        }
+      const success = cancelEvent(dialogId);
+      if (success) {
+        session.send(`event ${displayEvents[number]} has been canceled`);
+      } else {
+        session.send('ops... something wrong');
+      }
     } else {
       session.send('type correct query');
       session.beginDialog('/activeEvents');
