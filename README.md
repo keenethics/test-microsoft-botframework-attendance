@@ -47,11 +47,13 @@ Make sure you follow eslint rules
 Commits with eslint errors are disabled.
 
 When you are assigned on the new task:
-1. Create separate branch. The name of the branch should appropriate a task meaning.
+1. Create separate branch forked from development. The name of the branch should appropriate a task meaning.
 2. When you all done with a task create PR. Left the comment with a task description or link to task. And ask other developers
 to test it.
 3. Every task should have tests covering.
-4. Approved PR is merged to master.
+4. Approved PR is merged to development.
+5. development branch is tested by QA
+6. development branch is merged to master
 
 ## Troubleshooting
 If have troubles with compiling Typescript files in BotFramework-Emulator change typescript version in package.json to "2.2.2".
