@@ -1,4 +1,4 @@
-//import moment from 'moment';
+import moment from 'moment';
 import { bot } from '../bot.js';
 import builder from 'botbuilder';
 import { getUserByEmail } from '../helpers/users.js';
@@ -71,14 +71,41 @@ bot.dialog('/rejected', [
         break;
     }
   }
-
 ]);
+
+
+bot.dialog('/approved', [
+  async function (session) {
+    const user = await getUserByEmail(session.userData.profile.email);
+    const today = moment()._d;
+    const pastDate = moment(today).clone().subtract(2, 'd')._d;
+    const events = await getEventsByIds(user.events, { createdAt: { $lt: pastDate }});
+    events.forEach((ev,index) => {
+      session.send(`${index} - ${getEventDate(ev)} ${ev.type} reason: ${ev.comment}`);   
+    });
+    session.send('rejected events');
+    builder.Prompts.text(session, '1.menu 2. active events');
+  },
+  function (session, results) {
+    switch (results.response) {
+      case 'menu': 
+        session.beginDialog('/menu');
+        break;
+      case 'active events': 
+        session.beginDialog('/activeEvents');
+        break;
+      default:
+        session.beginDialog('/approved');
+        break;
+    }
+  }
+]);
+
+
 
 bot.dialog('/activeEvents', [
   function (session){
     const options = ['pending', 'rejected', 'approved', 'menu'];
-    //const today = moment()._d;
-    //const pastDate = moment(today).clone().subtract(2, 'd')._d;
     session.dialogData.options = options;
     builder.Prompts.text(session, '1.pending 2.rejected 3.approved 4.menu');
   },
