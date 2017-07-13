@@ -3,7 +3,7 @@ import builder from 'botbuilder';
 import { getUserByEmail } from '../helpers/users.js';
 import { getEventsByIds, getEventDate, cancelEvent } from '../helpers/events.js';
 
-bot.dialog('/activeEvents', [
+bot.dialog('/pending', [
   async function (session) {
     session.send(`your events ${session.userData.profile.email} `);
     const user = await getUserByEmail(session.userData.profile.email);
@@ -46,4 +46,21 @@ bot.dialog('/activeEvents', [
     }
   },
 
+]);
+
+bot.dialog('/activeEvents', [
+  function (session){
+    const options = ['pending', 'rejected', 'approved', 'menu'];
+    session.dialogData.options = options;
+    builder.Prompts.text(session, '1.pending 2.rejected 3.approved 4.menu');
+  },
+  function (session, results) {
+    const dialog = results.response;
+    if (session.dialogData.options.indexOf(dialog) > -1) {
+      session.beginDialog(`/${dialog}`);
+    } else {
+      session.send('what do you mean ?');
+      session.beginDialog('/activeEvents');
+    }
+  }
 ]);
