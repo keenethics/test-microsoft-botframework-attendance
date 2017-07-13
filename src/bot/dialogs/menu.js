@@ -11,7 +11,7 @@ bot.dialog('/menu', new builder.IntentDialog()
     .matches(/^help/i,'/help' )
     .matches(/^day off/i, '/dayoff')
     .matches(/^vacation/i, '/vacation')
-    .matches(/^edit profile/i, '/ensureProfile')
+    .matches(/^edit profile/i, '/editProfile')
     .matches(/^full info/i, '/fullInfo')
     .matches(/^user info/i, '/userInfo')
     .matches(/^active events/i, '/activeEvents')
@@ -34,4 +34,9 @@ bot.dialog('/getstarted',[
     session.beginDialog('/help');
     session.beginDialog('/menu', session.userData.profile);
   }
-]);
+]).endConversationAction(
+  'returnToMainMenu', 'Returning to main menu',
+  {
+    matches: /^cancel$/i
+  }
+);

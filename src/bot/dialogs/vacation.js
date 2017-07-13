@@ -44,4 +44,9 @@ bot.dialog('/vacation' , [
     session.endDialog();
     session.beginDialog('/menu');
   },
-]);
+]).endConversationAction(
+  'returnToMainMenu', 'Returning to main menu',
+  {
+    matches: /^cancel$/i
+  }
+);

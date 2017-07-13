@@ -47,7 +47,12 @@ bot.dialog('/dayoff' , [
     session.endDialogWithResult();
     session.beginDialog('/menu');
   }
-]);
+]).endConversationAction(
+  'returnToMainMenu', 'Returning to main menu',
+  {
+    matches: /^cancel$/i
+  }
+);
 
 function createHeroCard(session,reason) {
   const imageUrl = 'http://2.bp.blogspot.com/-AJcBRl3gmJk/VPdRVHoEa5I/AAAAAAAAaTU/'+
