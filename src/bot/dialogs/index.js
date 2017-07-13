@@ -15,7 +15,7 @@ export {
 	userInfo,
 	vacation,
   help,
-  activeEvents 
+  activeEvents,
   editProfile
 };
 
