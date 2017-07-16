@@ -15,6 +15,7 @@ bot.dialog('/menu', new builder.IntentDialog()
     .matches(/^full info/i, '/fullInfo')
     .matches(/^user info/i, '/userInfo')
     .matches(/^change info/i, '/changeInfo')
+    .matches(/^change user info/i, '/changeUserInfo')
     .onDefault('/help')
 
 );

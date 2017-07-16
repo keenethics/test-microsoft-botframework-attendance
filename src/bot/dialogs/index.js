@@ -6,6 +6,7 @@ import fullInfo from './fullInfo.js';
 import userInfo from '../admin_dialogs/getInfoByEmail.js';
 import help from './help.js';
 import editProfile from './editProfile';
+import changeUserInfo from '../admin_dialogs/changeInfoByEmail';
 export {
 	menu,
 	dayoff,
@@ -14,5 +15,6 @@ export {
 	userInfo,
 	vacation,
 	help,
-  editProfile
+  editProfile,
+  changeUserInfo,
 };
