@@ -7,6 +7,8 @@ import userInfo from '../admin_dialogs/getInfoByEmail.js';
 import help from './help.js';
 import activeEvents from './activeEvents';
 import editProfile from './editProfile';
+import events from '../admin_dialogs/events.js';
+
 export {
 	menu,
 	dayoff,
@@ -16,6 +18,7 @@ export {
 	vacation,
   help,
   activeEvents,
-  editProfile
+  editProfile,
+  events,
 };
 
