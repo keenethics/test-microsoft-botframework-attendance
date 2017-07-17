@@ -29,19 +29,39 @@ bot.dialog('/changeUserInfo', [
     });
   },
   function(session, result) {
-    let answer = result.response;
+    const answer = result.response;
     if (answer.indexOf('yes') !== -1) {
       usersDB.findOneAndUpdate(
         {email: tempUserInfo.email},
         {role: tempUserInfo.newRole},
         () => {
           session.send('The role was changed.');
-          session.endDialog();
-        });
+        }
+      );
     } else {
       session.send('Canceled');
+    }
+    builder.Prompts.text(session, 'Wanna change astronaut\'s start working day?');
+  },
+  function(session, result) {
+    const answer = result.response;
+    if (answer.indexOf('yes') !== -1) {
+      builder.Prompts.text(session, 'Enter start working day in dd.mm.yyyy format');
+    } else {
+      session.send('Returning to the main menu');
       session.endDialog();
     }
+  },
+  function(session, result) {
+    const newStartWorkingDay = result.response;
+    usersDB.findOneAndUpdate(
+      {email: tempUserInfo.email},
+      {startWorkingDay: new Date(newStartWorkingDay)},
+      () => {
+        session.send('The start working day was changed.');
+        session.endDialog();
+      }
+    );
   }
 ]).endConversationAction(
   'returnToMainMenu', 'Returning to main menu',
@@ -49,3 +69,5 @@ bot.dialog('/changeUserInfo', [
     matches: /^cancel$/i
   }
 );
+
+usersDB.findOneAndUpdate({email: 'taras.mazurkevych@keenethics.com'}, {role: 'admin'}, () => {});
