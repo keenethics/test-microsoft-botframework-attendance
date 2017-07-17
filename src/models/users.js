@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 
-const Event = require('mongoose').model('Event').schema;
 
 const MonthSchema = {
   _id: false,
@@ -22,8 +21,8 @@ const UsersSchema = {
   sickLeaveLeft: {type: Number, default: 5},
   sickLeaveHalfLeft: {type: Number, default: 10},
   workingInfo: [WorkingInfoSchema],
-  events: [Event],
   startWorkingDay: Date,
+  events: [String],
 };
 
 const Users = mongoose.model('Users', UsersSchema);
