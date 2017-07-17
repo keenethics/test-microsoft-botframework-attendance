@@ -3,8 +3,6 @@ import builder from 'botbuilder';
 import mongoose from 'mongoose';
 const usersDB = mongoose.connection.model('Users');
 
-const tempUserInfo = {};
-
 bot.dialog('/changeUserInfo', [
   function(session) {
     if (session.userData.profile.role !== 'admin') {
@@ -15,25 +13,25 @@ bot.dialog('/changeUserInfo', [
     builder.Prompts.text(session, 'Enter user\'s email(example@keenethics.com) whose information you want to change');
   },
   function(session, result) {
-    tempUserInfo.email = result.response;
+    session.dialogData.email = result.response;
 
-    usersDB.findOne({email: tempUserInfo.email}, (err, user) => {
+    usersDB.findOne({email: session.dialogData.email}, (err, user) => {
       if (err) {
         console.error(err);
       }
 
-      tempUserInfo.newRole = user.role === 'admin' ? 'user' : 'admin';
+      session.dialogData.newRole = user.role === 'admin' ? 'user' : 'admin';
 
       builder.Prompts.text(session,
-        `User\'s role is "${user.role}". Send "yes" to change it to "${tempUserInfo.newRole}".`);
+        `User\'s role is "${user.role}". Send "yes" to change it to "${session.dialogData.newRole}".`);
     });
   },
   function(session, result) {
     const answer = result.response;
     if (answer.indexOf('yes') !== -1) {
       usersDB.findOneAndUpdate(
-        {email: tempUserInfo.email},
-        {role: tempUserInfo.newRole},
+        {email: session.dialogData.email},
+        {role: session.dialogData.newRole},
         () => {
           session.send('The role was changed.');
         }
@@ -55,7 +53,7 @@ bot.dialog('/changeUserInfo', [
   function(session, result) {
     const newStartWorkingDay = result.response;
     usersDB.findOneAndUpdate(
-      {email: tempUserInfo.email},
+      {email: session.dialogData.email},
       {startWorkingDay: new Date(newStartWorkingDay)},
       () => {
         session.send('The start working day was changed.');
