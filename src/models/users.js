@@ -21,6 +21,7 @@ const UsersSchema = {
   sickLeaveLeft: {type: Number, default: 5},
   sickLeaveHalfLeft: {type: Number, default: 10},
   workingInfo: [WorkingInfoSchema],
+  startWorkingDay: Date,
   events: [String],
 };
 
