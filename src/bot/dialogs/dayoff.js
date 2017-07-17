@@ -1,50 +1,10 @@
 import { bot } from '../bot.js';
 import builder from 'botbuilder';
 import moment from 'moment';
-import { Event } from '../../models';
-import mongoose from 'mongoose';
+import { getHolidays, saveEvent, saveEventIntoUser, getEventDate } from '../helpers/events.js';
+import { getUserByEmail } from '../helpers/users.js';
+
 require('babel-polyfill');
-
-function getHolidays() {
-  return new Promise(function(resolve, reject) {
-    const holidays = mongoose.connection.model('Holidays');
-    holidays.find({ year: 2017 }, (err, info) => {
-      if (err) { 
-        reject(err.reason);
-      } else {
-        const workedMonths = info[0] && info[0].months;
-        resolve(workedMonths);
-      }
-    });
-  });
-}
-
-function saveEvent(dayoff) {
-  return new Promise(function(resolve, reject) {
-    const DayOff = new Event(dayoff);
-    DayOff.save((err) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve('saved...');
-      }
-    });			
-  });
-}
-
-function getUser(userName) {
-  return new Promise(function(resolve, reject) {
-    const users = mongoose.connection.model('Users');
-    users.findOne({ name: userName }, (err, info) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(info);
-      }
-    });
-  });
-}
-
 bot.dialog('/dayoff' , [
 
   function (session) {
@@ -77,9 +37,10 @@ bot.dialog('/dayoff' , [
       comment: session.userData.dayOff.reason,
       user: session.userData.profile.email,
       responses: [], 
+      createdAt: new Date(),
     };
     session.userData.dayoff = dayoff;
-    saveDayoffEvent(dayoff, session.userData.profile.name);
+    saveDayoffEvent(dayoff, session.userData.profile.email);
     session.userData.time = builder.EntityRecognizer.resolveTime([startsAt]);
     var card = createHeroCard(session, reason);
     var msg = new builder.Message(session).addAttachment(card);
@@ -97,10 +58,7 @@ bot.dialog('/dayoff' , [
 function createHeroCard(session,reason) {
   const imageUrl = 'http://2.bp.blogspot.com/-AJcBRl3gmJk/VPdRVHoEa5I/AAAAAAAAaTU/'+
   '23keCkkciQQ/s1600/keep-calm-and-have-a-day-off-3.png';
-  const { startsAt, endsAt } = session.userData.dayoff;
-  const diff = moment(endsAt).diff(moment(startsAt), 'days');
-  const dayoffs = diff > 1 ? `${moment(startsAt).format('MMMM Do YYYY')} - ${moment(endsAt).format('MMMM Do YYYY')}`
-    : moment(startsAt).format('MMMM Do YYYY');
+  const dayoffs = getEventDate(session.userData.dayoff); 
   return new builder.HeroCard(session)
         .title('Day off for  %s', session.userData.profile.name)
         .text('Reason: " %s "', reason)
@@ -113,13 +71,13 @@ function createHeroCard(session,reason) {
         ]);
 }
 
-const saveDayoffEvent = async (event, userName) => {
+const saveDayoffEvent = async (event, email) => {
   const dayoff = event;
   const year = moment(dayoff.startsAt).year();
   const dayOffCount = moment(dayoff.endsAt).diff(moment(dayoff.startsAt), 'days');
+  const user = await getUserByEmail(email);
   if(event.isVacation) {
     const workedMonths = await getHolidays(new Date());
-    const user = await getUser(userName);
     const workedMonthsObject = {};
     workedMonths.forEach(wM => workedMonthsObject[wM.month] = wM.totalWorkingDays);
     const actuallyWorked = user.workingInfo.filter(wI => (wI.year === parseInt(year, 10)))[0];
@@ -136,7 +94,10 @@ const saveDayoffEvent = async (event, userName) => {
     dayoff.vacationsUsed = 0;
     dayoff.daysOffUsed = dayOffCount;
   }
-  saveEvent(dayoff);
+  const eventId = await saveEvent(dayoff);
+  if (eventId) {
+    saveEventIntoUser(user._id, eventId);
+  }
 };
 
 export default saveDayoffEvent;
