@@ -30,7 +30,7 @@ bot.dialog('/events', [
     builder.Prompts.text(session,' ?');
   },
   
-  function (session) {
+  function (session, result) {
     const action = result.response;
     const { adminId } = session.dialogData;
     const { mappedEvents } = session.dialogData;
