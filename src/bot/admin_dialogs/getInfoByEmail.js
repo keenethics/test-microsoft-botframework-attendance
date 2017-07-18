@@ -22,4 +22,9 @@ bot.dialog('/userInfo', [
       session.endDialog();
     });
   }
-]);
+]).endConversationAction(
+  'returnToMainMenu', 'Returning to main menu',
+  {
+    matches: /^cancel$/i
+  }
+);

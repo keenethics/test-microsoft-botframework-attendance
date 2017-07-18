@@ -10,8 +10,6 @@ bot.dialog('/events', [
       session.endDialog();
       return;
     }
-    builder.Prompts.text(session,' ?');
-
   },
   async function(session, result) {  
     const user = await getUserByEmail(session.userData.profile.email);
