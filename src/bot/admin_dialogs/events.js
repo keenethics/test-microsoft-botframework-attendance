@@ -4,14 +4,12 @@ import { getUserByEmail } from '../helpers/users.js';
 import { getPendingEvents, getEventDate, approveOrRejectEvent  } from '../helpers/events.js';
 
 bot.dialog('/events', [
-  function(session) {
+  async function(session) {
     if (session.userData.profile.role != 'admin') {
       session.send('This feature available only for admins');
       session.endDialog();
       return;
     }
-  },
-  async function(session, result) {  
     const user = await getUserByEmail(session.userData.profile.email);
     session.dialogData.adminId = user && user._id;
     const events = await getPendingEvents(user._id);
@@ -23,7 +21,7 @@ bot.dialog('/events', [
     displayEvents.forEach(ev => {
       session.send(ev);
     });
-    session.send('to reject/ event type "reject/event {number}"');
+    session.send('to reject/approve event type "reject/approve {number}"');
     session.send('type "menu" to go to the main menu');
     builder.Prompts.text(session,' ?');
   },

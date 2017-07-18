@@ -78,8 +78,9 @@ export const getEventsByIds = (ids, options = {}) => {
 
 export const getPendingEvents = (adminId) => {
   return new Promise(function(resolve, reject) {
-    const query = { rejected: { $ne: `${adminId}` }};
-    Event.find(query)
+    const notRejected = { rejected: { $ne: `${adminId}` }};
+    const notApproved = { approved: { $ne: `${adminId}` }};
+    Event.find({$and: [notRejected, notApproved]})
       .sort('startsAt')
       .exec(function(err, data){
         if(err) {
