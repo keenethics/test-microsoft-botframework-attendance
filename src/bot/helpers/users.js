@@ -26,3 +26,17 @@ export const getUserByEmail = (email) => {
   });
 };
 
+export const getUsers = () => {
+  const users = mongoose.connection.model('Users');
+  return new Promise(function (resolve, reject) {
+    users.find({})
+      .sort('email')
+      .select('email name')
+      .exec(function(err, data){
+      if(err) {
+        reject(err);
+      }
+      resolve(data);
+    });
+  });
+};
