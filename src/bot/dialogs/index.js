@@ -19,6 +19,5 @@ export {
   changeUserInfo,
   help,
   activeEvents,
-  editProfile,
 };
 
