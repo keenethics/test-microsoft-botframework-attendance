@@ -8,7 +8,8 @@ bot.dialog('/pending', [
   async function (session) {
     session.send(`your events ${session.userData.profile.email} `);
     const user = await getUserByEmail(session.userData.profile.email);
-    const events = await getEventsByIds(user.events, { startsAt: { $gt: new Date() }, rejected: { $size: 0 }});
+    const events = await getEventsByIds(user.events, { startsAt: { $gt: new Date() },
+      rejected: { $size: 0 }});
     const sortedEvents = events;
     session.dialogData.mappedEvents = {};
     sortedEvents.forEach((ev, index) => { session.dialogData.mappedEvents[index] = ev._id; });
