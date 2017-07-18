@@ -43,21 +43,6 @@ export const saveEventIntoUser = (userId, eventId) => {
   }); 
 };
 
-export const getEventsByIds = (ids, options = {}) => {
-  return new Promise(function(resolve, reject) {
-    const query = { _id: { $in: ids } };
-    const queryWithOptions = Object.assign({}, query, options);   
-    Event.find(queryWithOptions).sort('startsAt').exec(function(err, data){
-      if(err) {
-        reject(err);
-      }
-      resolve(data);
-      
-    });
-  });
-};
-
-
 export const getEventDate = (event) => {
   const { startsAt, endsAt } = event;
   const diff = moment(endsAt).diff(moment(startsAt), 'days');
@@ -77,3 +62,59 @@ export const cancelEvent = (eventId) => {
   });
 };
 
+export const getEventsByIds = (ids, options = {}) => {
+  return new Promise(function(resolve, reject) {
+    const query = { _id: { $in: ids } };
+    const queryWithOptions = Object.assign({}, query, options);   
+    Event.find(queryWithOptions).sort('startsAt').exec(function(err, data){
+      if(err) {
+        reject(err);
+      }
+      resolve(data);
+      
+    });
+  });
+};
+
+export const getPendingEvents = (adminId) => {
+  return new Promise(function(resolve, reject) {
+    const notRejected = { rejected: { $ne: `${adminId}` }};
+    const notApproved = { approved: { $ne: `${adminId}` }};
+    Event.find({$and: [notRejected, notApproved]})
+      .sort('startsAt')
+      .exec(function(err, data){
+        if(err) {
+          reject(err);
+        }
+        resolve(data);
+      });
+  });
+};
+
+export const getUsers = (userIds) => {
+  return new Promise(function(resolve, reject) {
+    const query = { _id: { $in: userIds } };
+    Users.find(query)
+      .select('email name _id')
+      .exec(function(err, data){
+        if(err) {
+          reject(err);
+        }
+        resolve(data);
+      });
+  });
+};
+
+export const approveOrRejectEvent = (eventId, adminId, action) => {
+  return new Promise(function(resolve, reject) {
+    const query = { _id: eventId };
+    const projection = { $addToSet: { [action]: adminId }};
+    Event.update(query, projection)
+      .exec(function(err, data){
+        if (err) {
+          reject(err);
+        }
+        resolve(data);
+      });
+  });
+};
