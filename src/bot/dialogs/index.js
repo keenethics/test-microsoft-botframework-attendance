@@ -9,6 +9,7 @@ import activeEvents from './activeEvents';
 import editProfile from './editProfile';
 import events from '../admin_dialogs/events.js';
 import changeUserInfo from '../admin_dialogs/changeInfoByEmail';
+import settings from '../admin_dialogs/settings.js';
 
 export {
 	menu,
