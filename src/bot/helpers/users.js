@@ -33,11 +33,11 @@ export const getUsers = () => {
       .sort('email')
       .select('email name')
       .exec(function(err, data){
-      if(err) {
-        reject(err);
-      }
-      resolve(data);
-    });
+        if(err) {
+          reject(err);
+        }
+        resolve(data);
+      });
   });
 };
 

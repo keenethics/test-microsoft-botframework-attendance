@@ -91,17 +91,17 @@ export const getPendingEvents = (adminId) => {
   });
 };
 
-const getUsers = (userIds) => {
+export const getUsers = (userIds) => {
   return new Promise(function(resolve, reject) {
     const query = { _id: { $in: userIds } };
     Users.find(query)
       .select('email name _id')
       .exec(function(err, data){
         if(err) {
-        reject(err);
-      }
-      resolve(data);
-    });
+          reject(err);
+        }
+        resolve(data);
+      });
   });
 };
 
