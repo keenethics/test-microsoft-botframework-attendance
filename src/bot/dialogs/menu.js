@@ -1,6 +1,6 @@
 import { bot } from '../bot.js';
 import builder from 'botbuilder';
-
+import { eventsOn } from './dialogExpressions.js';
 
 bot.dialog('/', new builder.IntentDialog()
     .onDefault('/getstarted')
@@ -19,6 +19,7 @@ bot.dialog('/menu', new builder.IntentDialog()
     .matches(/^change info/i, '/changeInfo')
     .matches(/^confirm events/i, '/events')
     .matches(/^change user info/i, '/changeUserInfo')
+    .matches(eventsOn, '/eventsOnDate')
     .onDefault('/help')
 
 );
