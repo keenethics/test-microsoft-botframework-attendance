@@ -24,6 +24,7 @@ export {
   activeEvents,
   editProfile,
   events,
-  eventsOnDate 
+  eventsOnDate,
+  settings,
 };
 
