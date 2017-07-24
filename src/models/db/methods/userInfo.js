@@ -48,6 +48,20 @@ function getInfoByEmail(email, callback) {
   });
 }
 
+function getInfoByName(name, callback) {
+  usersDB.findOne({name: name}, (err, user) => {
+    let answer;
+    if (err) {
+      answer = 'Sorry, something go wrong. :(';
+      console.error(err);
+    } else if (user) {
+      getInfoByEmail(user.email, callback);
+    } else {
+      answer = 'User is not found.';
+    }
+    callback(answer);
+  });
+}
 
 function getRoleByUsername(username, callback) {
   usersDB.findOne({name: username}, (err, user) => {
@@ -113,5 +127,6 @@ module.exports = {
   getRoleByUsername: getRoleByUsername,
   checkUserEmail: checkUserEmail,
   usernameExist: usernameExist,
-  registrateNewUser: registrateNewUser
+  registrateNewUser: registrateNewUser,
+  getInfoByName: getInfoByName
 };
