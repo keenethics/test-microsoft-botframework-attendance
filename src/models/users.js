@@ -23,6 +23,7 @@ const UsersSchema = {
   workingInfo: [WorkingInfoSchema],
   startWorkingDay: Date,
   events: [String],
+  settings: {type: Object, default: {}},
 };
 
 const Users = mongoose.model('Users', UsersSchema);
