@@ -10,6 +10,7 @@ import activeEvents from './activeEvents';
 import editProfile from './editProfile';
 import events from '../admin_dialogs/events.js';
 import changeUserInfo from '../admin_dialogs/changeInfoByEmail';
+import getInfoByName from '../admin_dialogs/getInfoByName';
 import settings from '../admin_dialogs/settings.js';
 
 export {
@@ -25,6 +26,7 @@ export {
   editProfile,
   events,
   userStatus,
+  getInfoByName,
   settings,
 };
 
