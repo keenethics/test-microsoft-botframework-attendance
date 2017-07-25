@@ -5,7 +5,7 @@ import { getPendingEvents, getEventDate, approveOrRejectEvent  } from '../helper
 
 bot.dialog('/events', [
   async function(session) {
-    if (session.userData.profile.role != 'admin') {
+    if (session.userData.profile.role !== 'admin') {
       session.send('This feature available only for admins');
       session.endDialog();
       return;

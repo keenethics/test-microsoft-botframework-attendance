@@ -1,13 +1,13 @@
 import { bot } from '../bot.js';
 import builder from 'botbuilder';
 
-
 bot.dialog('/', new builder.IntentDialog()
     .onDefault('/getstarted')
 
   );
-bot.dialog('/menu', new builder.IntentDialog()
 
+
+bot.dialog('/menu', new builder.IntentDialog()
     .matches(/^help/i,'/help' )
     .matches(/^day off/i, '/dayoff')
     .matches(/^vacation/i, '/vacation')
@@ -20,17 +20,15 @@ bot.dialog('/menu', new builder.IntentDialog()
     .matches(/^change user info/i, '/changeUserInfo')
     .matches(/^What\'s [a-zA-z0-9_.]+@keenethics.com status on [0-9]{2}\.[0-9]{2}\.[0-9]{4}/i, '/userStatus')
     .onDefault('/help')
-
 );
-bot.dialog('/getstarted',[
 
+
+bot.dialog('/getstarted', [
   function (session, args, next) {
     if (session.userData.confirm == true) {
       next();
-
     } else {
       session.beginDialog('/ensureProfile', session.userData.profile);
-
     }
   },
   function (session) {
