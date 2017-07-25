@@ -14,11 +14,13 @@ bot.dialog('/menu', new builder.IntentDialog()
     .matches(/^edit profile/i, '/editProfile')
     .matches(/^full info/i, '/fullInfo')
     .matches(/^user info/i, '/userInfo')
+    .matches(/^info on/i, '/userInfoByName')
     .matches(/^active events/i, '/activeEvents')
     .matches(/^settings/i, '/settings')
     .matches(/^change info/i, '/changeInfo')
     .matches(/^confirm events/i, '/events')
     .matches(/^change user info/i, '/changeUserInfo')
+    .matches(/^user status/i, '/userStatus')
     .onDefault('/help')
 
 );

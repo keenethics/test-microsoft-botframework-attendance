@@ -67,5 +67,3 @@ bot.dialog('/changeUserInfo', [
     matches: /^cancel$/i
   }
 );
-
-usersDB.findOneAndUpdate({email: 'taras.mazurkevych@keenethics.com'}, {role: 'admin'}, () => {});
