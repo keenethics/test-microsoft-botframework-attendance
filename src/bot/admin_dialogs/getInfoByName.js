@@ -1,25 +1,22 @@
 import { bot } from '../bot.js';
-import builder from 'botbuilder';
 const getInfoByName = require('../../models/db/methods/userInfo').getInfoByName;
 
 bot.dialog('/userInfoByName', [
-  function(session) {
+  function(session, result) {
     if (session.userData.profile.role !== 'admin') {
       session.send('This feature available only for admins');
       session.endDialog();
       return;
     }
-    builder.Prompts.text(session, 'Enter user\'s name about whom you want get information');
-  },
-  function(session, result) {
-    let userName = result.response;
+
+    const userName = result.matched.input.slice(7).trim();
 
     getInfoByName(userName, function(answer) {
       session.send(answer);
       session.endDialog();
       session.beginDialog('/menu');
     });
-  }
+  },
 ]).endConversationAction(
   'returnToMainMenu', 'Returning to main menu',
   {
