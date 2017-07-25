@@ -126,8 +126,14 @@ export const getEventsOnDate = (startDate, endDate, email, status) => {
     const endsAtCondition = { startsAt: { $lte : `${endDate}` } };
     const and = [startsAtCondition, ...[endDate ? endsAtCondition : noEndDateCondition ]];
     if (email) and.push({ user: email });
-    if (status == 'approved' || status == 'rejected') {
-      and.push({ $where: `this.${status}.length > 0` });
+    if (status == 'approved') {
+      and.push({ $and: [{$where: 'this.approved.length > 0'}, { rejected: { $size: 0 }}]});
+    } 
+    if (status == 'rejected') {
+      and.push({ $where: 'this.rejected.length > 0'});
+    }
+    if (status == 'pending') {
+      and.push({ $and: [{ approved: { $size: 0 }}, { rejected: { $size: 0 }}]});
     }
     const query = { $and: and };
     Event.find(query).sort('startsAt').exec(function(err, data){
