@@ -19,7 +19,7 @@ bot.dialog('/menu', new builder.IntentDialog()
     .matches(/^change info/i, '/changeInfo')
     .matches(/^confirm events/i, '/events')
     .matches(/^change user info/i, '/changeUserInfo')
-    .matches(/^user status/i, '/userStatus')
+    .matches(/^What\'s [a-zA-z0-9_.]+@keenethics.com status on [0-9]{2}\.[0-9]{2}\.[0-9]{4}/i, '/userStatus')
     .onDefault('/help')
 
 );

@@ -25,5 +25,6 @@ export {
   editProfile,
   events,
   userStatus,
+  settings,
 };
 
