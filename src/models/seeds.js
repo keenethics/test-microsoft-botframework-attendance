@@ -21,9 +21,9 @@ const getNewUser = ({ _id, email, role, events }) => {
 };
 
 const randomDate = (start, end) => {
-    const diff =  end.getTime() - start.getTime();
-    const new_diff = diff * Math.random();
-    return new Date(start.getTime() + new_diff);
+  const diff = end.getTime() - start.getTime();
+  const new_diff = diff * Math.random();
+  return new Date(start.getTime() + new_diff);
 };
 
 const getNewEvent = ({_id, startsAt, endsAt, type, comment, rejected, approved, email }) => {
@@ -56,7 +56,7 @@ const generateUsersAndEvents = () => {
   const events = rejectedEvents.concat(approvedEvents).concat(pendingEvents);
   user.events = events.map(e => (e._id));
   Users.create([user, admin], (err) => {
-    if (err) console.log(err); 
+    if (err) return err;
   });
   Event.create(events);
 };
