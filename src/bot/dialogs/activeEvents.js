@@ -49,6 +49,7 @@ bot.dialog('/pending', [
 
 ]);
 
+
 bot.dialog('/rejected', [
   async function (session) {
     const user = await getUserByEmail(session.userData.profile.email);
@@ -104,7 +105,6 @@ bot.dialog('/approved', [
 ]);
 
 
-
 bot.dialog('/activeEvents', [
   function (session){
     const options = ['pending', 'rejected', 'approved', 'menu'];
@@ -121,4 +121,3 @@ bot.dialog('/activeEvents', [
     }
   }
 ]);
-

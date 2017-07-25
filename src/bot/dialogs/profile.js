@@ -3,12 +3,11 @@ import builder from 'botbuilder';
 import { CCODE } from '../../models/db/CCode';
 import emailHelper from '../helpers/emailHelper';
 
-
-var checkUserEmail = require('../../models/db/methods/userInfo').checkUserEmail;
-var usernameExist = require('../../models/db/methods/userInfo').usernameExist;
-var registrateNewUser = require('../../models/db/methods/userInfo').registrateNewUser;
-var sendConfirmCode = require('../mailService/mailMessage').sendConfirmCode;
-var user = {};
+const checkUserEmail = require('../../models/db/methods/userInfo').checkUserEmail;
+const usernameExist = require('../../models/db/methods/userInfo').usernameExist;
+const registrateNewUser = require('../../models/db/methods/userInfo').registrateNewUser;
+const sendConfirmCode = require('../mailService/mailMessage').sendConfirmCode;
+let user = {};
 
 bot.dialog('/ensureProfile', [
   function (session, args) {
@@ -28,7 +27,7 @@ bot.dialog('/ensureProfile', [
         userEmail = emailHelper.getEmailOutOfTag(userEmail);
       }
       user = await checkUserEmail(userEmail);
-      var ccode = CCODE();
+      const ccode = CCODE();
       session.userData.profile.ccode = ccode;
       if (user) {
         let mailOptions = {
@@ -37,7 +36,7 @@ bot.dialog('/ensureProfile', [
           subject: 'Confirmation code',
           text: ccode
         };
-        var sendResult = await sendConfirmCode(mailOptions);
+        const sendResult = await sendConfirmCode(mailOptions);
         if (sendResult) {
           builder.Prompts.text(session, `Confirmation code was send to ${user.email}. Please paste it here:`);
         } else {
@@ -57,7 +56,7 @@ bot.dialog('/ensureProfile', [
     }
   },
   function (session, results) {
-    if (session.userData.profile.ccode != results.response) {
+    if (session.userData.profile.ccode !== results.response) {
       session.send('Wrong confirmation code');
       session.replaceDialog('/ensureProfile', {reprompt: true});
     } else {
@@ -77,6 +76,7 @@ bot.dialog('/ensureProfile', [
   }
 );
 
+
 bot.dialog('/newUserRegistration', [
   function(session, args) {
     if (!args || !args.invalidName) {
@@ -87,7 +87,7 @@ bot.dialog('/newUserRegistration', [
     }
   },
   async function(session, results) {
-    if (results.response == '-cancel') {
+    if (results.response === '-cancel') {
       session.replaceDialog('/ensureProfile');
     } else {
       if (emailHelper.validateName(results.response)) {
@@ -96,7 +96,7 @@ bot.dialog('/newUserRegistration', [
           session.replaceDialog('/newUserRegistration', {invalidName: true});
         } else {
           session.userData.profile.name = results.response;
-          var ccode = CCODE();
+          const ccode = CCODE();
           session.userData.profile.ccode = ccode;
           let mailOptions = {
             from: 'keenethics',
@@ -104,7 +104,7 @@ bot.dialog('/newUserRegistration', [
             subject: 'Confirmation code',
             text: ccode
           };
-          var sendResult = await sendConfirmCode(mailOptions);
+          const sendResult = await sendConfirmCode(mailOptions);
           if (sendResult) {
             builder.Prompts.text(session, `Confirmation code was send to ${session.userData.profile.email}. Please paste
                it here:`);
@@ -120,11 +120,11 @@ bot.dialog('/newUserRegistration', [
     }
   },
   async function (session, results) {
-    if (session.userData.profile.ccode != results.response) {
+    if (session.userData.profile.ccode !== results.response) {
       session.send('Wrong confirmation code');
       session.replaceDialog('/newUserRegistration');
     } else {
-      var newUser = {
+      const newUser = {
         name: session.userData.profile.name,
         email: session.userData.profile.email
       };
