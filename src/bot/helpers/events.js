@@ -119,13 +119,16 @@ export const approveOrRejectEvent = (eventId, adminId, action) => {
   });
 };
 
-export const getEventsOnDate = (startDate, endDate, email) => {
+export const getEventsOnDate = (startDate, endDate, email, status) => {
   return new Promise(function(resolve, reject) {
     const startsAtCondition = { startsAt: { $gte: `${startDate}` } };
     const noEndDateCondition = { startsAt: { $lte: `${moment(startDate).clone().add('1', 'days')._d}`} }; 
     const endsAtCondition = { startsAt: { $lte : `${endDate}` } };
     const and = [startsAtCondition, ...[endDate ? endsAtCondition : noEndDateCondition ]];
     if (email) and.push({ user: email });
+    if (status == 'approved' || status == 'rejected') {
+      and.push({ $where: `this.${status}.length > 0` });
+    }
     const query = { $and: and };
     Event.find(query).sort('startsAt').exec(function(err, data){
       if(err) {
