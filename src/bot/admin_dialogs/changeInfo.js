@@ -3,7 +3,7 @@ import builder from 'botbuilder';
 import mongoose from 'mongoose';
 const usersDB = mongoose.connection.model('Users');
 
-bot.dialog('/changeUserInfo', [
+bot.dialog('/changeInfo', [
   function(session) {
     if (session.userData.profile.role !== 'admin') {
       session.send('This feature available only for admins');
