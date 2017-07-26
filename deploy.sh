@@ -8,5 +8,5 @@ git add .
 git commit -m "release"
 git push --force heroku $BRANCH:master
 git reset --hard HEAD^
-git branch -D $BRANCH
 git checkout development
+git branch -D $BRANCH
