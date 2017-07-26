@@ -10,6 +10,7 @@ import editProfile from './editProfile';
 import events from '../admin_dialogs/events.js';
 import changeInfo from '../admin_dialogs/changeInfo';
 import settings from '../admin_dialogs/settings.js';
+import eventsOnDate from '../admin_dialogs/eventsOnDate.js'; 
 
 export {
 	menu,
@@ -22,6 +23,7 @@ export {
   activeEvents,
   editProfile,
   events,
+  eventsOnDate,
   userStatus,
   settings,
 };

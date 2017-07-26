@@ -119,6 +119,33 @@ export const approveOrRejectEvent = (eventId, adminId, action) => {
   });
 };
 
+export const getEventsOnDate = (startDate, endDate, email, status) => {
+  return new Promise(function(resolve, reject) {
+    const startsAtCondition = { startsAt: { $gte: `${startDate}` } };
+    const noEndDateCondition = { startsAt: { $lte: `${moment(startDate).clone().add('1', 'days')._d}`} }; 
+    const endsAtCondition = { startsAt: { $lte : `${endDate}` } };
+    const and = [startsAtCondition, ...[endDate ? endsAtCondition : noEndDateCondition ]];
+    if (email) and.push({ user: email });
+    if (status == 'approved') {
+      and.push({ $and: [{$where: 'this.approved.length > 0'}, { rejected: { $size: 0 }}]});
+    } 
+    if (status == 'rejected') {
+      and.push({ $where: 'this.rejected.length > 0'});
+    }
+    if (status == 'pending') {
+      and.push({ $and: [{ approved: { $size: 0 }}, { rejected: { $size: 0 }}]});
+    }
+    const query = { $and: and };
+    Event.find(query).sort('startsAt').exec(function(err, data){
+      if(err) {
+        reject(err);
+      }
+      resolve(data);
+      
+    });
+  });
+}; 
+
 export const checkUserAvailabilityOnDate = (userEmail, date) => {
   return new Promise((resolve, reject) => {
     Users.findOne({email: userEmail}, (err, user) => {
@@ -146,3 +173,4 @@ export const checkUserAvailabilityOnDate = (userEmail, date) => {
     });
   });
 };
+
