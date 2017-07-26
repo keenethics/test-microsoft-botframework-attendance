@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-git checkout development
 BRANCH=feature-`date +%y/%m/%d-%H.%M.%S`
 echo $BRANCH
 git checkout -b $BRANCH
