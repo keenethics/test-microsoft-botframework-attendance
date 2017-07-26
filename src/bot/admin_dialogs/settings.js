@@ -52,4 +52,6 @@ bot.dialog('/settings', [
       session.send('time format is incorrect');
     }
   }
-]);
+]).cancelAction('cancelAction', 'Ok, canceled.', {
+  matches: /^nevermind$|^cancel$/i
+});

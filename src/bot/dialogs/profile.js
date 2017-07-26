@@ -69,12 +69,9 @@ bot.dialog('/ensureProfile', [
     }
   },
 
-]).endConversationAction(
-  'returnToMainMenu', 'Returning to main menu',
-  {
-    matches: /^cancel$/i
-  }
-);
+]).cancelAction('cancelAction', 'Ok, canceled.', {
+  matches: /^nevermind$|^cancel$/i
+});
 
 
 bot.dialog('/newUserRegistration', [
@@ -137,9 +134,6 @@ bot.dialog('/newUserRegistration', [
       session.endDialogWithResult({ response: session.userData.profile });
     }
   },
-]).endConversationAction(
-  'returnToMainMenu', 'Returning to main menu',
-  {
-    matches: /^cancel$/i
-  }
-);
+]).cancelAction('cancelAction', 'Ok, canceled.', {
+  matches: /^nevermind$|^cancel$/i
+});

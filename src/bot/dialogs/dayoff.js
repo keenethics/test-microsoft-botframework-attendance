@@ -66,12 +66,9 @@ bot.dialog('/dayoff' , [
     session.endDialogWithResult();
     session.beginDialog('/menu');
   }
-]).endConversationAction(
-  'returnToMainMenu', 'Returning to main menu',
-  {
-    matches: /^cancel$/i
-  }
-);
+]).cancelAction('cancelAction', 'Ok, canceled.', {
+  matches: /^nevermind$|^cancel$/i
+});
 
 const saveDayoffEvent = async (event, email) => {
   const dayoff = event;

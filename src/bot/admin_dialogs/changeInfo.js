@@ -61,9 +61,6 @@ bot.dialog('/changeInfo', [
       }
     );
   }
-]).endConversationAction(
-  'returnToMainMenu', 'Returning to main menu',
-  {
-    matches: /^cancel$/i
-  }
-);
+]).cancelAction('cancelAction', 'Ok, canceled.', {
+  matches: /^nevermind$|^cancel$/i
+});

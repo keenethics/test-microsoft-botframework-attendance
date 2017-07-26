@@ -25,6 +25,7 @@ bot.dialog('/pending', [
     session.send('type "menu" to go to the main menu');
     builder.Prompts.text(session,' ?');
   },
+
   function (session,results){
     const { mappedEvents, displayEvents } = session.dialogData;
     const action = results.response; 
@@ -46,8 +47,9 @@ bot.dialog('/pending', [
       session.beginDialog('/activeEvents');
     }
   },
-
-]);
+]).cancelAction('cancelAction', 'Ok, canceled.', {
+  matches: /^nevermind$|^cancel$/i
+});
 
 
 bot.dialog('/rejected', [
@@ -74,7 +76,9 @@ bot.dialog('/rejected', [
         break;
     }
   }
-]);
+]).cancelAction('cancelAction', 'Ok, canceled.', {
+  matches: /^nevermind$|^cancel$/i
+});
 
 
 bot.dialog('/approved', [
@@ -102,7 +106,9 @@ bot.dialog('/approved', [
         break;
     }
   }
-]);
+]).cancelAction('cancelAction', 'Ok, canceled.', {
+  matches: /^nevermind$|^cancel$/i
+});
 
 
 bot.dialog('/activeEvents', [
@@ -120,4 +126,6 @@ bot.dialog('/activeEvents', [
       session.beginDialog('/activeEvents');
     }
   }
-]);
+]).cancelAction('cancelAction', 'Ok, canceled.', {
+  matches: /^nevermind$|^cancel$/i
+});

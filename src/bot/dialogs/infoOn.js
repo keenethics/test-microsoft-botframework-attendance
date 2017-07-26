@@ -36,9 +36,4 @@ bot.dialog('/infoOn', [
       }
     }
   },
-]).endConversationAction(
-  'returnToMainMenu', 'Returning to main menu',
-  {
-    matches: /^cancel$/i
-  }
-);
+]);

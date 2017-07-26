@@ -62,4 +62,6 @@ bot.dialog('/events', [
         break;
     }
   }
-]);
+]).cancelAction('cancelAction', 'Ok, canceled.', {
+  matches: /^nevermind$|^cancel$/i
+});
