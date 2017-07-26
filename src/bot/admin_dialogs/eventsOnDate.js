@@ -72,4 +72,6 @@ bot.dialog('/eventsOnDate', [
     session.endDialog();
     session.beginDialog('/menu');
   }
-]);
+]).cancelAction('cancelAction', 'Ok, canceled.', {
+  matches: /^nevermind$|^cancel$/i
+});
