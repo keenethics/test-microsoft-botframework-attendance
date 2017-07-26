@@ -1,8 +1,0 @@
-{
-  "ChatConnector" : {
-    "appId":"79dc72c7-dc9b-43f6-9833-d12c0771f89b",
-    "appPassword":"xiUrcc4ndfHZizWBK5sgEAd"
-  },
-  "mongodb":"mongodb://localhost:27017/skypebot",
-  "mongoDeployUrl":"mongodb://tester:tester21@ds161960.mlab.com:61960/skype_bot"
-}
