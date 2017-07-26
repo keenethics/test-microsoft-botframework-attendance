@@ -28,7 +28,8 @@ bot.dialog('/eventsOnDate', [
       session.endDialog();
     } else if (validDate == 2 || validDate == 1) {
       const [startDate, endDate] = date.split('-');
-      events = (await getEventsOnDate(getMomentDDMMFormat(startDate), getMomentDDMMFormat(endDate), email, statusSpecified))
+      events = (await getEventsOnDate(getMomentDDMMFormat(startDate), getMomentDDMMFormat(endDate),
+        email, statusSpecified))
         .sort((a,b) =>(a > b));
       session.dialogData.mappedEvents = {};
       const displayEvents = events.map((ev,index) => (

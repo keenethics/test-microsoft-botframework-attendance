@@ -1,4 +1,4 @@
-BRANCH=feature-`date +%y/%m/%d-%H:%M:%S`
+BRANCH=feature-`date +%y/%m/%d-%H.%M.%S`
 echo $BRANCH
 git checkout -b $BRANCH
 npm run build
