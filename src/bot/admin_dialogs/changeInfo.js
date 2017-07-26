@@ -3,7 +3,7 @@ import builder from 'botbuilder';
 import mongoose from 'mongoose';
 const usersDB = mongoose.connection.model('Users');
 
-bot.dialog('/changeUserInfo', [
+bot.dialog('/changeInfo', [
   function(session) {
     if (session.userData.profile.role !== 'admin') {
       session.send('This feature available only for admins');
@@ -61,11 +61,6 @@ bot.dialog('/changeUserInfo', [
       }
     );
   }
-]).endConversationAction(
-  'returnToMainMenu', 'Returning to main menu',
-  {
-    matches: /^cancel$/i
-  }
-);
-
-usersDB.findOneAndUpdate({email: 'taras.mazurkevych@keenethics.com'}, {role: 'admin'}, () => {});
+]).cancelAction('cancelAction', 'Ok, canceled.', {
+  matches: /^nevermind$|^cancel$/i
+});

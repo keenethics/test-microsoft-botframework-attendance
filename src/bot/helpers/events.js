@@ -145,3 +145,32 @@ export const getEventsOnDate = (startDate, endDate, email, status) => {
     });
   });
 }; 
+
+export const checkUserAvailabilityOnDate = (userEmail, date) => {
+  return new Promise((resolve, reject) => {
+    Users.findOne({email: userEmail}, (err, user) => {
+      if (err) {
+        reject('Sorry, something go wrong. :(');
+        console.error(err);
+      } else if (user) {
+        getEventsByIds(user.events, {
+          startsAt: {
+            $lte: moment(date, 'DD.MM.YYYY').toDate(),
+          },
+          endsAt: {
+            $gte: moment(date, 'DD.MM.YYYY').toDate(),
+          },
+        }).then((events) => {
+          if (events.length) {
+            resolve('He is on vacation');
+          } else {
+            resolve('He should be working on that date');
+          }
+        });
+      } else {
+        reject('User is not found.');
+      }
+    });
+  });
+};
+

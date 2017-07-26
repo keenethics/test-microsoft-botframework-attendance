@@ -4,7 +4,7 @@ import { setNotificationTime, getUserByEmail } from '../helpers/users.js';
 
 bot.dialog('/settings', [
   async function(session) {
-    if (session.userData.profile.role != 'admin') {
+    if (session.userData.profile.role !== 'admin') {
       session.send('This feature available only for admins');
       session.endDialog();
       return;
@@ -52,4 +52,6 @@ bot.dialog('/settings', [
       session.send('time format is incorrect');
     }
   }
-]);
+]).cancelAction('cancelAction', 'Ok, canceled.', {
+  matches: /^nevermind$|^cancel$/i
+});
