@@ -41,7 +41,7 @@ bot.dialog('/eventsOnDate', [
     if (statusSpecified === 'pending') {
       session.dialogData.statusSpecified = statusSpecified;
       events.forEach((ev, index) => { session.dialogData.mappedEvents[index] = ev._id; });
-        builder.Prompts.text(session, 'you can approve or reject event by typing "approve/reject {n}'); 
+      builder.Prompts.text(session, 'you can approve or reject event by typing "approve/reject {n}'); 
     } else {
       session.endDialog();
     }
@@ -54,9 +54,9 @@ bot.dialog('/eventsOnDate', [
     if ( session.dialogData.statusSpecified === 'pending') { 
       const queryExp = /(reject |approve )*[0-9]{1,3}/;
       if (!queryExp.test(action)) {
-        session.send("incorrect input");
+        session.send('incorrect input');
       } else {
-        const actionExp = /(reject |approve )/
+        const actionExp = /(reject |approve )/;
         const toDo = action.match(actionExp) && action.match(actionExp)[0].trim();
         const index = parseInt(action.replace(actionExp, ''), 10);
         const eventId = mappedEvents[index];
