@@ -3,6 +3,7 @@
 BRANCH=feature-`date +%y/%m/%d-%H.%M.%S`
 echo $BRANCH
 git checkout -b $BRANCH
+echo "node_modules/ npm-debug.log *.js.swp .idea/" >> t.gitignore
 npm run build
 git add .
 git commit -m "release"
