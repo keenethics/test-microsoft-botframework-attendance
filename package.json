@@ -10,7 +10,7 @@
     "test": "./node_modules/mocha/bin/mocha",
     "deploy": "bash deploy.sh",
     "seeds": "nodemon --exec node src/models/seeds.js",
-    "run-production": "npm install && node lib/app.js",
+    "run-production": "npm install && node src/app.js",
     "start-locally": "NODE_ENV='development' nodemon --exec node src/app.js",
     "eslint": "./node_modules/.bin/eslint ./",
     "precommit-msg": "echo 'Pre-commit checks...' && exit 0"
