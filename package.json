@@ -10,8 +10,8 @@
     "test": "./node_modules/mocha/bin/mocha",
     "deploy": "bash deploy.sh",
     "seeds": "nodemon --exec node src/models/seeds.js",
-    "run-production": "npm install && node src/app.js",
-    "start-locally": "NODE_ENV='development' nodemon --exec node src/app.js",
+    "run-production": "npm install && node src/index.js",
+    "start-locally": "NODE_ENV='development' nodemon --exec node src/index.js",
     "eslint": "./node_modules/.bin/eslint ./",
     "precommit-msg": "echo 'Pre-commit checks...' && exit 0"
   },
@@ -181,6 +181,8 @@
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
+    "babel-register": "^6.24.1",
     "chai": "^3.5.0",
     "eslint": "^3.19.0",
     "mocha": "^3.2.0",
