@@ -10,6 +10,5 @@ git add .
 git status
 git commit -m "release"
 git push --force heroku $BRANCH:master
-git reset --hard HEAD^
 git checkout development
 git branch -D $BRANCH
