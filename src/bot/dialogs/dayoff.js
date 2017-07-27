@@ -8,7 +8,6 @@ import {
   getEventDate
 } from '../helpers/events.js';
 import { getUserByEmail } from '../helpers/users.js';
-require('babel-polyfill');
 
 bot.dialog('/dayoff' , [
 

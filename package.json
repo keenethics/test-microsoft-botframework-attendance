@@ -1,16 +1,17 @@
 {
   "name": "bot",
   "version": "1.0.0",
+  "engines": {
+    "npm": "8.1.x"
+  },
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha --compilers js:babel-core/register",
-    "babel-node": "babel-node",
+    "test": "./node_modules/mocha/bin/mocha",
     "deploy": "bash deploy.sh",
-    "build": "babel src --out-dir lib",
-    "seeds": "nodemon --exec npm run babel-node -- src/models/seeds.js",
+    "seeds": "nodemon --exec node src/models/seeds.js",
     "run-production": "npm install && node lib/app.js",
-    "start-locally": "NODE_ENV='development' nodemon --exec npm run babel-node -- src/app.js",
+    "start-locally": "NODE_ENV='development' nodemon --exec node src/app.js",
     "eslint": "./node_modules/.bin/eslint ./",
     "precommit-msg": "echo 'Pre-commit checks...' && exit 0"
   },
@@ -29,9 +30,6 @@
     "asynckit": "0.4.0",
     "aws-sign2": "0.6.0",
     "aws4": "1.6.0",
-    "babel-eslint": "^7.2.3",
-    "babel-plugin-transform-async-to-generator": "^6.24.1",
-    "babel-polyfill": "^6.23.0",
     "backoff": "2.5.0",
     "balanced-match": "0.4.2",
     "base64url": "1.0.6",
@@ -182,10 +180,7 @@
     "yallist": "2.1.2"
   },
   "devDependencies": {
-    "babel-cli": "^6.24.1",
-    "babel-core": "^6.24.1",
-    "babel-preset-env": "^1.3.3",
-    "babel-preset-es2015": "^6.24.1",
+    "babel-eslint": "^7.2.3",
     "chai": "^3.5.0",
     "eslint": "^3.19.0",
     "mocha": "^3.2.0",
