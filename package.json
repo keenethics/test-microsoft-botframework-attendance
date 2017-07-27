@@ -2,7 +2,7 @@
   "name": "bot",
   "version": "1.0.0",
   "engines": {
-    "npm": "8.1.x"
+    "node": "8.1.x"
   },
   "description": "",
   "main": "index.js",
