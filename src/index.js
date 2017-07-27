@@ -1,3 +1,3 @@
-require('../node_modules/babel-register');
-require('../node_modules/babel-polyfill');
+require('babel-core/register');
+require('babel-polyfill');
 require('./app');
