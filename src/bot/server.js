@@ -3,6 +3,8 @@ import { connector } from './bot.js';
 import { mongoDeployUrl } from '../../settings.json';
 import mongoose from 'mongoose';
 import createUser from '../models/seeds.js';
+import workers from './workers/index.js';
+
 var createUsers = require('../models/db/defaultUsersDB.js');
 
 var MongoClient = require('mongodb').MongoClient

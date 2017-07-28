@@ -1,5 +1,4 @@
-import mongoose from 'mongoose';
-
+const mongoose  = require('mongoose');
 
 const EventSchema = {
   startsAt: Date,
@@ -18,4 +17,5 @@ const EventSchema = {
 
 const Event = mongoose.model('Event', EventSchema);
 
-export default Event;
+module.exports = Event;
+

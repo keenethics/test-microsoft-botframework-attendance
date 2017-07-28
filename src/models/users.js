@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 
 const MonthSchema = {
@@ -29,4 +29,5 @@ const UsersSchema = {
 
 const Users = mongoose.model('Users', UsersSchema);
 
-export default Users;
+module.exports = Users;
+
