@@ -1,3 +1,3 @@
-import notificationWorker from './notificationsWorker.js';
+import notificationWorker from './notifications/notificationsWorker.js';
 
 export { notificationWorker };
