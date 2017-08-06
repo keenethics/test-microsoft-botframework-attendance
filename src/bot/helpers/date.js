@@ -14,3 +14,4 @@ export const getMomentDDMMFormat = (date) => {
   return moment({ day, month: month - 1, year })._d;
 };
 
+export const formatDate = (date) => (moment(date).format('MMMM Do YYYY'));
