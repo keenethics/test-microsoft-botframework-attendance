@@ -6,7 +6,24 @@ import { getMomentDDMMFormat } from '../helpers/date.js';
 import moment from 'moment';
 bot.dialog('/holidays', [
   async function(session, args) {
+    if (session.userData.profile.role !== 'admin') {
+      session.send('This feature available only for admins');
+      session.endDialog();
+      return;
+    }
+    const query = args.matched.input;
+    const queryString = query.replace(/holidays on /, '');
+    const dateExp = /^([0][0-9]|[1][0-2])[.][0-9]{4}$/;
+    if (!dateExp.test(queryString)) { 
+      session.send('incorrect month or year');
+    }
+    const dM = queryString.split('.')
+    const month = dM[0]; 
+    const year = dM[1];
+    const holidays = getHolidays({ year, month }); 
+    console.log(holidays);
   }
+
 ]).cancelAction('cancelAction', 'Ok, canceled.', {
   matches: /^nevermind$|^cancel$/i
 });
