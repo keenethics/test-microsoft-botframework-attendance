@@ -11,6 +11,7 @@ export const validateDate = (date) => (date.split('-').filter((d)=>((isGoodDate(
 export const getMomentDDMMFormat = (date) => {
   if (!date) return;
   const [day, month, year] = date.split('.');
-  return moment({ day, month: month - 1, year })._d;
+  return moment({ day, month: month, year })._d;
 };
 
+export const formatDate = (date) => (moment(date).format('MMMM Do YYYY'));

@@ -3,9 +3,91 @@ import mongoid from 'mongoid';
 
 import Event from '../models/event.js';
 import Users from '../models/users.js';
+import Holidays from '../models/holidays.js';
 
 const fromDate = new Date('04.01.2017');
 const toDate = new Date('12.12.2017'); 
+
+const randomHolidayNames = [
+  'Lee-Jackson-King Day ',
+  'Martin Luther King, Jr. Day ',
+  'Groundhog Day ',
+  'Darwin Day ',
+  'Presidents Day ',
+  'Confederate Memorial ',
+  'Longtail Day ',
+  'Patriot\'s Day ',
+  'Earth Day ',
+  'King\'s Day',
+  'Constitution Day ',
+  'Youth Day ',
+  'Victoria Day ',
+  'Flag Day ',
+  'Juneteenth ',
+  'Canada Day ',
+  'Labor Day or Labour Day ',
+  'Grandparents Day ',
+  'Columbus Day ',
+  'National Alphabet Day ',
+  'Thanksgiving ',
+  'Saint Nicholas Day ',
+  'Boxing Day ',
+  'Samhain ',
+  'Winter Nights ',
+  'Yule ',
+  'Imbolc ',
+  'Ostara/Easter ',
+  'Beltane ',
+  'Litha ',
+  'Lughnasadh ',
+  'Mabon/Harvest End ',
+  'April Fools Day ',
+  'Beluga Whale Day ',
+  'Black Friday or Buy Nothing Day ',
+  'Bloomsday ',
+  'Brookemas ',
+  'Christmas Eve ',
+  'Festivus ',
+  'First Contact Day ',
+  'Friday the 13th',
+  'Friendship Day (First Sunday in August)',
+  'Galactic Tick Day ', 'GIS Day ', 'Giving Tuesday[1] ',
+  'International Cannabis Day/Four Twenty ',
+  'International Inflation Day ',
+  'International Talk Like a Pirate Day ',
+  'Lost Penny Day[2] ',
+  'Marathon Monday ',
+  'Mischief Night ',
+  'Mole Day ',
+  'Monkey Day ',
+  'National Cancer Survivors Day ',
+  'National Gorilla Suit Day', 
+  'National Hug Day ',
+  'Ninja Day ',
+  'No Pants Day ',
+  'Opposite Day ',
+  'Pi Day ',
+  'Put A Pillow On Your Fridge Day[3] ',
+  'Record Store Day ',
+  'Robert Burns Day/Burns Night ',
+  'S.A.D. – ',
+  'Star Wars Day ',
+  'Super Bowl Sunday ',
+  'Sweetest Day ',
+  'Take Your Houseplant For A Walk Day ',
+  'Tax Freedom Day',
+  'Towel Day (25 May) (Tribute to the late Douglas Adams)',
+  'Women Gamers Day (18 June) (Day for girls who enjoy video games)',
+];
+
+const generateRandomHoliday = (num) => {
+  for (let i = 0; i < num; i++) {
+    const rDate = randomDate(fromDate, toDate);
+    const rName = randomHolidayNames[Math.floor(Math.random() * 70)];
+    const rHol = new Holidays({ date: rDate, name: rName }); 
+    Holidays.create(rHol);
+  }
+};
 
 const getNewUser = ({ _id, email, role, events }) => {
   return {
@@ -59,6 +141,7 @@ const generateUsersAndEvents = () => {
     if (err) return err;
   });
   Event.create(events);
+  generateRandomHoliday(40); 
 };
 
 export default generateUsersAndEvents;
