@@ -35,6 +35,7 @@ bot.dialog('/holidays', [
     if (!resExp.test(res)) {
       session.send('incorect input');
       session.endDialog();
+      return;
     }
     const ind = parseInt(res.replace('remove ',''));
     let op = null;
