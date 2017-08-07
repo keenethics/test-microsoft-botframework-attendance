@@ -1,4 +1,4 @@
-import { Users, Holidays } from '../../models';
+import { Users } from '../../models';
 
 import mongoose from 'mongoose';
 

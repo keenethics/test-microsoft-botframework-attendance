@@ -1,5 +1,5 @@
 import { bot } from '../bot.js';
-import { validateDate, formatDate } from '../helpers/date.js';
+import { formatDate } from '../helpers/date.js';
 import { addHoliday, getHolidays, removeHoliday } from '../helpers/holidays.js';
 import builder from 'botbuilder';
 import { getMomentDDMMFormat } from '../helpers/date.js';
@@ -12,18 +12,18 @@ bot.dialog('/holidays', [
     if (!dateExp.test(queryString)) { 
       session.send('incorrect month or year');
     }
-    const dM = queryString.split('.')
+    const dM = queryString.split('.');
     const month = dM[0]; 
     const year = dM[1];
     const holidays = await getHolidays({ year, month }); 
-    let msg = 'to remove holidays type \" remove {number} \"'
+    let msg = 'to remove holidays type \" remove {number} \"';
     let holidaysMsg = '';
     if (!holidays.length) {
       msg = 'there is not any holidays';
     }
     session.dialogData.mathcIdInNumber = {};
-    const mathcIdInNumber = holidays.forEach((h,i) => {
-      holidaysMsg += `${i}: ${h.name} - ${formatDate(h.date)} \n\n\n\n`
+    holidays.forEach((h,i) => {
+      holidaysMsg += `${i}: ${h.name} - ${formatDate(h.date)} \n\n\n\n`;
       session.dialogData.mathcIdInNumber[i] = h._id; 
     });
     builder.Prompts.text(session, holidaysMsg + msg);
@@ -36,7 +36,7 @@ bot.dialog('/holidays', [
       session.send('incorect input');
       session.endDialog();
     }
-    const ind = parseInt(res.replace('remove ','')) 
+    const ind = parseInt(res.replace('remove ',''));
     let op = null;
     if (ind) {
       const holidayId = session.dialogData.mathcIdInNumber[ind]; 
@@ -69,7 +69,7 @@ bot.dialog('/addHoliday', [
     const name = queryString.replace(dateExp, '').trim();
     const result = await addHoliday({date, name}); 
     let msg = result;
-    if (typeof result !== 'string') msg = `holiday ${name} on ${moment(date).format('MMMM Do YYYY')} has been created`
+    if (typeof result !== 'string') msg = `holiday ${name} on ${moment(date).format('MMMM Do YYYY')} has been created`;
     session.send(msg);
     session.endDialog();
   }

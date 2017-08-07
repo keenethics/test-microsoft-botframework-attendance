@@ -7,7 +7,7 @@ export const getHolidays = (options) => {
   const { month, year } = options;
   if (month && year) {
     const date = moment({ month, year })._d;
-    const beforeDate = moment(date).clone().add('1', 'month')._d
+    const beforeDate = moment(date).clone().add('1', 'month')._d;
     const cond1 = { date: { $gte: `${date}` } };
     const cond2 = { date: { $lt: `${beforeDate}` } };
     const and = [cond1, cond2];
@@ -30,7 +30,6 @@ export const addHoliday = (holiday) => {
   const holidays = mongoose.connection.model('Holidays');
   return new Promise(function(resolve, reject) {
     const Holiday = new holidays(holiday);
-    const { _id } = Holiday;
     Holiday.save((err) => {
       if (err) {
         reject(err);

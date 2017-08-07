@@ -87,7 +87,7 @@ const generateRandomHoliday = (num) => {
     const rHol = new Holidays({ date: rDate, name: rName }); 
     Holidays.create(rHol);
   }
-}
+};
 
 const getNewUser = ({ _id, email, role, events }) => {
   return {

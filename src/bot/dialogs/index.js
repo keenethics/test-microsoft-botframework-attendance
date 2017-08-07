@@ -26,5 +26,6 @@ export {
   events,
   eventsOnDate,
   userStatus,
+  addHoliday,
   settings,
 };
