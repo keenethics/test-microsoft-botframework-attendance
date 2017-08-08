@@ -174,3 +174,25 @@ export const checkUserAvailabilityOnDate = (userEmail, date) => {
   });
 };
 
+export const getDayOffsOnMonth = (email, date) => {
+  return new Promise(function(resolve, reject) {
+    const and = [{ user: email }, { rejected: [] }];
+    if (date) {
+      const mmYYYY = date.split('.');
+      const startDate = moment({ month: mmYYYY[0], year: mmYYYY[1], day: 1 })._d;
+      const endDate = moment(startDate).clone().add('month', 1).date(0)._d;
+      const startsAtCond = { startsAt: { $gte: `${startDate}` } };
+      const endsAtCond = { startsAt: { $lt: `${endDate}`} }; 
+      and.push(startsAtCond);
+      and.push(endsAtCond);  
+    } 
+    const query = { $and: and };
+    Event.find(query).sort('startsAt').exec(function(err, data){
+      if(err) {
+        reject(err);
+      }
+      resolve(data);
+    });
+  });
+}; 
+

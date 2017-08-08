@@ -1,6 +1,6 @@
 import { bot } from '../bot.js';
 import builder from 'botbuilder';
-import { eventsOn, addHoliday, holidaysOn } from './dialogExpressions.js';
+import { eventsOn, addHoliday, holidaysOn, attendance } from './dialogExpressions.js';
 
 bot.dialog('/', new builder.IntentDialog()
     .onDefault('/getstarted')
@@ -8,7 +8,7 @@ bot.dialog('/', new builder.IntentDialog()
   );
 
 bot.dialog('/menu', new builder.IntentDialog()
-    .matches(/^help/i,'/help' )
+    .matches(/^help/i,'/help')
     .matches(/^day off/i, '/dayoff')
     .matches(/^vacation/i, '/vacation')
     .matches(/^edit profile/i, '/editProfile')
@@ -21,6 +21,7 @@ bot.dialog('/menu', new builder.IntentDialog()
     .matches(holidaysOn, '/holidays')
     .matches(eventsOn, '/eventsOnDate')
     .matches(addHoliday, '/addHoliday')
+    .matches(attendance, '/attendance')
     .matches(/^What\'s [a-zA-z0-9_.]+@keenethics.com status on [0-9]{2}\.[0-9]{2}\.[0-9]{4}/i, '/userStatus')
     .matches(/^ensureProfile/i, '/ensureProfile')
     .matches(/^newUserRegistration/i, '/newUserRegistration')

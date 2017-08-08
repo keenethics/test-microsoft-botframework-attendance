@@ -12,6 +12,7 @@ import changeInfo from '../admin_dialogs/changeInfo';
 import settings from '../admin_dialogs/settings.js';
 import eventsOnDate from '../admin_dialogs/eventsOnDate.js'; 
 import addHoliday from '../admin_dialogs/holidays.js';
+import attendance from '../admin_dialogs/attendance.js'; 
 
 export {
 	menu,
@@ -28,4 +29,6 @@ export {
   userStatus,
   addHoliday,
   settings,
+  attendance,
 };
+

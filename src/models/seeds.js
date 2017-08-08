@@ -1,6 +1,6 @@
 import faker from 'faker';
 import mongoid from 'mongoid';
-
+import moment from 'moment';
 import Event from '../models/event.js';
 import Users from '../models/users.js';
 import Holidays from '../models/holidays.js';
@@ -110,7 +110,7 @@ const randomDate = (start, end) => {
 
 const getNewEvent = ({_id, startsAt, endsAt, type, comment, rejected, approved, email }) => {
   const date1 = randomDate(fromDate, toDate);
-  const date2 = randomDate(fromDate, toDate);
+  const date2 =  moment(date1).clone().add('days', Math.floor(Math.random() * 6) + 1);
   return {
     _id: _id || mongoid(),
     endsAt: endsAt || date1 > date2 ? date1 : date2,

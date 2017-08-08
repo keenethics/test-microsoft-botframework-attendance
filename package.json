@@ -124,6 +124,7 @@
     "minimist": "0.0.8",
     "mkdirp": "0.5.1",
     "moment": "^2.18.1",
+    "moment-business": "^3.0.1",
     "moment-range": "^3.0.3",
     "mongodb": "2.2.25",
     "mongodb-core": "2.1.9",
