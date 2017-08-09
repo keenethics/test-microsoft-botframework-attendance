@@ -56,7 +56,7 @@ bot.dialog('/settings', [
   matches: /^nevermind$|^cancel$/i
 });
 
-bot.dialog('iAmAdmin', [
+bot.dialog('/iAmAdmin', [
   async function(session) {
     const user = await getUserByEmail(session.userData.profile.email);
     if (user.role === 'admin') {
