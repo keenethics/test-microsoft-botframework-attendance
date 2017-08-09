@@ -15,32 +15,39 @@ holidaysDB.find((err, data) => {
   }
 });
 
+function createUserInfoTextFromObject(user) {
+  let answer = '';
+  answer += 'Name: ' + user.name + '\n\n';
+  answer += 'Email: ' + user.email + '\n\n';
+  answer += 'Role: ' + user.role + '\n\n';
+  answer += 'sickLeaveLeft: ' + user.sickLeaveLeft + '\n\n';
+  answer += 'sickLeaveHalfLeft: ' + user.sickLeaveHalfLeft + '\n\n';
+  let vacationDays = 0;
+  let workedMonths = null;
+  user.workingInfo.forEach((year) => {
+    holidays.forEach((yearHolidays) => {
+      if (_.isMatch(yearHolidays, {year: year.year})) {
+        workedMonths = yearHolidays.months;
+      }
+    });
+    year.months.forEach((month, index) => {
+      vacationDays += (20 / 12) * (month.actuallyWorkedDays / workedMonths[index].totalWorkingDays);
+    });
+  });
+  vacationDays -= user.usedVacations;
+  answer += 'Vacation days available: ' + parseInt(vacationDays);
+
+  return answer;
+}
+
 function getInfoByEmail(email, callback) {
   usersDB.findOne({email: email}, (err, user) => {
-    var answer;
+    let answer;
     if (err) {
       answer = 'Sorry, something go wrong. :(';
       console.error(err);
     } else if (user) {
-      answer = 'Name: ' + user.name + '\n\n';
-      answer += 'Email: ' + user.email + '\n\n';
-      answer += 'Role: ' + user.role + '\n\n';
-      answer += 'sickLeaveLeft: ' + user.sickLeaveLeft + '\n\n';
-      answer += 'sickLeaveHalfLeft: ' + user.sickLeaveHalfLeft + '\n\n';
-      var vacationDays = 0;
-      var workedMonths = null;
-      user.workingInfo.forEach((year) => {
-        holidays.forEach((yearHolidays) => {
-          if (_.isMatch(yearHolidays, {year: year.year})) {
-            workedMonths = yearHolidays.months;
-          }
-        });
-        year.months.forEach((month, index) => {
-          vacationDays += (20 / 12) * (month.actuallyWorkedDays / workedMonths[index].totalWorkingDays);
-        });
-      });
-      vacationDays -= user.usedVacations;
-      answer += 'Vacation days available: ' + parseInt(vacationDays);
+      answer = createUserInfoTextFromObject(user);
     } else {
       answer = 'User is not found.';
     }
@@ -48,6 +55,20 @@ function getInfoByEmail(email, callback) {
   });
 }
 
+function getInfoByName(name, callback) {
+  usersDB.findOne({name: name}, (err, user) => {
+    let answer;
+    if (err) {
+      answer = 'Sorry, something go wrong. :(';
+      console.error(err);
+    } else if (user) {
+      answer = createUserInfoTextFromObject(user);
+    } else {
+      answer = 'User is not found.';
+    }
+    callback(answer);
+  });
+}
 
 function getRoleByUsername(username, callback) {
   usersDB.findOne({name: username}, (err, user) => {
@@ -113,5 +134,6 @@ module.exports = {
   getRoleByUsername: getRoleByUsername,
   checkUserEmail: checkUserEmail,
   usernameExist: usernameExist,
-  registrateNewUser: registrateNewUser
+  registrateNewUser: registrateNewUser,
+  getInfoByName: getInfoByName
 };

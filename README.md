@@ -74,3 +74,9 @@ where you can write functional, which you want to test.
 
 ## Deploy Attendance:
 1. `npm run deploy`
+
+## Test Data
+1. to fill db with test user, admin and events run project with createUser flag
+ `npm run start-locally createUser`
+
+

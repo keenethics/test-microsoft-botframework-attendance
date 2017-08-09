@@ -1,6 +1,5 @@
-node_modules
+node_modules/
+.idea/
 settings.json
 npm-debug.log
 *.js.swp
-.idea/
-lib/

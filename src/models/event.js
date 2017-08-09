@@ -10,7 +10,9 @@ const EventSchema = {
   vacationsUsed: {type: Number, defaul: 0},
   daysOffUsed: {type: Number, defaul: 0},
   sickLeavesUsed: {type: Number, defaul: 0},
-  isReject: {type: Boolean, default: false},
+  approved: {type: Array, default: []},
+  rejected: {type: Array, default: []},
+  createdAt: Date,
 };
 
 
