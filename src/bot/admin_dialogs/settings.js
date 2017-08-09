@@ -55,3 +55,16 @@ bot.dialog('/settings', [
 ]).cancelAction('cancelAction', 'Ok, canceled.', {
   matches: /^nevermind$|^cancel$/i
 });
+
+bot.dialog('iAmAdmin', [
+  async function(session) {
+    const user = await getUserByEmail(session.userData.profile.email);
+    if (user.role === 'admin') {
+      session.userData.profile.role = 'admin';
+      session.send('you are admin');
+    } else {
+      session.send('you are not admin');
+    }
+    session.endDialog();
+  }
+]);
