@@ -79,4 +79,9 @@ where you can write functional, which you want to test.
 1. to fill db with test user, admin and events run project with createUser flag
  `npm run start-locally createUser`
 
+## test bot in skype
+You can add bot to your skype through this link
+https://join.skype.com/bot/79dc72c7-dc9b-43f6-9833-d12c0771f89b
 
+## Troubleshooting
+If your use has admin role in db but bot still treat you as a user - type "i am admin". It will update bot application state
