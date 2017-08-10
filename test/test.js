@@ -3,7 +3,7 @@ var describe = require('mocha').describe;
 var it = require('mocha').it;
 var expect = require('chai').expect;
 var should = require('chai').should();
-var forTest = require('../testFile.js');
+var forTest = require('./testFile.js');
 
 describe('Number check', () => {
   describe('return value', () => {
