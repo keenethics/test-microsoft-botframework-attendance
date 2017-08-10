@@ -123,7 +123,8 @@ bot.dialog('/newUserRegistration', [
     } else {
       const newUser = {
         name: session.userData.profile.name,
-        email: session.userData.profile.email
+        email: session.userData.profile.email,
+        address: session.message.address,
       };
       user = await registrateNewUser(newUser);
       session.userData.profile.email = user.email;
