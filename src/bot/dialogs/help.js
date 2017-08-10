@@ -11,6 +11,7 @@ const adminOptions = 'You can: \n- day off \n- edit profile \n- info on me / ema
 
 bot.dialog('/help', [
   function(session) {
+    if (!session.userData.profile) session.beginDialog('/ensureProfile');
     if (session.userData.profile.role !== 'admin') {
       session.send(userOptions);
     } else{
