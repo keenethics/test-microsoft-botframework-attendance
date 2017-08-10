@@ -1,6 +1,8 @@
 import builder from 'botbuilder';
 import moment from 'moment';
 import { bot } from '../bot.js';
+import { notifyAdmins } from '../helpers/notifications.js';
+
 import {
   getHolidays,
   saveEvent,
@@ -95,6 +97,7 @@ const saveDayoffEvent = async (event, email) => {
   const eventId = await saveEvent(dayoff);
   if (eventId) {
     saveEventIntoUser(user._id, eventId);
+    notifyAdmins(eventId);
   }
 };
 

@@ -76,6 +76,17 @@ export const getEventsByIds = (ids, options = {}) => {
   });
 };
 
+export const getEvent = (id) => {
+  return new Promise(function(resolve, reject) {
+    Event.findOne({ _id: id }).sort('startsAt').exec(function(err, data){
+      if(err) {
+        reject(err);
+      }
+      resolve(data);
+    });
+  });
+};
+
 export const getPendingEvents = (adminId) => {
   return new Promise(function(resolve, reject) {
     const notRejected = { rejected: { $ne: `${adminId}` }};
