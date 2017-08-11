@@ -13,5 +13,7 @@ export const connector = new builder.ChatConnector({
   appPassword: ChatConnector.appPassword
 });
 
-export const bot = new builder.UniversalBot(connector);
+const bot = new builder.UniversalBot(connector);
 
+bot.endConversationAction('goodbye', 'Goodbye :)', { matches: /^goodbye/i });
+export { bot };
