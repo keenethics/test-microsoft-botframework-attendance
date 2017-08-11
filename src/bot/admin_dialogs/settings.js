@@ -57,8 +57,12 @@ bot.dialog('/settings', [
 });
 
 bot.dialog('/iAmAdmin', [
-  async function(session) {
-    const user = await getUserByEmail(session.userData.profile.email);
+  function (session) {
+    builder.Prompts.text(session,'whats your email?');
+  },
+  async function(session, results) {
+    const email = results.response; 
+    const user = await getUserByEmail(email);
     if (user.role === 'admin') {
       session.userData.profile.role = 'admin';
       session.send('you are admin');
@@ -67,4 +71,6 @@ bot.dialog('/iAmAdmin', [
     }
     session.endDialog();
   }
-]);
+]).cancelAction('cancelAction', 'Ok, canceled.', {
+  matches: /^nevermind$|^cancel$/i
+});
