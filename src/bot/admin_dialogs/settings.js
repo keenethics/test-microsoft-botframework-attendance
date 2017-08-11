@@ -64,6 +64,7 @@ bot.dialog('/iAmAdmin', [
     const email = results.response; 
     const user = await getUserByEmail(email);
     if (user.role === 'admin') {
+      if (!session.userData.profile) session.userData.profile = {};
       session.userData.profile.role = 'admin';
       session.send('you are admin');
     } else {
