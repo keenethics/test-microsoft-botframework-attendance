@@ -29,7 +29,7 @@ export const getAdmins = () => {
 export const getUserByEmail = (email) => {
   return new Promise(function(resolve, reject) {
     const users = mongoose.connection.model('Users');
-    users.findOne({ email: email }, { email: 1, address: 1, name:1, events: 1 }, (err, info) => {
+    users.findOne({ email: email }, { email: 1, address: 1, name:1, events: 1, role: 1 }, (err, info) => {
       if (err) {
         reject(err);
       } else {
