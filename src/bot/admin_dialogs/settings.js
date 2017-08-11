@@ -62,6 +62,7 @@ bot.dialog('/iAmAdmin', [
   },
   async function(session, results) {
     const email = results.response; 
+    console.log(results.response)
     const user = await getUserByEmail(email);
     if (user.role === 'admin') {
       if (!session.userData.profile) session.userData.profile = {};
