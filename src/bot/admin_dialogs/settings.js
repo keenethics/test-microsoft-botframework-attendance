@@ -61,8 +61,9 @@ bot.dialog('/iAmAdmin', [
     builder.Prompts.text(session,'whats your email?');
   },
   async function(session, results) {
-    const email = results.response; 
-    console.log(results.response)
+    const res = results.response; 
+    const emailReg = /(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/;
+    const email = res.match(emailReg);
     const user = await getUserByEmail(email);
     if (user.role === 'admin') {
       if (!session.userData.profile) session.userData.profile = {};
