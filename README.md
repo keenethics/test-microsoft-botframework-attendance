@@ -79,4 +79,4 @@ where you can write functional, which you want to test.
 1. to fill db with test user, admin and events run project with createUser flag
  `npm run start-locally createUser`
 
-
+If bot doesn't reply you ( probably because your user has been removed from the database but bot still store your profile data in it's own state) - just type 'goodbye'. It will terminate your current dialog.
