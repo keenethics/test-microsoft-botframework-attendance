@@ -21,10 +21,6 @@ export const saveEvent = (dayoff) => {
   return new Promise(function(resolve, reject) {
     const DayOff = new Event(dayoff);
     const { _id } = DayOff;
-
-    console.log("dayoff");
-    console.log(DayOff);
-    
     DayOff.save((err) => {
       if (err) {
         reject(null);

@@ -34,14 +34,10 @@ bot.dialog('/dayoff' , [
     const momentMonth = parseInt(dayMonth[1], 10); 
     const month = momentMonth - 1;
     const year = dayMonth[2];
-    console.log('month',month);  
-    console.log('year',year)
-    console.log('day',day);
     const date = moment({ month, date: day, year })._d;
     const startsAt = moment(date)._d;
     const endsAt = moment(startsAt).clone().add(dayOffCount, 'days')._d;
     const type = 'dayoff';
-    console.log('startsAt',startsAt);
     session.userData.dayoff = {
       startsAt,
       endsAt,
@@ -103,9 +99,6 @@ const saveDayoffEvent = async (event, email) => {
     if (eventId) {
       const savedIntoUser = await saveEventIntoUser(user._id, eventId);
       const adminNotified = await notifyAdmins(eventId);
-      console.log(eventId,'eventId');
-      console.log('savedIntoUser',savedIntoUser);
-      console.log('adminNotified',adminNotified);  
       if (savedIntoUser && adminNotified) resolve('saved');
     }
     reject('error while saving day off');

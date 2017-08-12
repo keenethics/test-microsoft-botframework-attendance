@@ -17,14 +17,14 @@ bot.dialog('/activeEvents', [
         status = 'rejected';
       } else {
         if (ev.approved > 0) {
-        status = 'approved';
+          status = 'approved';
         }
       }
       return `${index} - ${getEventDate(ev)} ${ev.type} reason: ${ev.comment}\n status: ${status}\n\n\n`;
     });
     let response = '';
     session.dialogData.displayEvents = displayEvents;
-    response += `your events: \n\n\n`;
+    response += 'your events: \n\n\n';
     displayEvents.forEach(ev => {
       response += ev;
     });
