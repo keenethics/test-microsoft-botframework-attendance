@@ -13,7 +13,7 @@ import settings from '../admin_dialogs/settings.js';
 import eventsOnDate from '../admin_dialogs/eventsOnDate.js'; 
 import addHoliday from '../admin_dialogs/holidays.js';
 import attendance from '../admin_dialogs/attendance.js'; 
-
+import requestsWaiting from '../admin_dialogs/requestsWaiting.js';
 export {
 	menu,
 	dayoff,
@@ -30,5 +30,6 @@ export {
   addHoliday,
   settings,
   attendance,
+  requestsWaiting 
 };
 
