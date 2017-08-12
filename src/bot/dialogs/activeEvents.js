@@ -16,7 +16,7 @@ bot.dialog('/activeEvents', [
       if (ev.rejected.length > 0) {
         status = 'rejected';
       } else {
-        if (ev.approved > 0) {
+        if (ev.approved.length > 0) {
           status = 'approved';
         }
       }
