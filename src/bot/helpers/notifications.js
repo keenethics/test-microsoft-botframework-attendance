@@ -9,5 +9,6 @@ export const notifyAdmins = async (eventId) => {
     const { address } = ad;
     bot.beginDialog(address, '/approveEvent', { event: ev });
   });
+  return new Promise(function (resolve, reject){ resolve("success")});
 };
 

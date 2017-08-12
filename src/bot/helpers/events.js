@@ -21,6 +21,10 @@ export const saveEvent = (dayoff) => {
   return new Promise(function(resolve, reject) {
     const DayOff = new Event(dayoff);
     const { _id } = DayOff;
+
+    console.log("dayoff");
+    console.log(DayOff);
+    
     DayOff.save((err) => {
       if (err) {
         reject(null);
@@ -35,7 +39,7 @@ export const saveEventIntoUser = (userId, eventId) => {
   return new Promise(function(resolve, reject) {
     Users.update({ _id: userId }, { $addToSet: { events: eventId }} ,(err) => {
       if (err) {
-        reject(err);
+        reject(null);
       } else {
         resolve('success');
       }
