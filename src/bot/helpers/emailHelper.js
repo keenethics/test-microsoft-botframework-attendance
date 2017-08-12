@@ -1,6 +1,6 @@
 const emailHelper = {
   validateEmail(email) {
-    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@keenethics.com$/;
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@(keenethics|gmail).com$/;
     return re.test(email);
   },
 
