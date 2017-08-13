@@ -41,6 +41,8 @@ bot.dialog('/activeEvents', [
     const number = action.replace( /^\D+/g, '');
     const dialogId = mappedEvents[number];
     if (expMenu.test(action)) {
+      session.endDialog();
+      session.beginDialog('/help');
       session.beginDialog('/menu');   
     } else if (exp.test(action)){ 
       const success = await cancelEvent(dialogId);
@@ -51,6 +53,8 @@ bot.dialog('/activeEvents', [
       }
     } else {
       session.endDialog();
+      session.beginDialog('/help');
+      session.beginDialog('/menu');
     }
   },
 ]).cancelAction('cancelAction', 'Ok, canceled.', {
