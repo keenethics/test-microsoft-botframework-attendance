@@ -1,12 +1,21 @@
 import { bot } from '../bot.js';
 import { getEventDate, getUpcomingEventsByEmail } from '../helpers/events.js'; 
+import { emailReg } from '../dialogs/dialogExpressions.js';
 
 bot.dialog('/eventsOfEmail', [
   async function(session, args) {
     session.send('welcome to events on dialog');
     const query = args.matched.input;
     const queryString = query.replace(/events of /, '');
-    const email = queryString;
+    const matchedEmail = queryString.match(emailReg);
+    const email = matchedEmail && matchedEmail[0];
+    if (!email) {
+      session.send('incorrect email');
+      session.endDialog();
+      session.beginDialog('/help');
+      session.beginDialog('/menu');
+      return;
+    }
     let events = await getUpcomingEventsByEmail(email); 
     let msg = '';
     events.forEach((ev,index) => {
