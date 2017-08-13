@@ -24,7 +24,7 @@ bot.dialog('/requestsWaiting', [
     builder.Prompts.text(session, msg);
   },
   
-  function (session, result) {
+  async function (session, result) {
     const action = result.response;
     const { adminId } = session.dialogData;
     const { mappedEvents } = session.dialogData;
@@ -34,21 +34,26 @@ bot.dialog('/requestsWaiting', [
     const number = action.replace( /^\D+/g, '');
     const eventId = mappedEvents[number];
     if (expMenu.test(action)) {
+      session.endDialog();
       session.beginDialog('/menu');   
+      return;
     } 
 
     const approve =  approveExp.test(action);
     const reject = rejectExp.test(action);
-    const confirmEvent = approve ? 'approved' : 'rejected';
-    const success = approveOrRejectEvent(eventId, adminId, confirmEvent);
+    let confirmEvent;
+    if (approve) confirmEvent = 'approved';
+    if (reject) confirmEvent = 'rejected';
+    const success = await approveOrRejectEvent(eventId, adminId, confirmEvent);
     let msg = '';
     if (success) {
-      msg = `event ${mappedEvents[number]} has been ${reject ? 'rejected' : 'approved' }`;
+      msg = `event ${mappedEvents[number]} has been ${confirmEvent}`;
     } else {
       msg = 'ops... something wrong';
     }
     session.send(msg);
     session.endDialog();
+    session.beginDialog('/menu');
   }
 ]).cancelAction('cancelAction', 'Ok, canceled.', {
   matches: /^nevermind$|^cancel$/i
