@@ -44,6 +44,11 @@ bot.dialog('/requestsWaiting', [
     let confirmEvent;
     if (approve) confirmEvent = 'approved';
     if (reject) confirmEvent = 'rejected';
+    if (!confirmEvent) {
+      session.endDialog();
+      session.beginDialog('/menu');   
+      return;       
+    }
     const success = await approveOrRejectEvent(eventId, adminId, confirmEvent);
     let msg = '';
     if (success) {
