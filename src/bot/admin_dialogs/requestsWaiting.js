@@ -35,6 +35,7 @@ bot.dialog('/requestsWaiting', [
     const eventId = mappedEvents[number];
     if (expMenu.test(action)) {
       session.endDialog();
+      session.beginDialog('/help');
       session.beginDialog('/menu');   
       return;
     } 
@@ -46,6 +47,7 @@ bot.dialog('/requestsWaiting', [
     if (reject) confirmEvent = 'rejected';
     if (!confirmEvent) {
       session.endDialog();
+      session.beginDialog('/help');
       session.beginDialog('/menu');   
       return;       
     }
