@@ -4,7 +4,6 @@ import { emailReg } from '../dialogs/dialogExpressions.js';
 
 bot.dialog('/eventsOfEmail', [
   async function(session, args) {
-    session.send('welcome to events on dialog');
     const query = args.matched.input;
     const queryString = query.replace(/events of /, '');
     const matchedEmail = queryString.match(emailReg);
@@ -16,8 +15,8 @@ bot.dialog('/eventsOfEmail', [
       session.beginDialog('/menu');
       return;
     }
+    let msg = `events of ${email}: \n\n`;
     let events = await getUpcomingEventsByEmail(email); 
-    let msg = '';
     events.forEach((ev,index) => {
       let status = 'pending';
       if (ev.rejected.length > 0) { 
