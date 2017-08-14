@@ -28,7 +28,7 @@ bot.dialog('/changeInfo', [
   },
   function(session, result) {
     const answer = result.response;
-    if (answer.indexOf('yes') !== -1) {
+    if (/^yes/i.test(answer)) {
       usersDB.findOneAndUpdate(
         {email: session.dialogData.email},
         {role: session.dialogData.newRole},
@@ -43,7 +43,7 @@ bot.dialog('/changeInfo', [
   },
   function(session, result) {
     const answer = result.response;
-    if (answer.indexOf('yes') !== -1) {
+    if (/^yes/i.test(answer)) {
       builder.Prompts.text(session, 'Enter start working day in dd.mm.yyyy format');
     } else {
       session.send('Returning to the main menu');
