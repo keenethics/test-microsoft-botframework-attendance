@@ -4,8 +4,7 @@ import { eventsOn, addHoliday, holidaysOn, attendance } from './dialogExpression
 
 bot.dialog('/', new builder.IntentDialog()
     .onDefault('/getstarted')
-
-  );
+);
 
 bot.dialog('/menu', new builder.IntentDialog()
     .matches(/^help/i,'/help')

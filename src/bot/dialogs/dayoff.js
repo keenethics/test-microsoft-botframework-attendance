@@ -55,7 +55,7 @@ bot.dialog('/dayoff' , [
     builder.Prompts.text(session, 'Send "yes" to save the request');
   },
   function (session, results) {
-    if (results.response === 'yes') {
+    if (/^yes/i.test(results.response)) {
       saveDayoffEvent(session.userData.dayoff, session.userData.profile.email);
       session.send('Saved');
     } else {

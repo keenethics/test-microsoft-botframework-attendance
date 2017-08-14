@@ -79,7 +79,7 @@ where you can write functional, which you want to test.
 1. to fill db with test user, admin and events run project with createUser flag
  `npm run start-locally createUser`
 
-## test bot in skype
+## Test bot in skype
 You can add bot to your skype through this link
 https://join.skype.com/bot/79dc72c7-dc9b-43f6-9833-d12c0771f89b
 
