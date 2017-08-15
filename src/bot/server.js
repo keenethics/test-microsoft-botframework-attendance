@@ -1,11 +1,16 @@
 import restify from 'restify';
 import { connector } from './bot.js';
-import { mongoDeployUrl } from '../../settings.json';
 import mongoose from 'mongoose';
 import createUser from '../models/seeds.js';
-var createUsers = require('../models/db/defaultUsersDB.js');
 
-var MongoClient = require('mongodb').MongoClient
+const mongoDeployUrl = 
+  process.env.NODE_ENV === 'development' ?
+  require('../../settings.json').mongoDeployUrl
+  : process.env.mongoDeployUrl; 
+
+const createUsers = require('../models/db/defaultUsersDB.js');
+
+const MongoClient = require('mongodb').MongoClient
   , assert = require('assert');
 
 
