@@ -1,5 +1,6 @@
 import { bot } from '../bot.js';
 import emailHelper from '../helpers/emailHelper';
+import { filterQuotes } from '../helpers/dialogs.js';
 const getInfoByName = require('../../models/db/methods/userInfo').getInfoByName;
 const getInfoByEmail = require('../../models/db/methods/userInfo').getInfoByEmail;
 
@@ -11,8 +12,8 @@ const sendDataAndEndDialog = (session, data) => {
 
 bot.dialog('/infoOn', [
   function(session, result) {
-    const answer = result.matched.input.slice(7).trim();
-
+    const filteredQuery = filterQuotes(result.matched.input);
+    const answer = filteredQuery.replace(/info on /, ''); 
     if (answer === 'me') {
       getInfoByEmail(session.userData.profile.email, (data) => {
         sendDataAndEndDialog(session, data);
