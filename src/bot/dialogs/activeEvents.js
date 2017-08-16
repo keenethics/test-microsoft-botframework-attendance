@@ -4,29 +4,36 @@ import builder from 'botbuilder';
 import { getUserByEmail } from '../helpers/users.js';
 import { getEventsByIds, getEventDate, cancelEvent } from '../helpers/events.js';
 
-bot.dialog('/pending', [
+bot.dialog('/activeEvents', [
   async function (session) {
-    session.send(`your events ${session.userData.profile.email} `);
     const user = await getUserByEmail(session.userData.profile.email);
-    const events = await getEventsByIds(user.events, { startsAt: { $gt: new Date() },
-      rejected: { $size: 0 }});
+    const events = await getEventsByIds(user.events, { startsAt: { $gt: new Date() }});
     const sortedEvents = events;
     session.dialogData.mappedEvents = {};
     sortedEvents.forEach((ev, index) => { session.dialogData.mappedEvents[index] = ev._id; });
-    const displayEvents = sortedEvents.map((ev,index) => (
-      `${index} - ${getEventDate(ev)} ${ev.type} reason: ${ev.comment}`   
-    ));
-    session.dialogData.displayEvents = displayEvents;
-    session.send(`your events ${session.userData.profile.email} `);
-    displayEvents.forEach(ev => {
-      session.send(ev);
+    const displayEvents = sortedEvents.map((ev,index) => {
+      let status = 'pending';
+      if (ev.rejected.length > 0) {
+        status = 'rejected';
+      } else {
+        if (ev.approved.length > 0) {
+          status = 'approved';
+        }
+      }
+      return `${index} - ${getEventDate(ev)} ${ev.type} reason: ${ev.comment}\n status: ${status}\n\n\n`;
     });
-    session.send('to cancel event type "cancel {number}"');
-    session.send('type "menu" to go to the main menu');
-    builder.Prompts.text(session,' ?');
+    let response = '';
+    session.dialogData.displayEvents = displayEvents;
+    response += 'your events: \n\n\n';
+    displayEvents.forEach(ev => {
+      response += ev;
+    });
+    response += '\n\n\nto cancel event type "cancel {number}"';
+    response += 'type "menu" to go to the main menu';
+    builder.Prompts.text(session, response);
   },
 
-  function (session,results){
+  async function (session,results){
     const { mappedEvents, displayEvents } = session.dialogData;
     const action = results.response; 
     const expMenu = /^menu$/;
@@ -34,17 +41,20 @@ bot.dialog('/pending', [
     const number = action.replace( /^\D+/g, '');
     const dialogId = mappedEvents[number];
     if (expMenu.test(action)) {
+      session.endDialog();
+      session.beginDialog('/help');
       session.beginDialog('/menu');   
     } else if (exp.test(action)){ 
-      const success = cancelEvent(dialogId);
+      const success = await cancelEvent(dialogId);
       if (success) {
         session.send(`event ${displayEvents[number]} has been canceled`);
       } else {
         session.send('ops... something wrong');
       }
     } else {
-      session.send('type correct query');
-      session.beginDialog('/activeEvents');
+      session.endDialog();
+      session.beginDialog('/help');
+      session.beginDialog('/menu');
     }
   },
 ]).cancelAction('cancelAction', 'Ok, canceled.', {
@@ -110,22 +120,3 @@ bot.dialog('/approved', [
   matches: /^nevermind$|^cancel$/i
 });
 
-
-bot.dialog('/activeEvents', [
-  function (session){
-    const options = ['pending', 'rejected', 'approved', 'menu'];
-    session.dialogData.options = options;
-    builder.Prompts.text(session, '1.pending 2.rejected 3.approved 4.menu');
-  },
-  function (session, results) {
-    const dialog = results.response;
-    if (session.dialogData.options.indexOf(dialog) > -1) {
-      session.beginDialog(`/${dialog}`);
-    } else {
-      session.send('what do you mean ?');
-      session.beginDialog('/activeEvents');
-    }
-  }
-]).cancelAction('cancelAction', 'Ok, canceled.', {
-  matches: /^nevermind$|^cancel$/i
-});

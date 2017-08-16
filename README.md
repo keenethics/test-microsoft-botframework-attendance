@@ -84,4 +84,5 @@ You can add bot to your skype through this link
 https://join.skype.com/bot/79dc72c7-dc9b-43f6-9833-d12c0771f89b
 
 ## Troubleshooting
+If bot doesn't reply you ( probably because your user has been removed from the database but bot still store your profile data in it's own state) - just type 'goodbye'. It will terminate your current dialog.
 If your use has admin role in db but bot still treat you as a user - type "i am admin". It will update bot application state

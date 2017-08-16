@@ -35,7 +35,7 @@ export const saveEventIntoUser = (userId, eventId) => {
   return new Promise(function(resolve, reject) {
     Users.update({ _id: userId }, { $addToSet: { events: eventId }} ,(err) => {
       if (err) {
-        reject(err);
+        reject(null);
       } else {
         resolve('success');
       }
@@ -72,6 +72,32 @@ export const getEventsByIds = (ids, options = {}) => {
       }
       resolve(data);
       
+    });
+  });
+};
+
+export const getUpcomingEventsByEmail = (email) => {
+  return new Promise(function(resolve, reject) {
+    const emailCond = { user: email };
+    const date = new Date();
+    const dateCond = { startsAt: { $gte: `${date}` } };
+    const query = { $and: [emailCond, dateCond] };
+    Event.find(query).sort('startsAt').exec(function(err, data){
+      if(err) {
+        reject(err);
+      }
+      resolve(data);
+    });
+  });
+};
+
+export const getEvent = (id) => {
+  return new Promise(function(resolve, reject) {
+    Event.findOne({ _id: id }).sort('startsAt').exec(function(err, data){
+      if(err) {
+        reject(err);
+      }
+      resolve(data);
     });
   });
 };

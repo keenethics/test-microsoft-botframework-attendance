@@ -3,6 +3,7 @@ import { formatDate } from '../helpers/date.js';
 import { getDayOffsOnMonth } from '../helpers/events.js';
 import moment from 'moment';
 import business from 'moment-business';
+import { emailReg } from '../dialogs/dialogExpressions.js';
 
 bot.dialog('/attendance', [
   async function(session, args) {
@@ -15,7 +16,8 @@ bot.dialog('/attendance', [
     const queryString = query.replace(/attendance of /, '');
     const att = queryString.split(' on ');
     let email, date;
-    email = att[0];
+    const matchedEmail = att[0].match(emailReg);
+    email = matchedEmail && matchedEmail[0];
     date = att[1];
     const mmYYYY = date.split('.');
     const dayoffs = await getDayOffsOnMonth(email, date); 
