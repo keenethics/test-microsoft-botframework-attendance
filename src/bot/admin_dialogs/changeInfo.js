@@ -5,6 +5,9 @@ const usersDB = mongoose.connection.model('Users');
 
 bot.dialog('/changeInfo', [
   function(session) {
+    if (!session.userData.profile) {
+      session.userData.profile = {};
+    }
     if (session.userData.profile.role !== 'admin') {
       session.send('This feature available only for admins');
       session.endDialog();
