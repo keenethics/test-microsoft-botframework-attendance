@@ -48,11 +48,6 @@ describe('Check EventSchema', () => {
       forTest.user.should.have.property('user');
       expect(forTest.user.user).to.be.a('string');
     });
-
-    it('should have isReject and be a boolean', () => {
-      forTest.user.should.have.property('isReject');
-      expect(forTest.user.isReject).to.be.a('boolean');
-    });
   });
 });
 
