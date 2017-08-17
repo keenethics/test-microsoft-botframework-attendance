@@ -8,7 +8,7 @@ import activeEvents from './activeEvents';
 import editProfile from './editProfile';
 import events from '../admin_dialogs/events.js';
 import changeInfo from '../admin_dialogs/changeInfo';
-import settings from '../admin_dialogs/settings.js';
+import iAmAdmin from '../admin_dialogs/iAmAdmin.js';
 import eventsOfEmail from '../admin_dialogs/eventsOfEmail.js'; 
 import addHoliday from '../admin_dialogs/holidays.js';
 import attendance from '../admin_dialogs/attendance.js';
@@ -28,7 +28,7 @@ export {
   eventsOfEmail,
   userStatus,
   addHoliday,
-  settings,
+  iAmAdmin,
   attendance,
   dayoffShortCommand,
   requestsWaiting 
