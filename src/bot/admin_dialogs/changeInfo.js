@@ -22,7 +22,11 @@ bot.dialog('/changeInfo', [
       if (err) {
         console.error(err);
       }
-
+      if (!user) {
+        session.send('user not found');
+        session.endDialog();
+        return;
+      }
       session.dialogData.newRole = user && user.role === 'admin' ? 'user' : 'admin';
 
       builder.Prompts.text(session,
