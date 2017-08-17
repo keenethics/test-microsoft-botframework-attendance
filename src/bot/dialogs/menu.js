@@ -8,7 +8,7 @@ bot.dialog('/', new builder.IntentDialog()
   );
 bot.dialog('/menu', new builder.IntentDialog()
     .matches(/^help/i,'/help')
-    .matchesAny([/^day off/i, /<\/legacyquote>(day off)<legacyquote>/], '/dayoff')
+  .matchesAny([/^day off/i, addQuotes('day off')], '/dayoff')
     .matchesAny([/^vacation/i, addQuotes('vacation')], '/vacation')
     .matchesAny([/^edit profile/i, addQuotes('edit profile')], '/editProfile')
     .matchesAny([/^info on/i, addQuotes('info on.*')],  '/infoOn')
