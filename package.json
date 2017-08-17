@@ -7,7 +7,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha --require babel-register",
+    "test": "./node_modules/mocha/bin/mocha --recursive --require babel-register",
     "deploy": "bash deploy.sh",
     "seeds": "nodemon --exec node src/models/seeds.js",
     "run-production": "npm install && node src/index.js createUser",
