@@ -1,7 +1,6 @@
 import dayoff from './dayoff.js';
 import menu from './menu.js';
 import profile from './profile.js';
-import vacation from './vacation';
 import infoOn from './infoOn.js';
 import userStatus from '../admin_dialogs/userStatus';
 import help from './help.js';
@@ -21,7 +20,6 @@ export {
 	dayoff,
 	profile,
   infoOn,
-	vacation,
   changeInfo,
   help,
   activeEvents,
