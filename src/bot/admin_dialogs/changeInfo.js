@@ -23,7 +23,7 @@ bot.dialog('/changeInfo', [
         console.error(err);
       }
 
-      session.dialogData.newRole = user.role === 'admin' ? 'user' : 'admin';
+      session.dialogData.newRole = user && user.role === 'admin' ? 'user' : 'admin';
 
       builder.Prompts.text(session,
         `User\'s role is "${user.role}". Send "yes" to change it to "${session.dialogData.newRole}".`);
