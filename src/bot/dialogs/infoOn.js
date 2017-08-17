@@ -13,7 +13,7 @@ const sendDataAndEndDialog = (session, data) => {
 bot.dialog('/infoOn', [
   function(session, result) {
     const filteredQuery = filterQuotes(result.matched.input);
-    const answer = filteredQuery.replace(/info on /, ''); 
+    const answer = filteredQuery.replace(/info on /, '').replace(/(\\[a-z]{0,1})|(\s)/g, ''); 
     if (answer === 'me') {
       getInfoByEmail(session.userData.profile.email, (data) => {
         sendDataAndEndDialog(session, data);
