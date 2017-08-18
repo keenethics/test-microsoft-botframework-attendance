@@ -13,6 +13,8 @@ const sendDataAndEndDialog = (session, data) => {
 bot.dialog('/infoOn', [
   function(session, result) {
     const filteredQuery = filterQuotes(result.matched.input);
+    console.log('query');
+    console.log(result.matched.input);
     const answer = filteredQuery.replace(/info on /, '').replace(/(\\[a-z]{0,1})|(\s)/g, ''); 
     console.log(answer);
     console.log(answer);
