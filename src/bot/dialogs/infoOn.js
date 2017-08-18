@@ -25,8 +25,9 @@ bot.dialog('/infoOn', [
         return;
       }
       // Check if answer is email address. If not, handle as a name
-      if (emailHelper.validateEmail(answer.replace(/<.*?>/g, ''))) {
-        getInfoByEmail(answer, (data) => {
+      const pureEmail = answer.replace(/<.*?>/g, '');
+      if (emailHelper.validateEmail(pureEmail)) {
+        getInfoByEmail(pureEmail, (data) => {
           sendDataAndEndDialog(session, data);
         });
       } else {
