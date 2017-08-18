@@ -1,7 +1,7 @@
 import { bot } from '../bot.js';
 import { getUserByEmail, updateUser } from '../helpers/users.js';
 import { emailReg } from '../dialogs/dialogExpressions.js';
-
+import { getMomentDDMMFormat } from '../helpers/date.js'; 
 bot.dialog('/changeInfo', [
   async function(session, result) {
     if (!session.userData.profile) {
@@ -19,13 +19,22 @@ bot.dialog('/changeInfo', [
     const changedProps = res.match(propExp);
     const setQuery = {};
 
-    setQuery.email = email;
-
+    setQuery.email = email; 
+    const fieldsNotUpdated = [];
+    const dateExp = /(30|31|[0-2][0-9])[.]([0][0-9]|[1][0-2])[.][0-9]{4}/;
+    const dateMatch =  res.match(dateExp);
+    const startWorkingDay = dateMatch && dateMatch[0] && getMomentDDMMFormat(dateMatch[0]);
+    if (startWorkingDay) {
+      setQuery.startWorkingDay = startWorkingDay;
+    }
     changedProps.forEach(chPr => {
       const spl = chPr.split('='); 
-      setQuery[spl[0]] = spl[1];
+      if (spl[1].length > 2 && spl[0] !== 'startWorkingDay') {
+        setQuery[spl[0]] = spl[1];
+      } else {
+        if (spl[0]!== 'startWorkingDay') { fieldsNotUpdated.push(spl[0]); }
+      }
     }); 
-
     const user = await getUserByEmail(email);
     if (!user) {
       session.send('user not found');
@@ -36,7 +45,11 @@ bot.dialog('/changeInfo', [
     
     const updateRes = await updateUser(setQuery);
     if (updateRes) { 
-      session.send('changed');
+      let msg = 'changed';
+      if (fieldsNotUpdated.length) {
+        msg += `fields not updated:\n\n ${fieldsNotUpdated.map(f=> (f)).join(',\n')}`; 
+      } 
+      session.send(msg);
     } else {
       session.send('something went wrong');
     }
