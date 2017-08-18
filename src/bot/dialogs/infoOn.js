@@ -14,6 +14,8 @@ bot.dialog('/infoOn', [
   function(session, result) {
     const filteredQuery = filterQuotes(result.matched.input);
     const answer = filteredQuery.replace(/info on /, '').replace(/(\\[a-z]{0,1})|(\s)/g, ''); 
+    console.log(answer);
+    console.log(answer);
     if (answer === 'me') {
       getInfoByEmail(session.userData.profile.email, (data) => {
         sendDataAndEndDialog(session, data);
@@ -26,6 +28,8 @@ bot.dialog('/infoOn', [
       }
       // Check if answer is email address. If not, handle as a name
       const pureEmail = answer.replace(/<.*?>/g, '');
+      console.log(pureEmail);
+      console.log(pureEmail);
       if (emailHelper.validateEmail(pureEmail)) {
         getInfoByEmail(pureEmail, (data) => {
           sendDataAndEndDialog(session, data);
