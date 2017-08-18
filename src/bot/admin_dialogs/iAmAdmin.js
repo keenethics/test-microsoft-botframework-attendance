@@ -1,15 +1,15 @@
 import { bot } from '../bot.js';
 import builder from 'botbuilder';
 import { getUserByEmail } from '../helpers/users.js';
-
+import { emailReg } from '../dialogs/dialogExpressions.js';
 bot.dialog('/iAmAdmin', [
   function (session) {
     builder.Prompts.text(session,'whats your email?');
   },
   async function(session, results) {
     const res = results.response; 
-    const emailReg = /(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/;
-    const email = res.match(emailReg);
+    const emailMatch = res.match(emailReg);
+    const email = emailMatch && emailMatch[0];
     const user = await getUserByEmail(email);
     if (user.role === 'admin') {
       if (!session.userData.profile) session.userData.profile = {};

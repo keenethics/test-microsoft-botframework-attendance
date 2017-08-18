@@ -31,7 +31,7 @@ export const getUserByEmail = (email) => {
     const users = mongoose.connection.model('Users');
     users.findOne({ email: email }, { email: 1, address: 1, name:1, events: 1, role: 1 }, (err, info) => {
       if (err) {
-        reject(err);
+        reject(null);
       } else {
         resolve(info);
       }
