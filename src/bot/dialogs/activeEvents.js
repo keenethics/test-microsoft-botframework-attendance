@@ -8,6 +8,13 @@ bot.dialog('/activeEvents', [
   async function (session) {
     const user = await getUserByEmail(session.userData.profile.email);
     const events = await getEventsByIds(user.events, { startsAt: { $gt: new Date() }});
+    if (!events.length) {
+      session.send('there is not any upcoming event');
+      session.endDialog();
+      session.beginDialog('/help');
+      session.beginDialog('/menu');
+      return;
+    }
     const sortedEvents = events;
     session.dialogData.mappedEvents = {};
     sortedEvents.forEach((ev, index) => { session.dialogData.mappedEvents[index] = ev._id; });
@@ -51,11 +58,10 @@ bot.dialog('/activeEvents', [
       } else {
         session.send('ops... something wrong');
       }
-    } else {
-      session.endDialog();
-      session.beginDialog('/help');
-      session.beginDialog('/menu');
     }
+    session.endDialog();
+    session.beginDialog('/help');
+    session.beginDialog('/menu');
   },
 ]).cancelAction('cancelAction', 'Ok, canceled.', {
   matches: /^nevermind$|^cancel$/i

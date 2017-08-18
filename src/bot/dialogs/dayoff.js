@@ -65,6 +65,7 @@ bot.dialog('/dayoff' , [
       session.send('Canceled');
     }
     session.endDialogWithResult();
+    session.beginDialog('/help');
     session.beginDialog('/menu');
   }
 ]).cancelAction('cancelAction', 'Ok, canceled.', {

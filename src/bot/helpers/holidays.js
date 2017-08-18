@@ -6,7 +6,7 @@ export const getHolidays = (options) => {
   const query = {};
   const { month, year } = options;
   if (month && year) {
-    const date = moment({ month, year })._d;
+    const date = moment({ month: month > 0 ? month - 1 : month, year })._d;
     const beforeDate = moment(date).clone().add('1', 'month')._d;
     const cond1 = { date: { $gte: `${date}` } };
     const cond2 = { date: { $lt: `${beforeDate}` } };

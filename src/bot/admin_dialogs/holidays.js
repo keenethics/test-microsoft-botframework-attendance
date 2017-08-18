@@ -22,6 +22,10 @@ bot.dialog('/holidays', [
     let holidaysMsg = '';
     if (!holidays.length) {
       msg = 'there is not any holidays';
+      session.send(msg);
+      session.endDialog();
+      session.beginDialog('/help');
+      return;
     }
     session.dialogData.mathcIdInNumber = {};
     holidays.forEach((h,i) => {
@@ -35,23 +39,21 @@ bot.dialog('/holidays', [
     const res  = results.response; 
     const resExp = /^remove [0-9]{1,3}$/; 
     if (!resExp.test(res)) {
-      session.send('incorect input');
       session.endDialog();
+      session.beginDialog('/help');
       return;
     }
     const ind = parseInt(res.replace('remove ',''));
     let op = null;
-    if (ind) {
-      const holidayId = session.dialogData.mathcIdInNumber[ind]; 
-      op = await removeHoliday(holidayId);
-    }
+    const holidayId = session.dialogData.mathcIdInNumber[ind]; 
+    op = await removeHoliday(holidayId);
     if (!op) {
       session.send('something went wrong');
     } else {
       session.send('holiday has been removed');
     }
     session.endDialog();
-    
+    session.beginDialog('/help'); 
   }
 
 ]).cancelAction('cancelAction', 'Ok, canceled.', {
