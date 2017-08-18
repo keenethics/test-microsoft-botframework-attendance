@@ -3,7 +3,7 @@ var describe = require('mocha').describe;
 var it = require('mocha').it;
 var expect = require('chai').expect;
 var should = require('chai').should();
-var forTest = require('../testFile.js');
+var forTest = require('./testFile.js');
 
 describe('Number check', () => {
   describe('return value', () => {
@@ -47,11 +47,6 @@ describe('Check EventSchema', () => {
     it('should have user and be a string', () => {
       forTest.user.should.have.property('user');
       expect(forTest.user.user).to.be.a('string');
-    });
-
-    it('should have isReject and be a boolean', () => {
-      forTest.user.should.have.property('isReject');
-      expect(forTest.user.isReject).to.be.a('boolean');
     });
   });
 });

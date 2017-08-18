@@ -4,13 +4,12 @@ import { eventsOf, addHoliday, holidaysOn, attendance } from './dialogExpression
 
 bot.dialog('/', new builder.IntentDialog()
     .onDefault('/getstarted')
-
-  );
+);
 
 bot.dialog('/menu', new builder.IntentDialog()
     .matches(/^help/i,'/help')
-    .matches(/^day off/i, '/dayoff')
-    .matches(/^vacation/i, '/vacation')
+    .matches(/day off\s*$/i, '/dayoff')
+    .matches(/day off\S*/i, '/dayoffShortCommand')
     .matches(/^edit profile/i, '/editProfile')
     .matches(/^info on/i, '/infoOn')
     .matches(/^my upcoming events/i, '/activeEvents')
