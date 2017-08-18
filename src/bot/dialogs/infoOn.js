@@ -24,9 +24,8 @@ bot.dialog('/infoOn', [
         sendDataAndEndDialog(session, 'This feature available only for admins');
         return;
       }
-
       // Check if answer is email address. If not, handle as a name
-      if (emailHelper.validateEmail(answer)) {
+      if (emailHelper.validateEmail(answer.replace(/<.*?>/g, ''))) {
         getInfoByEmail(answer, (data) => {
           sendDataAndEndDialog(session, data);
         });
