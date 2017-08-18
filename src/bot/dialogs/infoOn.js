@@ -8,6 +8,7 @@ const getInfoByEmail = require('../../models/db/methods/userInfo').getInfoByEmai
 const sendDataAndEndDialog = (session, data) => {
   session.send(data);
   session.endDialog();
+  session.beginDialog('/help');
   session.beginDialog('/menu');
 };
 
@@ -39,5 +40,6 @@ bot.dialog('/infoOn', [
         });
       }
     }
+
   },
 ]);
