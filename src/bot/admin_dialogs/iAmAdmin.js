@@ -16,6 +16,7 @@ bot.dialog('/iAmAdmin', [
       session.userData.profile.role = 'admin';
       session.send('you are admin');
     } else {
+      session.userData.profile.role = 'user';
       session.send('you are not admin');
     }
     session.endDialog();
