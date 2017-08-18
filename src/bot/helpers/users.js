@@ -67,3 +67,21 @@ export const setNotificationTime = (userId, notificationTime) => {
   });
 };
 
+export const updateUser = ({ email, userId, role }) => {
+  const users = mongoose.connection.model('Users');
+  return new Promise(function (resolve, reject) {
+    const query = {};
+    if (email) query.email = email;
+    if (userId) query._id = userId;
+    let projection = { $set: {} };
+    if (role) { projection.$set.role = role; }
+    users.update(query, projection)
+      .exec(function(err, data){
+        if (err) {
+          reject(null);
+        }
+        resolve(data);
+      });
+  });
+};
+

@@ -1,10 +1,9 @@
 import { bot } from '../bot.js';
-import builder from 'botbuilder';
-import mongoose from 'mongoose';
-const usersDB = mongoose.connection.model('Users');
+import { getUserByEmail, updateUser } from '../helpers/users.js';
+import { emailReg } from '../dialogs/dialogExpressions.js';
 
 bot.dialog('/changeInfo', [
-  function(session) {
+  async function(session, result) {
     if (!session.userData.profile) {
       session.userData.profile = {};
     }
@@ -13,60 +12,39 @@ bot.dialog('/changeInfo', [
       session.endDialog();
       return;
     }
-    builder.Prompts.text(session, 'Enter user\'s email(example@keenethics.com) whose information you want to change');
-  },
-  function(session, result) {
-    session.dialogData.email = result.response;
+    const propExp = /\w{2,25}=[\w@.]{2,25}/g;
+    const res = result.matched.input;
+    const emailMatch = res.match(emailReg);
+    const email = emailMatch && emailMatch[0];
+    const changedProps = res.match(propExp);
+    const setQuery = {};
 
-    usersDB.findOne({email: session.dialogData.email}, (err, user) => {
-      if (err) {
-        console.error(err);
-      }
-      if (!user) {
-        session.send('user not found');
-        session.endDialog();
-        return;
-      }
-      session.dialogData.newRole = user && user.role === 'admin' ? 'user' : 'admin';
+    setQuery.email = email;
 
-      builder.Prompts.text(session,
-        `User\'s role is "${user.role}". Send "yes" to change it to "${session.dialogData.newRole}".`);
-    });
-  },
-  function(session, result) {
-    const answer = result.response;
-    if (/^yes/i.test(answer)) {
-      usersDB.findOneAndUpdate(
-        {email: session.dialogData.email},
-        {role: session.dialogData.newRole},
-        () => {
-          session.send('The role was changed.');
-        }
-      );
-    } else {
-      session.send('Canceled');
-    }
-    builder.Prompts.text(session, 'Wanna change astronaut\'s start working day?');
-  },
-  function(session, result) {
-    const answer = result.response;
-    if (/^yes/i.test(answer)) {
-      builder.Prompts.text(session, 'Enter start working day in dd.mm.yyyy format');
-    } else {
-      session.send('Returning to the main menu');
+    changedProps.forEach(chPr => {
+      const spl = chPr.split('='); 
+      setQuery[spl[0]] = spl[1];
+    }); 
+
+    const user = await getUserByEmail(email);
+    if (!user) {
+      session.send('user not found');
       session.endDialog();
+      session.beginDialog('/help');
+      return;
     }
-  },
-  function(session, result) {
-    const newStartWorkingDay = result.response;
-    usersDB.findOneAndUpdate(
-      {email: session.dialogData.email},
-      {startWorkingDay: new Date(newStartWorkingDay)},
-      () => {
-        session.send('The start working day was changed.');
-        session.endDialog();
-      }
-    );
+    
+    const updateRes = await updateUser(setQuery);
+    if (updateRes) { 
+      session.send('changed');
+    } else {
+      session.send('something went wrong');
+    }
+ 
+    session.endDialog();
+    session.beginDialog('/help');
+    return;   
+
   }
 ]).cancelAction('cancelAction', 'Ok, canceled.', {
   matches: /^nevermind$|^cancel$/i
