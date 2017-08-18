@@ -4,6 +4,7 @@ import { getDayOffsOnMonth } from '../helpers/events.js';
 import moment from 'moment';
 import business from 'moment-business';
 import { emailReg } from '../dialogs/dialogExpressions.js';
+import { filterQuotes } from '../helpers/dialogs.js';
 
 bot.dialog('/attendance', [
   async function(session, args) {
@@ -13,7 +14,7 @@ bot.dialog('/attendance', [
       return;
     }
     const query = args.matched.input;
-    const queryString = query.replace(/attendance of /, '');
+    const queryString = filterQuotes(query.replace(/attendance of /, ''));
     const att = queryString.split(' on ');
     let email, date;
     const matchedEmail = att[0].match(emailReg);

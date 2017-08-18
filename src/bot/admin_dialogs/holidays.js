@@ -1,13 +1,15 @@
 import { bot } from '../bot.js';
 import { formatDate } from '../helpers/date.js';
 import { addHoliday, getHolidays, removeHoliday } from '../helpers/holidays.js';
+import { filterQuotes } from '../helpers/dialogs.js';
 import builder from 'botbuilder';
 import { getMomentDDMMFormat } from '../helpers/date.js';
 import moment from 'moment';
 bot.dialog('/holidays', [
   async function(session, args) {
     const query = args.matched.input;
-    const queryString = query.replace(/holidays on /, '');
+    
+    const queryString = filterQuotes(query.replace(/holidays on /, ''));
     const dateExp = /^([0][0-9]|[1][0-2])[.][0-9]{4}$/;
     if (!dateExp.test(queryString)) { 
       session.send('incorrect month or year');
@@ -64,7 +66,7 @@ bot.dialog('/addHoliday', [
       return;
     }
     const query = args.matched.input;
-    const queryString = query.replace(/add holiday on /, '');
+    const queryString = filterQuotes(query.replace(/add holiday on /, ''));
     const dateExp = /[0-9]{2}.[0-9]{2}.[0-9]{4}/;
     const date = getMomentDDMMFormat(queryString.match(dateExp)[0]);
     const name = queryString.replace(dateExp, '').trim();

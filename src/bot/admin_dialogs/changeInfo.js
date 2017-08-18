@@ -5,6 +5,9 @@ const usersDB = mongoose.connection.model('Users');
 
 bot.dialog('/changeInfo', [
   function(session) {
+    if (!session.userData.profile) {
+      session.userData.profile = {};
+    }
     if (session.userData.profile.role !== 'admin') {
       session.send('This feature available only for admins');
       session.endDialog();
@@ -19,8 +22,12 @@ bot.dialog('/changeInfo', [
       if (err) {
         console.error(err);
       }
-
-      session.dialogData.newRole = user.role === 'admin' ? 'user' : 'admin';
+      if (!user) {
+        session.send('user not found');
+        session.endDialog();
+        return;
+      }
+      session.dialogData.newRole = user && user.role === 'admin' ? 'user' : 'admin';
 
       builder.Prompts.text(session,
         `User\'s role is "${user.role}". Send "yes" to change it to "${session.dialogData.newRole}".`);
