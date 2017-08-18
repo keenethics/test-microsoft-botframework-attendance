@@ -1,6 +1,7 @@
 import { bot } from '../bot.js';
 import emailHelper from '../helpers/emailHelper';
 import { filterQuotes } from '../helpers/dialogs.js';
+import { emailReg } from '../dialogs/dialogExpressions.js';
 const getInfoByName = require('../../models/db/methods/userInfo').getInfoByName;
 const getInfoByEmail = require('../../models/db/methods/userInfo').getInfoByEmail;
 
@@ -13,11 +14,7 @@ const sendDataAndEndDialog = (session, data) => {
 bot.dialog('/infoOn', [
   function(session, result) {
     const filteredQuery = filterQuotes(result.matched.input);
-    console.log('query');
-    console.log(result.matched.input);
     const answer = filteredQuery.replace(/info on /, ''); 
-    console.log('answer');
-    console.log(answer);
     if (answer === 'me') {
       getInfoByEmail(session.userData.profile.email, (data) => {
         sendDataAndEndDialog(session, data);
@@ -29,9 +26,9 @@ bot.dialog('/infoOn', [
         return;
       }
       // Check if answer is email address. If not, handle as a name
-      const pureEmail = answer.replace(/<.*?>/g, '');
-      console.log('pureEmail');
-      console.log(pureEmail);
+      const emailMatch = answer.match(emailReg);
+      const pureEmail = emailMatch && emailMatch[0]; 
+
       if (emailHelper.validateEmail(pureEmail)) {
         getInfoByEmail(pureEmail, (data) => {
           sendDataAndEndDialog(session, data);
