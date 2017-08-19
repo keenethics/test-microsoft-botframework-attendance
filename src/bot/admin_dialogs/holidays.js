@@ -38,6 +38,8 @@ bot.dialog('/holidays', [
   async function(session,results) {
     const res  = results.response; 
     const queryString = filterQuotes(res);
+    console.log('queryString');
+    console.log(queryString);
     const resExp = /^remove [0-9]{1,3}$/; 
     if (!resExp.test(queryString)) {
       session.endDialog();
