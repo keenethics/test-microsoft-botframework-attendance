@@ -38,15 +38,13 @@ bot.dialog('/holidays', [
   async function(session,results) {
     const res  = results.response; 
     const queryString = filterQuotes(res);
-    console.log('queryString');
-    console.log(queryString);
-    const resExp = /^remove [0-9]{1,3}$/; 
+    const resExp = /remove [0-9]{1,3}/; 
     if (!resExp.test(queryString)) {
       session.endDialog();
       session.beginDialog('/help');
       return;
     }
-    const ind = parseInt(res.replace('remove ',''));
+    const ind = parseInt(res.replace('/D+/g', ''));
     let op = null;
     const holidayId = session.dialogData.mathcIdInNumber[ind]; 
     op = await removeHoliday(holidayId);
