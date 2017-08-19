@@ -44,7 +44,9 @@ bot.dialog('/holidays', [
       session.beginDialog('/help');
       return;
     }
-    const ind = parseInt(res.replace('/D+/g', ''));
+    console.log('queryString');
+    console.log(queryString);
+    const ind = parseInt(queryString.replace('/D+/g', ''));
     let op = null;
     const holidayId = session.dialogData.mathcIdInNumber[ind]; 
     console.log('ind');
