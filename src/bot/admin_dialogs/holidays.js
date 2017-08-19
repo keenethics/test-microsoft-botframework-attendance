@@ -44,7 +44,7 @@ bot.dialog('/holidays', [
       session.beginDialog('/help');
       return;
     }
-    console.log(queryString);
+    console.log('queryString');
     console.log(queryString);
     const ind = parseInt(queryString.replace(/D+/g, ''));
     console.log('ind');
