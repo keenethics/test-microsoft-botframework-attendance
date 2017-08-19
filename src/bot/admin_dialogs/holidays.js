@@ -9,10 +9,8 @@ bot.dialog('/holidays', [
   async function(session, args) {
     const query = args.matched.input;
     
-    const queryString = filterQuotes(query.replace(/holidays on /, ''));
+    const queryString = filterQuotes(query.replace(/holidays on /, '').replace(/\s/g,''));
     const dateExp = /^([0][0-9]|[1][0-2])[.][0-9]{4}$/;
-    console.log('queryString');
-    console.log(queryString);
     if (!dateExp.test(queryString)) { 
       session.send('incorrect month or year');
     }
@@ -39,8 +37,9 @@ bot.dialog('/holidays', [
 
   async function(session,results) {
     const res  = results.response; 
+    const queryString = filterQuotes(res);
     const resExp = /^remove [0-9]{1,3}$/; 
-    if (!resExp.test(res)) {
+    if (!resExp.test(queryString)) {
       session.endDialog();
       session.beginDialog('/help');
       return;
