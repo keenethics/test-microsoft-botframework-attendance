@@ -11,6 +11,8 @@ bot.dialog('/holidays', [
     
     const queryString = filterQuotes(query.replace(/holidays on /, ''));
     const dateExp = /^([0][0-9]|[1][0-2])[.][0-9]{4}$/;
+    console.log('queryString');
+    console.log(queryString);
     if (!dateExp.test(queryString)) { 
       session.send('incorrect month or year');
     }
@@ -54,6 +56,7 @@ bot.dialog('/holidays', [
     }
     session.endDialog();
     session.beginDialog('/help'); 
+    session.beginDialog('/menu');
   }
 
 ]).cancelAction('cancelAction', 'Ok, canceled.', {
@@ -77,6 +80,8 @@ bot.dialog('/addHoliday', [
     if (typeof result !== 'string') msg = `holiday ${name} on ${moment(date).format('MMMM Do YYYY')} has been created`;
     session.send(msg);
     session.endDialog();
+    session.beginDialog('/help');
+    session.beginDialog('/menu');
   }
 ]).cancelAction('cancelAction', 'Ok, canceled.', {
   matches: /^nevermind$|^cancel$/i
