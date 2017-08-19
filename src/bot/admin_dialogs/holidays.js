@@ -44,15 +44,9 @@ bot.dialog('/holidays', [
       session.beginDialog('/help');
       return;
     }
-    console.log('queryString');
-    console.log(queryString);
-    const ind = parseInt(queryString.replace('/D+/g', ''));
+    const ind = parseInt(queryString.replace(/D+/g, ''));
     let op = null;
     const holidayId = session.dialogData.mathcIdInNumber[ind]; 
-    console.log('ind');
-    console.log(ind);
-    console.log('holidayId');
-    console.log(holidayId);
     op = await removeHoliday(holidayId);
     if (!op) {
       session.send('something went wrong');
